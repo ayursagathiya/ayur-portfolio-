@@ -1,0 +1,2219 @@
+import { gsap } from 'gsap';
+
+// Disable browser scroll restoration immediately
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+
+// Force scroll position to top instantly
+window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'instant'
+});
+
+// Clear anchor hash from URL to prevent browser scroll jump on refresh
+if (window.location.hash && window.location.hash !== '#hero') {
+    history.replaceState(null, document.title, window.location.pathname + window.location.search);
+}
+
+
+/**
+ * Portfolio 2.0 - Core Application Controller
+ * Ayur Sagathiya - UI/UX Designer
+ * 
+ * Features:
+ * - WebGL Black Hole Hero Background (inspired by Kerr-Newman shader)
+ * - Mouse gesture interaction (aero effect)
+ * - Cinematic preloader with progress line
+ * - Smooth scroll animations with staggered reveals
+ * - Floating widget parallax
+ * - Custom magnetic cursor
+ * - Premium About Section with ScrollTrigger animations
+ * 
+ * PERFORMANCE OPTIMIZATIONS:
+ * - Single consolidated requestAnimationFrame loop
+ * - Throttled mouse/scroll event handlers
+ * - WebGL paused when hero section is offscreen
+ * - Reduced canvas resolution for GPU relief
+ * - Debounced resize handler
+ */
+
+// Register GSAP ScrollTrigger plugin
+if (typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
+// ─── Shared global state for unified rAF loop ───
+let mouseX = 0, mouseY = 0;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Clear GSAP ScrollTrigger memory if it exists
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.clearScrollMemory();
+    }
+
+    // Force scroll to top on DOMContentLoaded
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'
+    });
+
+    initPreloader();
+    initSmoothScroll();
+    initCustomCursor();
+    initPremiumHero();
+    initAboutSection();
+    initProjectsSection();
+    initExperienceSection();
+    initSkillsSection();
+    initDesignFlowSection();
+    initContactSection();
+    initCaseStudyModal();
+    initMagnetics();
+    initFloatingLabelsIdle();
+    // CRITICAL: Always start the unified loop regardless of WebGL success
+    startUnifiedLoop();
+});
+
+// Force absolute scroll reset on full window load to override any delayed browser restorations
+window.addEventListener('load', () => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'
+    });
+    if (lenisInstance) {
+        lenisInstance.scrollTo(0, { immediate: true });
+    }
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh(true);
+    }
+});
+
+/* ============================================================
+   1. CINEMATIC PRELOADER WITH PROGRESS LINE
+   ============================================================ */
+function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const counterElement = document.getElementById('preloader-counter-num');
+    const progressLine = document.getElementById('preloader-progress-line');
+    if (!preloader || !counterElement) return;
+
+    let count = 0;
+    const interval = setInterval(() => {
+        count += Math.floor(Math.random() * 8) + 4;
+        if (count >= 100) {
+            count = 100;
+            clearInterval(interval);
+            if (progressLine) progressLine.style.width = '100%';
+            // Trigger instantly — zero gap between loader end and animation start
+            preloader.classList.add('fade-out');
+            requestAnimationFrame(() => {
+                triggerPremiumHeroReveal();
+            });
+        }
+        counterElement.textContent = count;
+        if (progressLine) {
+            progressLine.style.width = count + '%';
+        }
+    }, 30);
+}
+
+/* ============================================================
+   2. SMOOTH SCROLLING (Lenis)
+   ============================================================ */
+let lenisInstance = null;
+function initSmoothScroll() {
+    if (typeof Lenis !== 'undefined') {
+        lenisInstance = new Lenis({
+            duration: 1.4,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1.0
+        });
+        lenisInstance.scrollTo(0, { immediate: true });
+        // Lenis raf is driven by the unified loop (see startUnifiedLoop)
+    }
+}
+
+/* ============================================================
+   3. CUSTOM MAGNETIC CURSOR
+   ============================================================ */
+function initCustomCursor() {
+    const canvas = document.getElementById('cursor-canvas');
+    const cursorTextLabel = document.getElementById('cursor-text-label');
+    if (!canvas) return;
+
+    // Fluid simulation settings
+    const config = {
+        SIM_RESOLUTION: 128,
+        DYE_RESOLUTION: 1440,
+        CAPTURE_RESOLUTION: 512,
+        DENSITY_DISSIPATION: 3.5,
+        VELOCITY_DISSIPATION: 2,
+        PRESSURE: 0.1,
+        PRESSURE_ITERATIONS: 20,
+        CURL: 3,
+        SPLAT_RADIUS: 0.2,
+        SPLAT_FORCE: 6000,
+        SHADING: true,
+        COLOR_UPDATE_SPEED: 10,
+        PAUSED: false,
+        BACK_COLOR: { r: 0.5, g: 0, b: 0 },
+        TRANSPARENT: true,
+        RAINBOW_MODE: false,
+        COLOR: '#4D9FFF' // Signature Electric Blue
+    };
+
+    // Track actual mouse coords for other effects
+    let isHovering = false;
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (cursorTextLabel) {
+            cursorTextLabel.style.transform = `translate(${mouseX + 15}px, ${mouseY + 15}px)`;
+        }
+    }, { passive: true });
+
+    // Interactive hover states
+    const interactiveSelectors = 'a, .btn, .project-card, .bento-item, .modal-close-btn, input, textarea, .floating-label, .about-skill-chip, .skill-pill-marquee, .timeline-card, .focus-tag, .about-stat-card, .portrait-block';
+
+    document.addEventListener('mouseover', (e) => {
+        const target = e.target.closest(interactiveSelectors);
+        if (target) {
+            isHovering = true;
+            document.body.classList.add('hovering-link');
+
+            // Context-aware texts
+            let text = 'EXPLORE';
+            if (target.closest('.nav-links') || target.classList.contains('logo')) {
+                text = 'OPEN';
+            } else if (target.closest('#portrait-block')) {
+                text = 'VIEW';
+            } else if (target.classList.contains('about-skill-chip') || target.classList.contains('skill-pill-marquee')) {
+                text = 'VIEW';
+            } else if (target.classList.contains('timeline-card')) {
+                text = 'VIEW';
+            } else if (target.classList.contains('btn')) {
+                text = 'EXPLORE';
+            } else if (target.classList.contains('floating-label')) {
+                text = 'EXPLORE';
+            }
+
+            if (cursorTextLabel) {
+                cursorTextLabel.textContent = text;
+            }
+        }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        const target = e.target.closest(interactiveSelectors);
+        if (target) {
+            isHovering = false;
+            document.body.classList.remove('hovering-link');
+        }
+    });
+
+    // Disable old cursor ring update in unified loop
+    window._cursorRingUpdate = null;
+
+    // WebGL Fluid Simulation Core
+    function pointerPrototype() {
+        this.id = -1;
+        this.texcoordX = 0;
+        this.texcoordY = 0;
+        this.prevTexcoordX = 0;
+        this.prevTexcoordY = 0;
+        this.deltaX = 0;
+        this.deltaY = 0;
+        this.down = false;
+        this.moved = false;
+        this.color = [0, 0, 0];
+    }
+
+    let pointers = [new pointerPrototype()];
+
+    const { gl, ext } = getWebGLContext(canvas);
+    if (!gl) return;
+
+    if (!ext.supportLinearFiltering) {
+        config.DYE_RESOLUTION = 256;
+        config.SHADING = false;
+    }
+
+    function getWebGLContext(canvas) {
+        const params = {
+            alpha: true,
+            depth: false,
+            stencil: false,
+            antialias: false,
+            preserveDrawingBuffer: false
+        };
+        let gl = canvas.getContext('webgl2', params);
+        const isWebGL2 = !!gl;
+        if (!isWebGL2) gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
+        if (!gl) return { gl: null, ext: null };
+
+        let halfFloat;
+        let supportLinearFiltering;
+        if (isWebGL2) {
+            gl.getExtension('EXT_color_buffer_float');
+            supportLinearFiltering = gl.getExtension('OES_texture_float_linear');
+        } else {
+            halfFloat = gl.getExtension('OES_texture_half_float');
+            supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
+        }
+        gl.clearColor(0.0, 0.0, 0.0, 0.0);
+
+        const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : halfFloat && halfFloat.HALF_FLOAT_OES;
+        let formatRGBA;
+        let formatRG;
+        let formatR;
+
+        if (isWebGL2) {
+            formatRGBA = getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, halfFloatTexType);
+            formatRG = getSupportedFormat(gl, gl.RG16F, gl.RG, halfFloatTexType);
+            formatR = getSupportedFormat(gl, gl.R16F, gl.RED, halfFloatTexType);
+        } else {
+            formatRGBA = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
+            formatRG = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
+            formatR = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType);
+        }
+
+        return {
+            gl,
+            ext: {
+                formatRGBA,
+                formatRG,
+                formatR,
+                halfFloatTexType,
+                supportLinearFiltering
+            }
+        };
+    }
+
+    function getSupportedFormat(gl, internalFormat, format, type) {
+        if (!supportRenderTextureFormat(gl, internalFormat, format, type)) {
+            switch (internalFormat) {
+                case gl.R16F:
+                    return getSupportedFormat(gl, gl.RG16F, gl.RG, type);
+                case gl.RG16F:
+                    return getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, type);
+                default:
+                    return null;
+            }
+        }
+        return { internalFormat, format };
+    }
+
+    function supportRenderTextureFormat(gl, internalFormat, format, type) {
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, 4, 4, 0, format, type, null);
+        const fbo = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        return status === gl.FRAMEBUFFER_COMPLETE;
+    }
+
+    class Material {
+        constructor(vertexShader, fragmentShaderSource) {
+            this.vertexShader = vertexShader;
+            this.fragmentShaderSource = fragmentShaderSource;
+            this.programs = [];
+            this.activeProgram = null;
+            this.uniforms = [];
+        }
+        setKeywords(keywords) {
+            let hash = 0;
+            for (let i = 0; i < keywords.length; i++) hash += hashCode(keywords[i]);
+            let program = this.programs[hash];
+            if (program == null) {
+                let fragmentShader = compileShader(gl.FRAGMENT_SHADER, this.fragmentShaderSource, keywords);
+                program = createProgram(this.vertexShader, fragmentShader);
+                this.programs[hash] = program;
+            }
+            if (program === this.activeProgram) return;
+            this.uniforms = getUniforms(program);
+            this.activeProgram = program;
+        }
+        bind() {
+            gl.useProgram(this.activeProgram);
+        }
+    }
+
+    class Program {
+        constructor(vertexShader, fragmentShader) {
+            this.uniforms = {};
+            this.program = createProgram(vertexShader, fragmentShader);
+            this.uniforms = getUniforms(this.program);
+        }
+        bind() {
+            gl.useProgram(this.program);
+        }
+    }
+
+    function createProgram(vertexShader, fragmentShader) {
+        let program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) console.trace(gl.getProgramInfoLog(program));
+        return program;
+    }
+
+    function getUniforms(program) {
+        let uniforms = [];
+        let uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+        for (let i = 0; i < uniformCount; i++) {
+            let uniformName = gl.getActiveUniform(program, i).name;
+            uniforms[uniformName] = gl.getUniformLocation(program, uniformName);
+        }
+        return uniforms;
+    }
+
+    function compileShader(type, source, keywords) {
+        source = addKeywords(source, keywords);
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) console.trace(gl.getShaderInfoLog(shader));
+        return shader;
+    }
+
+    function addKeywords(source, keywords) {
+        if (!keywords) return source;
+        let keywordsString = '';
+        keywords.forEach(keyword => {
+            keywordsString += '#define ' + keyword + '\n';
+        });
+        return keywordsString + source;
+    }
+
+    const baseVertexShader = compileShader(
+        gl.VERTEX_SHADER,
+        `
+        precision highp float;
+        attribute vec2 aPosition;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform vec2 texelSize;
+
+        void main () {
+            vUv = aPosition * 0.5 + 0.5;
+            vL = vUv - vec2(texelSize.x, 0.0);
+            vR = vUv + vec2(texelSize.x, 0.0);
+            vT = vUv + vec2(0.0, texelSize.y);
+            vB = vUv - vec2(0.0, texelSize.y);
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+        }
+      `
+    );
+
+    const copyShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        uniform sampler2D uTexture;
+
+        void main () {
+            gl_FragColor = texture2D(uTexture, vUv);
+        }
+      `
+    );
+
+    const clearShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        uniform sampler2D uTexture;
+        uniform float value;
+
+        void main () {
+            gl_FragColor = value * texture2D(uTexture, vUv);
+        }
+      `
+    );
+
+    const displayShaderSource = `
+      precision highp float;
+      precision highp sampler2D;
+      varying vec2 vUv;
+      varying vec2 vL;
+      varying vec2 vR;
+      varying vec2 vT;
+      varying vec2 vB;
+      uniform sampler2D uTexture;
+      uniform sampler2D uDithering;
+      uniform vec2 ditherScale;
+      uniform vec2 texelSize;
+
+      vec3 linearToGamma (vec3 color) {
+          color = max(color, vec3(0));
+          return max(1.055 * pow(color, vec3(0.416666667)) - 0.055, vec3(0));
+      }
+
+      void main () {
+          vec3 c = texture2D(uTexture, vUv).rgb;
+          #ifdef SHADING
+              vec3 lc = texture2D(uTexture, vL).rgb;
+              vec3 rc = texture2D(uTexture, vR).rgb;
+              vec3 tc = texture2D(uTexture, vT).rgb;
+              vec3 bc = texture2D(uTexture, vB).rgb;
+
+              float dx = length(rc) - length(lc);
+              float dy = length(tc) - length(bc);
+
+              vec3 n = normalize(vec3(dx, dy, length(texelSize)));
+              vec3 l = vec3(0.0, 0.0, 1.0);
+
+              float diffuse = clamp(dot(n, l) + 0.7, 0.7, 1.0);
+              c *= diffuse;
+          #endif
+
+          float a = max(c.r, max(c.g, c.b));
+          gl_FragColor = vec4(c, a);
+      }
+    `;
+
+    const splatShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D uTarget;
+        uniform float aspectRatio;
+        uniform vec3 color;
+        uniform vec2 point;
+        uniform float radius;
+
+        void main () {
+            vec2 p = vUv - point.xy;
+            p.x *= aspectRatio;
+            vec3 splat = exp(-dot(p, p) / radius) * color;
+            vec3 base = texture2D(uTarget, vUv).xyz;
+            gl_FragColor = vec4(base + splat, 1.0);
+        }
+      `
+    );
+
+    const advectionShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D uVelocity;
+        uniform sampler2D uSource;
+        uniform vec2 texelSize;
+        uniform vec2 dyeTexelSize;
+        uniform float dt;
+        uniform float dissipation;
+
+        vec4 bilerp (sampler2D sam, vec2 uv, vec2 tsize) {
+            vec2 st = uv / tsize - 0.5;
+            vec2 iuv = floor(st);
+            vec2 fuv = fract(st);
+
+            vec4 a = texture2D(sam, (iuv + vec2(0.5, 0.5)) * tsize);
+            vec4 b = texture2D(sam, (iuv + vec2(1.5, 0.5)) * tsize);
+            vec4 c = texture2D(sam, (iuv + vec2(0.5, 1.5)) * tsize);
+            vec4 d = texture2D(sam, (iuv + vec2(1.5, 1.5)) * tsize);
+
+            return mix(mix(a, b, fuv.x), mix(c, d, fuv.x), fuv.y);
+        }
+
+        void main () {
+            #ifdef MANUAL_FILTERING
+                vec2 coord = vUv - dt * bilerp(uVelocity, vUv, texelSize).xy * texelSize;
+                vec4 result = bilerp(uSource, coord, dyeTexelSize);
+            #else
+                vec2 coord = vUv - dt * texture2D(uVelocity, vUv).xy * texelSize;
+                vec4 result = texture2D(uSource, coord);
+            #endif
+            float decay = 1.0 + dissipation * dt;
+            gl_FragColor = result / decay;
+        }
+      `,
+        ext.supportLinearFiltering ? null : ['MANUAL_FILTERING']
+    );
+
+    const divergenceShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        varying highp vec2 vL;
+        varying highp vec2 vR;
+        varying highp vec2 vT;
+        varying highp vec2 vB;
+        uniform sampler2D uVelocity;
+
+        void main () {
+            float L = texture2D(uVelocity, vL).x;
+            float R = texture2D(uVelocity, vR).x;
+            float T = texture2D(uVelocity, vT).y;
+            float B = texture2D(uVelocity, vB).y;
+
+            vec2 C = texture2D(uVelocity, vUv).xy;
+            if (vL.x < 0.0) { L = -C.x; }
+            if (vR.x > 1.0) { R = -C.x; }
+            if (vT.y > 1.0) { T = -C.y; }
+            if (vB.y < 0.0) { B = -C.y; }
+
+            float div = 0.5 * (R - L + T - B);
+            gl_FragColor = vec4(div, 0.0, 0.0, 1.0);
+        }
+      `
+    );
+
+    const curlShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        varying highp vec2 vL;
+        varying highp vec2 vR;
+        varying highp vec2 vT;
+        varying highp vec2 vB;
+        uniform sampler2D uVelocity;
+
+        void main () {
+            float L = texture2D(uVelocity, vL).y;
+            float R = texture2D(uVelocity, vR).y;
+            float T = texture2D(uVelocity, vT).x;
+            float B = texture2D(uVelocity, vB).x;
+            float vorticity = R - L - T + B;
+            gl_FragColor = vec4(0.5 * vorticity, 0.0, 0.0, 1.0);
+        }
+      `
+    );
+
+    const vorticityShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform sampler2D uVelocity;
+        uniform sampler2D uCurl;
+        uniform float curl;
+        uniform float dt;
+
+        void main () {
+            float L = texture2D(uCurl, vL).x;
+            float R = texture2D(uCurl, vR).x;
+            float T = texture2D(uCurl, vT).x;
+            float B = texture2D(uCurl, vB).x;
+            float C = texture2D(uCurl, vUv).x;
+
+            vec2 force = 0.5 * vec2(abs(T) - abs(B), abs(R) - abs(L));
+            force /= length(force) + 0.0001;
+            force *= curl * C;
+            force.y *= -1.0;
+
+            vec2 velocity = texture2D(uVelocity, vUv).xy;
+            velocity += force * dt;
+            velocity = min(max(velocity, -1000.0), 1000.0);
+            gl_FragColor = vec4(velocity, 0.0, 1.0);
+        }
+      `
+    );
+
+    const pressureShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        varying highp vec2 vL;
+        varying highp vec2 vR;
+        varying highp vec2 vT;
+        varying highp vec2 vB;
+        uniform sampler2D uPressure;
+        uniform sampler2D uDivergence;
+
+        void main () {
+            float L = texture2D(uPressure, vL).x;
+            float R = texture2D(uPressure, vR).x;
+            float T = texture2D(uPressure, vT).x;
+            float B = texture2D(uPressure, vB).x;
+            float C = texture2D(uPressure, vUv).x;
+            float divergence = texture2D(uDivergence, vUv).x;
+            float pressure = (L + R + B + T - divergence) * 0.25;
+            gl_FragColor = vec4(pressure, 0.0, 0.0, 1.0);
+        }
+      `
+    );
+
+    const gradientSubtractShader = compileShader(
+        gl.FRAGMENT_SHADER,
+        `
+        precision mediump float;
+        precision mediump sampler2D;
+        varying highp vec2 vUv;
+        varying highp vec2 vL;
+        varying highp vec2 vR;
+        varying highp vec2 vT;
+        varying highp vec2 vB;
+        uniform sampler2D uPressure;
+        uniform sampler2D uVelocity;
+
+        void main () {
+            float L = texture2D(uPressure, vL).x;
+            float R = texture2D(uPressure, vR).x;
+            float T = texture2D(uPressure, vT).x;
+            float B = texture2D(uPressure, vB).x;
+            vec2 velocity = texture2D(uVelocity, vUv).xy;
+            velocity.xy -= vec2(R - L, T - B);
+            gl_FragColor = vec4(velocity, 0.0, 1.0);
+        }
+      `
+    );
+
+    const blit = (() => {
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(0);
+        return (target, clear = false) => {
+            if (target == null) {
+                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            } else {
+                gl.viewport(0, 0, target.width, target.height);
+                gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
+            }
+            if (clear) {
+                gl.clearColor(0.0, 0.0, 0.0, 0.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+            }
+            gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+        };
+    })();
+
+    let dye, velocity, divergence, curl, pressure;
+
+    const copyProgram = new Program(baseVertexShader, copyShader);
+    const clearProgram = new Program(baseVertexShader, clearShader);
+    const splatProgram = new Program(baseVertexShader, splatShader);
+    const advectionProgram = new Program(baseVertexShader, advectionShader);
+    const divergenceProgram = new Program(baseVertexShader, divergenceShader);
+    const curlProgram = new Program(baseVertexShader, curlShader);
+    const vorticityProgram = new Program(baseVertexShader, vorticityShader);
+    const pressureProgram = new Program(baseVertexShader, pressureShader);
+    const gradienSubtractProgram = new Program(baseVertexShader, gradientSubtractShader);
+    const displayMaterial = new Material(baseVertexShader, displayShaderSource);
+
+    function initFramebuffers() {
+        let simRes = getResolution(config.SIM_RESOLUTION);
+        let dyeRes = getResolution(config.DYE_RESOLUTION);
+        const texType = ext.halfFloatTexType;
+        const rgba = ext.formatRGBA;
+        const rg = ext.formatRG;
+        const r = ext.formatR;
+        const filtering = ext.supportLinearFiltering ? gl.LINEAR : gl.NEAREST;
+        gl.disable(gl.BLEND);
+
+        if (!dye)
+            dye = createDoubleFBO(dyeRes.width, dyeRes.height, rgba.internalFormat, rgba.format, texType, filtering);
+        else
+            dye = resizeDoubleFBO(dye, dyeRes.width, dyeRes.height, rgba.internalFormat, rgba.format, texType, filtering);
+
+        if (!velocity)
+            velocity = createDoubleFBO(simRes.width, simRes.height, rg.internalFormat, rg.format, texType, filtering);
+        else
+            velocity = resizeDoubleFBO(
+                velocity,
+                simRes.width,
+                simRes.height,
+                rg.internalFormat,
+                rg.format,
+                texType,
+                filtering
+            );
+
+        divergence = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
+        curl = createFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
+        pressure = createDoubleFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST);
+    }
+
+    function createFBO(w, h, internalFormat, format, type, param) {
+        gl.activeTexture(gl.TEXTURE0);
+        let texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, param);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, param);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, null);
+
+        let fbo = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+        gl.viewport(0, 0, w, h);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        let texelSizeX = 1.0 / w;
+        let texelSizeY = 1.0 / h;
+        return {
+            texture,
+            fbo,
+            width: w,
+            height: h,
+            texelSizeX,
+            texelSizeY,
+            attach(id) {
+                gl.activeTexture(gl.TEXTURE0 + id);
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                return id;
+            }
+        };
+    }
+
+    function createDoubleFBO(w, h, internalFormat, format, type, param) {
+        let fbo1 = createFBO(w, h, internalFormat, format, type, param);
+        let fbo2 = createFBO(w, h, internalFormat, format, type, param);
+        return {
+            width: w,
+            height: h,
+            texelSizeX: fbo1.texelSizeX,
+            texelSizeY: fbo1.texelSizeY,
+            get read() {
+                return fbo1;
+            },
+            set read(value) {
+                fbo1 = value;
+            },
+            get write() {
+                return fbo2;
+            },
+            set write(value) {
+                fbo2 = value;
+            },
+            swap() {
+                let temp = fbo1;
+                fbo1 = fbo2;
+                fbo2 = temp;
+            }
+        };
+    }
+
+    function resizeFBO(target, w, h, internalFormat, format, type, param) {
+        let newFBO = createFBO(w, h, internalFormat, format, type, param);
+        copyProgram.bind();
+        gl.uniform1i(copyProgram.uniforms.uTexture, target.attach(0));
+        blit(newFBO);
+        return newFBO;
+    }
+
+    function resizeDoubleFBO(target, w, h, internalFormat, format, type, param) {
+        if (target.width === w && target.height === h) return target;
+        target.read = resizeFBO(target.read, w, h, internalFormat, format, type, param);
+        target.write = createFBO(w, h, internalFormat, format, type, param);
+        target.width = w;
+        target.height = h;
+        target.texelSizeX = 1.0 / w;
+        target.texelSizeY = 1.0 / h;
+        return target;
+    }
+
+    function updateKeywords() {
+        let displayKeywords = [];
+        if (config.SHADING) displayKeywords.push('SHADING');
+        displayMaterial.setKeywords(displayKeywords);
+    }
+
+    updateKeywords();
+    initFramebuffers();
+    let lastUpdateTime = Date.now();
+    let colorUpdateTimer = 0.0;
+
+    function updateFrame() {
+        const dt = calcDeltaTime();
+        if (resizeCanvas()) initFramebuffers();
+        updateColors(dt);
+        applyInputs();
+        step(dt);
+        render(null);
+        requestAnimationFrame(updateFrame);
+    }
+
+    function calcDeltaTime() {
+        let now = Date.now();
+        let dt = (now - lastUpdateTime) / 1000;
+        dt = Math.min(dt, 0.016666);
+        lastUpdateTime = now;
+        return dt;
+    }
+
+    function resizeCanvas() {
+        let width = scaleByPixelRatio(canvas.clientWidth);
+        let height = scaleByPixelRatio(canvas.clientHeight);
+        if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width;
+            canvas.height = height;
+            return true;
+        }
+        return false;
+    }
+
+    function updateColors(dt) {
+        colorUpdateTimer += dt * config.COLOR_UPDATE_SPEED;
+        if (colorUpdateTimer >= 1) {
+            colorUpdateTimer = wrap(colorUpdateTimer, 0, 1);
+            pointers.forEach(p => {
+                p.color = generateColor();
+            });
+        }
+    }
+
+    function applyInputs() {
+        pointers.forEach(p => {
+            if (p.moved) {
+                p.moved = false;
+                splatPointer(p);
+            }
+        });
+    }
+
+    function step(dt) {
+        gl.disable(gl.BLEND);
+        curlProgram.bind();
+        gl.uniform2f(curlProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform1i(curlProgram.uniforms.uVelocity, velocity.read.attach(0));
+        blit(curl);
+
+        vorticityProgram.bind();
+        gl.uniform2f(vorticityProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform1i(vorticityProgram.uniforms.uVelocity, velocity.read.attach(0));
+        gl.uniform1i(vorticityProgram.uniforms.uCurl, curl.attach(1));
+        gl.uniform1f(vorticityProgram.uniforms.curl, config.CURL);
+        gl.uniform1f(vorticityProgram.uniforms.dt, dt);
+        blit(velocity.write);
+        velocity.swap();
+
+        divergenceProgram.bind();
+        gl.uniform2f(divergenceProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform1i(divergenceProgram.uniforms.uVelocity, velocity.read.attach(0));
+        blit(divergence);
+
+        clearProgram.bind();
+        gl.uniform1i(clearProgram.uniforms.uTexture, pressure.read.attach(0));
+        gl.uniform1f(clearProgram.uniforms.value, config.PRESSURE);
+        blit(pressure.write);
+        pressure.swap();
+
+        pressureProgram.bind();
+        gl.uniform2f(pressureProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform1i(pressureProgram.uniforms.uDivergence, divergence.attach(0));
+        for (let i = 0; i < config.PRESSURE_ITERATIONS; i++) {
+            gl.uniform1i(pressureProgram.uniforms.uPressure, pressure.read.attach(1));
+            blit(pressure.write);
+            pressure.swap();
+        }
+
+        gradienSubtractProgram.bind();
+        gl.uniform2f(gradienSubtractProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform1i(gradienSubtractProgram.uniforms.uPressure, pressure.read.attach(0));
+        gl.uniform1i(gradienSubtractProgram.uniforms.uVelocity, velocity.read.attach(1));
+        blit(velocity.write);
+        velocity.swap();
+
+        advectionProgram.bind();
+        gl.uniform2f(advectionProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+        if (!ext.supportLinearFiltering)
+            gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, velocity.texelSizeX, velocity.texelSizeY);
+        let velocityId = velocity.read.attach(0);
+        gl.uniform1i(advectionProgram.uniforms.uVelocity, velocityId);
+        gl.uniform1i(advectionProgram.uniforms.uSource, velocityId);
+        gl.uniform1f(advectionProgram.uniforms.dt, dt);
+        gl.uniform1f(advectionProgram.uniforms.dissipation, config.VELOCITY_DISSIPATION);
+        blit(velocity.write);
+        velocity.swap();
+
+        if (!ext.supportLinearFiltering)
+            gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, dye.texelSizeX, dye.texelSizeY);
+        gl.uniform1i(advectionProgram.uniforms.uVelocity, velocity.read.attach(0));
+        gl.uniform1i(advectionProgram.uniforms.uSource, dye.read.attach(1));
+        gl.uniform1f(advectionProgram.uniforms.dissipation, config.DENSITY_DISSIPATION);
+        blit(dye.write);
+        dye.swap();
+    }
+
+    function render(target) {
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        gl.enable(gl.BLEND);
+        drawDisplay(target);
+    }
+
+    function drawDisplay(target) {
+        let width = target == null ? gl.drawingBufferWidth : target.width;
+        let height = target == null ? gl.drawingBufferHeight : target.height;
+        displayMaterial.bind();
+        if (config.SHADING) gl.uniform2f(displayMaterial.uniforms.texelSize, 1.0 / width, 1.0 / height);
+        gl.uniform1i(displayMaterial.uniforms.uTexture, dye.read.attach(0));
+        blit(target);
+    }
+
+    function splatPointer(pointer) {
+        let dx = pointer.deltaX * config.SPLAT_FORCE;
+        let dy = pointer.deltaY * config.SPLAT_FORCE;
+        splat(pointer.texcoordX, pointer.texcoordY, dx, dy, pointer.color);
+    }
+
+    function clickSplat(pointer) {
+        const color = generateColor();
+        color.r *= 10.0;
+        color.g *= 10.0;
+        color.b *= 10.0;
+        let dx = 10 * (Math.random() - 0.5);
+        let dy = 30 * (Math.random() - 0.5);
+        splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
+    }
+
+    function splat(x, y, dx, dy, color) {
+        splatProgram.bind();
+        gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0));
+        gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
+        gl.uniform2f(splatProgram.uniforms.point, x, y);
+        gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0);
+        gl.uniform1f(splatProgram.uniforms.radius, correctRadius(config.SPLAT_RADIUS / 100.0));
+        blit(velocity.write);
+        velocity.swap();
+
+        gl.uniform1i(splatProgram.uniforms.uTarget, dye.read.attach(0));
+        gl.uniform3f(splatProgram.uniforms.color, color.r, color.g, color.b);
+        blit(dye.write);
+        dye.swap();
+    }
+
+    function correctRadius(radius) {
+        let aspectRatio = canvas.width / canvas.height;
+        if (aspectRatio > 1) radius *= aspectRatio;
+        return radius;
+    }
+
+    function updatePointerDownData(pointer, id, posX, posY) {
+        pointer.id = id;
+        pointer.down = true;
+        pointer.moved = false;
+        pointer.texcoordX = posX / canvas.width;
+        pointer.texcoordY = 1.0 - posY / canvas.height;
+        pointer.prevTexcoordX = pointer.texcoordX;
+        pointer.prevTexcoordY = pointer.texcoordY;
+        pointer.deltaX = 0;
+        pointer.deltaY = 0;
+        pointer.color = generateColor();
+    }
+
+    function updatePointerMoveData(pointer, posX, posY, color) {
+        pointer.prevTexcoordX = pointer.texcoordX;
+        pointer.prevTexcoordY = pointer.texcoordY;
+        pointer.texcoordX = posX / canvas.width;
+        pointer.texcoordY = 1.0 - posY / canvas.height;
+        pointer.deltaX = correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
+        pointer.deltaY = correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
+        pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0;
+        pointer.color = color;
+    }
+
+    function updatePointerUpData(pointer) {
+        pointer.down = false;
+    }
+
+    function correctDeltaX(delta) {
+        let aspectRatio = canvas.width / canvas.height;
+        if (aspectRatio < 1) delta *= aspectRatio;
+        return delta;
+    }
+
+    function correctDeltaY(delta) {
+        let aspectRatio = canvas.width / canvas.height;
+        if (aspectRatio > 1) delta /= aspectRatio;
+        return delta;
+    }
+
+    function hexToRGB(hex) {
+        let val = hex.replace('#', '');
+        if (val.length === 3) val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
+        const r = parseInt(val.slice(0, 2), 16) / 255;
+        const g = parseInt(val.slice(2, 4), 16) / 255;
+        const b = parseInt(val.slice(4, 6), 16) / 255;
+        return { r: r * 0.15, g: g * 0.15, b: b * 0.15 };
+    }
+
+    function generateColor() {
+        if (!config.RAINBOW_MODE) {
+            return hexToRGB(config.COLOR);
+        }
+        let c = HSVtoRGB(Math.random(), 1.0, 1.0);
+        c.r *= 0.15;
+        c.g *= 0.15;
+        c.b *= 0.15;
+        return c;
+    }
+
+    function HSVtoRGB(h, s, v) {
+        let r, g, b, i, f, p, q, t;
+        i = Math.floor(h * 6);
+        f = h * 6 - i;
+        p = v * (1 - s);
+        q = v * (1 - f * s);
+        t = v * (1 - (1 - f) * s);
+        switch (i % 6) {
+            case 0: r = v; g = t; b = p; break;
+            case 1: r = q; g = v; b = p; break;
+            case 2: r = p; g = v; b = t; break;
+            case 3: r = p; g = q; b = v; break;
+            case 4: r = t; g = p; b = v; break;
+            case 5: r = v; g = p; b = q; break;
+        }
+        return { r, g, b };
+    }
+
+    function wrap(value, min, max) {
+        const range = max - min;
+        if (range === 0) return min;
+        return ((value - min) % range) + min;
+    }
+
+    function getResolution(resolution) {
+        let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+        if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
+        const min = Math.round(resolution);
+        const max = Math.round(resolution * aspectRatio);
+        if (gl.drawingBufferWidth > gl.drawingBufferHeight) return { width: max, height: min };
+        else return { width: min, height: max };
+    }
+
+    function scaleByPixelRatio(input) {
+        const pixelRatio = window.devicePixelRatio || 1;
+        return Math.floor(input * pixelRatio);
+    }
+
+    function hashCode(s) {
+        if (s.length === 0) return 0;
+        let hash = 0;
+        for (let i = 0; i < s.length; i++) {
+            hash = (hash << 5) - hash + s.charCodeAt(i);
+            hash |= 0;
+        }
+        return hash;
+    }
+
+    function handleMouseDown(e) {
+        let pointer = pointers[0];
+        let posX = scaleByPixelRatio(e.clientX);
+        let posY = scaleByPixelRatio(e.clientY);
+        updatePointerDownData(pointer, -1, posX, posY);
+        clickSplat(pointer);
+    }
+
+    let firstMouseMoveHandled = false;
+    function handleMouseMove(e) {
+        let pointer = pointers[0];
+        let posX = scaleByPixelRatio(e.clientX);
+        let posY = scaleByPixelRatio(e.clientY);
+        if (!firstMouseMoveHandled) {
+            let color = generateColor();
+            updatePointerMoveData(pointer, posX, posY, color);
+            firstMouseMoveHandled = true;
+        } else {
+            updatePointerMoveData(pointer, posX, posY, pointer.color);
+        }
+    }
+
+    function handleTouchStart(e) {
+        const touches = e.targetTouches;
+        let pointer = pointers[0];
+        for (let i = 0; i < touches.length; i++) {
+            let posX = scaleByPixelRatio(touches[i].clientX);
+            let posY = scaleByPixelRatio(touches[i].clientY);
+            updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+        }
+    }
+
+    function handleTouchMove(e) {
+        const touches = e.targetTouches;
+        let pointer = pointers[0];
+        for (let i = 0; i < touches.length; i++) {
+            let posX = scaleByPixelRatio(touches[i].clientX);
+            let posY = scaleByPixelRatio(touches[i].clientY);
+            updatePointerMoveData(pointer, posX, posY, pointer.color);
+        }
+    }
+
+    function handleTouchEnd(e) {
+        const touches = e.changedTouches;
+        let pointer = pointers[0];
+        for (let i = 0; i < touches.length; i++) {
+            updatePointerUpData(pointer);
+        }
+    }
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+
+    updateFrame();
+}
+
+
+
+      /* ============================================================
+   7. PREMIUM HERO ANIMATIONS (GSAP & Interactive Parallax)
+   ============================================================ */
+let heroInteractiveInitialized = false;
+
+function initPremiumHero() {
+    const gridBg = document.getElementById('hero-grid-bg');
+    const bgName = document.getElementById('bg-name');
+    const subtitle = document.getElementById('hero-subtitle');
+    const portText = document.getElementById('port-text');
+    const folioText = document.getElementById('folio-text');
+    const portraitGlow = document.getElementById('portrait-glow');
+    const portraitWrapper = document.getElementById('portrait-wrapper');
+    const rotatingRing = document.getElementById('rotating-ring');
+    const floatingLabels = document.querySelectorAll('.floating-label');
+    const heroLines = document.querySelectorAll('.hero-line');
+
+    if (gridBg) gsap.set(gridBg, { opacity: 0 });
+    if (bgName) gsap.set(bgName, { opacity: 0, filter: 'blur(10px)' });
+    if (subtitle) gsap.set(subtitle, { opacity: 0, y: -20 });
+    if (portText) gsap.set(portText, { opacity: 0, x: -150 });
+    if (folioText) gsap.set(folioText, { opacity: 0, x: 150 });
+    if (portraitGlow) gsap.set(portraitGlow, { opacity: 0, scale: 0.5 });
+    if (portraitWrapper) gsap.set(portraitWrapper, { opacity: 0, y: 80 });
+    if (rotatingRing) gsap.set(rotatingRing, { opacity: 0, scale: 0.8 });
+    
+    heroLines.forEach(line => gsap.set(line, { scaleX: 0 }));
+    floatingLabels.forEach(label => gsap.set(label, { opacity: 0, y: 30 }));
+}
+
+function triggerPremiumHeroReveal() {
+    const tl = gsap.timeline({
+        onComplete: () => {
+            initHeroInteractions();
+            startWatermarkAnimation();
+            initHeroScrollTransitions();
+        }
+    });
+
+    const gridBg = document.getElementById('hero-grid-bg');
+    const bgName = document.getElementById('bg-name');
+    const subtitle = document.getElementById('hero-subtitle');
+    const portText = document.getElementById('port-text');
+    const folioText = document.getElementById('folio-text');
+    const portraitGlow = document.getElementById('portrait-glow');
+    const portraitWrapper = document.getElementById('portrait-wrapper');
+    const rotatingRing = document.getElementById('rotating-ring');
+    const floatingLabels = document.querySelectorAll('.floating-label');
+    const heroLines = document.querySelectorAll('.hero-line');
+
+    // 1. Grid and lines fade in
+    tl.to(gridBg, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0)
+      .to(heroLines, { scaleX: 1, duration: 0.8, ease: "power3.inOut", stagger: 0.1 }, 0.1)
+      
+    // 2. PORT & FOLIO text slides in
+      .to(portText, { opacity: 1, x: 0, duration: 0.8, ease: "power4.out" }, 0.2)
+      .to(folioText, { opacity: 1, x: 0, duration: 0.8, ease: "power4.out" }, 0.2)
+
+    // 3. Portrait wrapper rises up and glows
+      .to(portraitWrapper, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 0.2)
+      .to(portraitGlow, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 0.3)
+      .to(rotatingRing, { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" }, 0.4)
+
+    // 5. Labels and subtitle fade in
+      .to(subtitle, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.6)
+      .to(floatingLabels, { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.5)", stagger: 0.08 }, 0.5);
+}
+
+function initHeroInteractions() {
+    if (heroInteractiveInitialized) return;
+    heroInteractiveInitialized = true;
+
+    const hero = document.getElementById('hero');
+    const portraitWrapper = document.getElementById('portrait-wrapper');
+    const bgName = document.getElementById('bg-name');
+    const gridBg = document.getElementById('hero-grid-bg');
+    const cursorGlow = document.getElementById('cursor-glow');
+
+    if (!hero) return;
+
+    // Mouse movement tracking for parallax and glow
+    hero.addEventListener('mousemove', (e) => {
+        // Update cursor glow position
+        if (cursorGlow) {
+            gsap.to(cursorGlow, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        }
+
+        // Parallax calculations (normalized dx/dy from -1 to 1)
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const dx = (e.clientX - cx) / cx;
+        const dy = (e.clientY - cy) / cy;
+
+        // Portrait subtle translation (no aggressive 3D rotations for a cleaner, professional feel)
+        if (portraitWrapper) {
+            gsap.to(portraitWrapper, {
+                x: dx * 15,
+                y: dy * 10,
+                duration: 0.8,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        }
+
+        // Background name watermark movement (opposite direction for depth)
+        if (bgName) {
+            gsap.to(bgName, {
+                x: -dx * 30,
+                y: -dy * 15,
+                duration: 1.0,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        }
+
+        // Grid bg movement
+        if (gridBg) {
+            gsap.to(gridBg, {
+                x: dx * 10,
+                y: dy * 10,
+                duration: 1.2,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        }
+    });
+
+    // Reset parallax on mouse leave
+    hero.addEventListener('mouseleave', () => {
+        if (portraitWrapper) {
+            gsap.to(portraitWrapper, {
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        }
+        if (bgName) {
+            gsap.to(bgName, {
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        }
+        if (gridBg) {
+            gsap.to(gridBg, {
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        }
+    });
+}
+
+function startWatermarkAnimation() {
+    const bgName = document.getElementById('bg-name');
+    if (!bgName) return;
+
+    // Set initial state
+    gsap.set(bgName, { opacity: 0, filter: 'blur(10px)' });
+
+    // Loop timeline: Fade In = 2s, Hold = 4s, Fade Out = 2s, Loop infinitely. Total cycle = 8s.
+    const watermarkTl = gsap.timeline({ repeat: -1 });
+
+    watermarkTl
+        .to(bgName, {
+            opacity: 0.07, // 7% opacity
+            filter: 'blur(0px)',
+            duration: 2.0,
+            ease: 'power2.inOut'
+        })
+        .to(bgName, {
+            // Hold state
+            duration: 4.0
+        })
+        .to(bgName, {
+            opacity: 0,
+            filter: 'blur(10px)',
+            duration: 2.0,
+            ease: 'power2.inOut'
+        });
+}
+
+function initHeroScrollTransitions() {
+    const portText = document.getElementById('port-text');
+    const folioText = document.getElementById('folio-text');
+    const portraitBlock = document.querySelector('.portrait-block');
+
+    if (portText && folioText) {
+        gsap.to([portText, folioText], {
+            scale: 0.6,
+            opacity: 0.08,
+            y: 80,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'bottom bottom',
+                end: 'bottom top',
+                scrub: 1.2,
+            }
+        });
+    }
+
+    if (portraitBlock) {
+        gsap.to(portraitBlock, {
+            scale: 0.5,
+            opacity: 0,
+            y: -60,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'center center',
+                end: 'bottom top',
+                scrub: 1,
+            }
+        });
+    }
+}
+
+function initMagnetics() {
+    const interactiveElements = document.querySelectorAll('.nav-links li a, .logo, .btn, .about-skill-chip, .floating-label, .skill-pill-marquee');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const bounds = el.getBoundingClientRect();
+            const cx = bounds.left + bounds.width / 2;
+            const cy = bounds.top + bounds.height / 2;
+            const dx = e.clientX - cx;
+            const dy = e.clientY - cy;
+
+            // Subtle 12% pull
+            gsap.to(el, {
+                x: dx * 0.12,
+                y: dy * 0.12,
+                duration: 0.4,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        });
+
+        el.addEventListener('mouseleave', () => {
+            gsap.to(el, {
+                x: 0,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+        });
+    });
+}
+
+function initFloatingLabelsIdle() {
+    const inners = document.querySelectorAll('.floating-label-inner');
+    inners.forEach((inner, i) => {
+        inner.style.animationDelay = `${i * 0.4}s`;
+        inner.style.animationDuration = `${4.0 + (i % 3) * 0.6}s`;
+    });
+}
+
+/* ============================================================
+   PREMIUM ABOUT SECTION — ScrollTrigger Animations
+   ============================================================ */
+function initAboutSection() {
+    // Guard: only run if ScrollTrigger and the about section exist
+    if (typeof ScrollTrigger === 'undefined') {
+        console.warn('ScrollTrigger not loaded, About section animations disabled.');
+        return;
+    }
+    const aboutSection = document.getElementById('about');
+    if (!aboutSection) return;
+
+    // ─── 2. Nav Active Indicator ───
+    const navLinks = document.querySelectorAll('.nav-links li a');
+    ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            const aboutLink = document.querySelector('.nav-links a[href="#about"]');
+            if (aboutLink) aboutLink.classList.add('active');
+        },
+        onLeaveBack: () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            const homeLink = document.querySelector('.nav-links a[href="#hero"]');
+            if (homeLink) homeLink.classList.add('active');
+        }
+    });
+
+    // ─── 3. Section Header Reveal ───
+    const aboutLabel = document.querySelector('.about-label');
+    const aboutTitle = document.getElementById('about-title');
+    const aboutSubtitle = document.getElementById('about-subtitle-text');
+
+    const headerTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.about-header',
+            start: 'top 80%',
+            end: 'top 40%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+
+    if (aboutLabel) {
+        headerTl.to(aboutLabel, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power3.out'
+        }, 0);
+    }
+
+    if (aboutTitle) {
+        headerTl.to(aboutTitle, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power4.out'
+        }, 0.1);
+    }
+
+    if (aboutSubtitle) {
+        headerTl.to(aboutSubtitle, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out'
+        }, 0.3);
+    }
+
+    // ─── 4. Paragraph Staggered Reveals ───
+    const paragraphs = document.querySelectorAll('.about-paragraph');
+    paragraphs.forEach((p, i) => {
+        gsap.to(p, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: p,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+            },
+            delay: i * 0.05
+        });
+    });
+
+    // Focus Areas reveal
+    const focusAreas = document.querySelector('.about-focus-areas');
+    if (focusAreas) {
+        gsap.to(focusAreas, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: focusAreas,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+            }
+        });
+    }
+
+    // ─── 5. Floating Profile Animation ───
+    const profileFloat = document.getElementById('about-profile-float');
+    if (profileFloat) {
+        gsap.to(profileFloat, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: profileFloat,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+            }
+        });
+
+        // Subtle parallax on scroll
+        gsap.to(profileFloat, {
+            y: -30,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.about-right',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5,
+            }
+        });
+    }
+
+    // ─── 6. Timeline Progressive Draw ───
+    const timelineItems = document.querySelectorAll('.about-timeline-item');
+    const timelineProgress = document.getElementById('timeline-progress');
+    const aboutTimeline = document.getElementById('about-timeline');
+
+    if (aboutTimeline && timelineProgress) {
+        // Line draws on scroll
+        gsap.to(timelineProgress, {
+            height: '100%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: aboutTimeline,
+                start: 'top 75%',
+                end: 'bottom 50%',
+                scrub: 1,
+            }
+        });
+    }
+
+    // Cards reveal progressively
+    timelineItems.forEach((item, i) => {
+        gsap.to(item, {
+            opacity: 1,
+            x: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: item,
+                start: 'top 82%',
+                toggleActions: 'play none none reverse',
+                onEnter: () => item.classList.add('active'),
+                onLeaveBack: () => item.classList.remove('active'),
+            },
+            delay: i * 0.05
+        });
+    });
+
+    // ─── 7. Skill Cloud Staggered Reveal + Magnetic Hover ───
+    const skillChips = document.querySelectorAll('.about-skill-chip');
+
+    skillChips.forEach((chip, i) => {
+        gsap.to(chip, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.5,
+            ease: 'back.out(1.4)',
+            scrollTrigger: {
+                trigger: '.about-skill-cloud',
+                start: 'top 82%',
+                toggleActions: 'play none none reverse',
+            },
+            delay: i * 0.06
+        });
+    });
+
+    // Magnetic mouse attraction for skill chips
+    const skillCloud = document.getElementById('about-skill-cloud');
+    if (skillCloud) {
+        skillCloud.addEventListener('mousemove', (e) => {
+            skillChips.forEach(chip => {
+                const rect = chip.getBoundingClientRect();
+                const chipCX = rect.left + rect.width / 2;
+                const chipCY = rect.top + rect.height / 2;
+                const dist = Math.hypot(e.clientX - chipCX, e.clientY - chipCY);
+
+                if (dist < 120) {
+                    const pullX = (e.clientX - chipCX) * 0.15;
+                    const pullY = (e.clientY - chipCY) * 0.15;
+                    gsap.to(chip, {
+                        x: pullX,
+                        y: pullY,
+                        duration: 0.3,
+                        ease: 'power2.out',
+                        overwrite: 'auto'
+                    });
+                } else {
+                    gsap.to(chip, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: 'power2.out',
+                        overwrite: 'auto'
+                    });
+                }
+            });
+        });
+
+        skillCloud.addEventListener('mouseleave', () => {
+            skillChips.forEach(chip => {
+                gsap.to(chip, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                });
+            });
+        });
+    }
+
+    // ─── 8. Philosophy Quote — Word-by-Word Blur Reveal ───
+    const philosophyQuote = document.getElementById('philosophy-quote');
+    if (philosophyQuote) {
+        const text = philosophyQuote.textContent.trim();
+        const words = text.split(/\s+/);
+        philosophyQuote.innerHTML = words.map(word =>
+            `<span class="philosophy-word">${word}</span>`
+        ).join(' ');
+
+        const wordEls = philosophyQuote.querySelectorAll('.philosophy-word');
+
+        ScrollTrigger.create({
+            trigger: '.about-philosophy',
+            start: 'top 70%',
+            end: 'bottom 50%',
+            onEnter: () => {
+                wordEls.forEach((el, i) => {
+                    setTimeout(() => {
+                        el.classList.add('revealed');
+                    }, i * 120);
+                });
+            },
+            onLeaveBack: () => {
+                wordEls.forEach(el => el.classList.remove('revealed'));
+            }
+        });
+    }
+
+    // ─── 9. Stats Counter Animation ───
+    const statCards = document.querySelectorAll('.about-stat-card');
+
+    statCards.forEach((card, i) => {
+        const numberEl = card.querySelector('.stat-number');
+        const targetCount = parseInt(card.dataset.count, 10);
+
+        // Reveal card
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.about-stats',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse',
+            },
+            delay: i * 0.1
+        });
+
+        // Counter animation (skip for text-only stat like "MCA")
+        if (numberEl && !numberEl.classList.contains('stat-text') && !isNaN(targetCount) && targetCount > 0) {
+            const counter = { val: 0 };
+            ScrollTrigger.create({
+                trigger: card,
+                start: 'top 80%',
+                once: true,
+                onEnter: () => {
+                    gsap.to(counter, {
+                        val: targetCount,
+                        duration: 1.5 + (targetCount > 10 ? 0.5 : 0),
+                        ease: 'power2.out',
+                        onUpdate: () => {
+                            numberEl.textContent = Math.floor(counter.val);
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    // ─── 10. Cursor Glow on About Section ───
+    const cursorGlow = document.getElementById('cursor-glow');
+    if (cursorGlow) {
+        aboutSection.addEventListener('mousemove', (e) => {
+            gsap.to(cursorGlow, {
+                x: e.clientX,
+                y: e.clientY,
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out',
+                overwrite: 'auto'
+            });
+        });
+
+        aboutSection.addEventListener('mouseleave', () => {
+            gsap.to(cursorGlow, {
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power2.out'
+            });
+        });
+    }
+}
+
+/* ============================================================
+   PREMIUM PROJECTS SECTION — ScrollTrigger Horizontal Pin
+   ============================================================ */
+function initProjectsSection() {
+    const projectsSection = document.getElementById('projects');
+    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
+    if (!projectsSection || !scrollWrapper) return;
+
+    // Header reveal timeline
+    const headerTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.projects-header',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+    headerTl.to('.projects-label', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            .to('.projects-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
+            .to('.projects-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
+
+    // Calculate dynamic scroll amount (content width minus screen width)
+    const getScrollAmount = () => {
+        return scrollWrapper.scrollWidth - window.innerWidth;
+    };
+
+    // Horizontal Scroll Trigger with Pinning
+    const pinTween = gsap.to(scrollWrapper, {
+        x: () => -getScrollAmount(),
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#projects',
+            pin: true,
+            scrub: 1,
+            start: 'top top',
+            end: () => `+=${getScrollAmount()}`,
+            invalidateOnRefresh: true,
+        }
+    });
+
+    // Reveal project cards progressively as they enter the viewport horizontally
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card) => {
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: card,
+                containerAnimation: pinTween,
+                start: 'left 85%',
+                toggleActions: 'play none none reverse',
+            }
+        });
+    });
+
+    // Navigation Active Link Syncing
+    ScrollTrigger.create({
+        trigger: '#projects',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => updateNavActiveLink('#projects'),
+        onEnterBack: () => updateNavActiveLink('#projects')
+    });
+}
+
+/* ============================================================
+   PREMIUM EXPERIENCE SECTION — Editorial Timeline
+   ============================================================ */
+function initExperienceSection() {
+    const section = document.getElementById('experience');
+    if (!section) return;
+
+    // Header reveal timeline
+    const headerTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.experience-header',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+    headerTl.to('.experience-label', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            .to('.experience-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
+            .to('.experience-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
+
+    // Details card slide/reveal
+    gsap.to('.experience-details-card', {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '.experience-details-card',
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+
+    // Navigation Active Link Syncing
+    ScrollTrigger.create({
+        trigger: '#experience',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => updateNavActiveLink('#experience'),
+        onEnterBack: () => updateNavActiveLink('#experience')
+    });
+}
+
+/* ============================================================
+   PREMIUM SKILLS SECTION — Ecosystem
+   ============================================================ */
+function initSkillsSection() {
+    const section = document.getElementById('skills');
+    if (!section) return;
+
+    // Unified entrance timeline triggered when the skills section enters the viewport
+    const skillsTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#skills',
+            start: 'top 85%',
+            once: true
+        }
+    });
+
+    // Reveal header and marquee tracks in a staggered, premium sequence
+    skillsTl.to('.skills-label', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            .to('.skills-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
+            .to('.skills-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45')
+            .fromTo('#skills-row-1', { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=0.55')
+            .fromTo('#skills-row-2', { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0');
+
+    // Navigation Active Link Syncing
+    ScrollTrigger.create({
+        trigger: '#skills',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => updateNavActiveLink('#skills'),
+        onEnterBack: () => updateNavActiveLink('#skills')
+    });
+}
+
+/* ============================================================
+   PREMIUM DESIGN PROCESS — Horizontal steps with connection line
+   ============================================================ */
+function initDesignFlowSection() {
+    const section = document.getElementById('design-flow');
+    const stepsWrapper = document.getElementById('flow-steps-wrapper');
+    const progressLine = document.getElementById('flow-track-progress');
+    if (!section || !stepsWrapper) return;
+
+    // Header reveal timeline
+    const headerTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.flow-header',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+    headerTl.to('.flow-label', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            .to('.flow-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
+            .to('.flow-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
+
+    // Calculate dynamic horizontal distance
+    const getScrollAmount = () => {
+        return stepsWrapper.scrollWidth - window.innerWidth;
+    };
+
+    // Horizontal Scroll Trigger with Pinning
+    const pinTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#design-flow',
+            pin: true,
+            scrub: 1,
+            start: 'top top',
+            end: () => `+=${getScrollAmount()}`,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                // Activate steps cards sequentially
+                const stepCards = document.querySelectorAll('.flow-step-card');
+                const stepIndex = Math.floor(self.progress * stepCards.length);
+                stepCards.forEach((card, idx) => {
+                    if (idx <= stepIndex) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+            }
+        }
+    });
+
+    pinTimeline.to(stepsWrapper, {
+        x: () => -getScrollAmount(),
+        ease: 'none'
+    }, 0);
+
+    if (progressLine) {
+        pinTimeline.to(progressLine, {
+            width: '100%',
+            ease: 'none'
+        }, 0);
+    }
+
+    // Reveal step cards progressively on entrance
+    const stepCards = document.querySelectorAll('.flow-step-card');
+    stepCards.forEach((card) => {
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: card,
+                containerAnimation: pinTimeline,
+                start: 'left 85%',
+                toggleActions: 'play none none reverse',
+            }
+        });
+    });
+
+    // Navigation Active Link Syncing
+    ScrollTrigger.create({
+        trigger: '#design-flow',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => updateNavActiveLink('#design-flow'),
+        onEnterBack: () => updateNavActiveLink('#design-flow')
+    });
+}
+
+/* ============================================================
+   PREMIUM CONTACT & FOOTER SECTION — Copier & Triggers
+   ============================================================ */
+function initContactSection() {
+    const section = document.getElementById('contact');
+    if (!section) return;
+
+    // Header reveal timeline
+    const headerTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '.contact-header',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+    headerTl.to('.contact-label', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            .to('.contact-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
+            .to('.contact-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
+
+    // Stagger contact info cards
+    const cards = document.querySelectorAll('.contact-card');
+    cards.forEach((card, idx) => {
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+            },
+            delay: idx * 0.12
+        });
+    });
+
+    // CTA actions reveal
+    gsap.to('.contact-actions', {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '.contact-actions',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+        }
+    });
+
+    // Clipboard Copy Action
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    copyButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const textVal = btn.getAttribute('data-clipboard');
+            if (textVal) {
+                navigator.clipboard.writeText(textVal).then(() => {
+                    const textSpan = btn.querySelector('.copy-text');
+                    const origVal = textSpan ? textSpan.textContent : 'Copy';
+                    if (textSpan) textSpan.textContent = 'Copied!';
+                    btn.classList.add('success');
+                    
+                    setTimeout(() => {
+                        if (textSpan) textSpan.textContent = origVal;
+                        btn.classList.remove('success');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        });
+    });
+
+    // Navigation Active Link Syncing
+    ScrollTrigger.create({
+        trigger: '#contact',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => updateNavActiveLink('#contact'),
+        onEnterBack: () => updateNavActiveLink('#contact')
+    });
+}
+
+/* ============================================================
+   PREMIUM CASE STUDY MODAL SYSTEM — Dynamic AJAX Router
+   ============================================================ */
+function initCaseStudyModal() {
+    const modal = document.getElementById('case-study-modal');
+    const container = document.getElementById('modal-content-container');
+    const closeBtn = document.getElementById('modal-close-btn');
+    if (!modal || !container || !closeBtn) return;
+
+    // Open Case Study click listener
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.open-case-study');
+        if (trigger) {
+            e.preventDefault();
+            const studyName = trigger.getAttribute('data-study');
+            if (studyName) {
+                // Fetch dynamic HTML file contents
+                fetch(`./case-studies/${studyName}.html`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to load case study contents (${response.status})`);
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        container.innerHTML = html;
+                        modal.classList.add('active');
+
+                        // Stop scroll engines on parent body
+                        if (lenisInstance) lenisInstance.stop();
+                        document.body.style.overflow = 'hidden';
+
+                        // Scroll internal contents to top
+                        container.scrollTop = 0;
+                    })
+                    .catch(err => {
+                        console.error('Case Study Router error:', err);
+                        container.innerHTML = `
+                            <div style="padding: 120px 40px; text-align: center; color: #ffffff; font-family: 'Space Grotesk', sans-serif;">
+                                <h3 style="font-size: 24px; color: #4D9FFF; margin-bottom: 16px;">Case Study under construction</h3>
+                                <p style="color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto; line-height: 1.6;">
+                                    This visual prototype folder is currently being finalized. Feel free to explore other selected case studies.
+                                </p>
+                            </div>
+                        `;
+                        modal.classList.add('active');
+                        if (lenisInstance) lenisInstance.stop();
+                        document.body.style.overflow = 'hidden';
+                    });
+            }
+        }
+    });
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        if (lenisInstance) lenisInstance.start();
+        document.body.style.overflow = '';
+        
+        // Wait for slide-out/fade animation, then purge modal content
+        setTimeout(() => {
+            container.innerHTML = '';
+        }, 500);
+    };
+
+    // Close button click listener
+    closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal();
+    });
+
+    // Close when clicking overlay dark background
+    modal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('case-study-modal-bg') || e.target.closest('.case-study-modal-bg')) {
+            closeModal();
+        }
+    });
+
+    // Close when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
+/* Helper function to update Nav Links Active Indicator */
+function updateNavActiveLink(targetSelector) {
+    const navLinks = document.querySelectorAll('.nav-links li a');
+    navLinks.forEach(link => link.classList.remove('active'));
+    const matchingLink = document.querySelector(`.nav-links a[href="${targetSelector}"]`);
+    if (matchingLink) {
+        matchingLink.classList.add('active');
+    }
+}
+
+/* ============================================================
+   UNIFIED ANIMATION LOOP
+   Single rAF drives Lenis, cursor ring, WebGL, hero tilt, widgets
+   ============================================================ */
+let unifiedLoopStarted = false;
+function startUnifiedLoop() {
+    if (unifiedLoopStarted) return;
+    unifiedLoopStarted = true;
+
+    function tick(time) {
+        // 1. Lenis smooth scroll
+        if (lenisInstance) lenisInstance.raf(time);
+
+        // 2. Cursor ring interpolation
+        if (window._cursorRingUpdate) window._cursorRingUpdate();
+
+
+        // 4. Hero content tilt (skipped when hero offscreen)
+        if (window._heroTiltUpdate) window._heroTiltUpdate();
+
+        // 5. Floating widget parallax (skipped when hero offscreen)
+        if (window._floatingWidgetsUpdate) window._floatingWidgetsUpdate();
+
+        requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+}

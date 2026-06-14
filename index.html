@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayur Sagathiya - Digital Product Designer</title>
+    <meta name="description"
+        content="Portfolio of Ayur Sagathiya - Digital Product Designer crafting intuitive, futuristic digital experiences. MCA Graduate based in Ahmedabad, India.">
+    <meta name="keywords"
+        content="UI/UX, Product Design, Mobile Design, Design Systems, Prototyping, Ayur Sagathiya, Portfolio, Ahmedabad">
+    <meta name="author" content="Ayur Sagathiya">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Ayur Sagathiya - Digital Product Designer">
+    <meta property="og:description"
+        content="Crafting intuitive digital experiences that blend creativity, functionality, and human-centered design.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="./assets/avatar.svg">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="./index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        .char {
+            transform: translateY(110%) rotate(8deg);
+        }
+
+        .hero-tagline,
+        .hero-ctas {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Custom Fluid Wave Cursor -->
+    <canvas id="cursor-canvas" class="cursor-canvas"></canvas>
+    <div id="cursor-text-label" class="cursor-text-label"></div>
+
+    <!-- Cursor Glow (follows mouse on hero) -->
+    <div id="cursor-glow" class="cursor-glow"></div>
+
+
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-header">
+            <span style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">AYUR SAGATHIYA</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">PORTFOLIO 2026</span>
+        </div>
+        <div class="preloader-counter">
+            <span id="preloader-counter-num">0</span><span
+                style="font-size: 4vw; color: var(--accent-cyan); font-weight: 300;">%</span>
+        </div>
+        <div class="preloader-progress-track">
+            <div id="preloader-progress-line" class="preloader-progress-line"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header id="header-nav" class="header-nav">
+        <a href="#hero" class="logo">AS<span style="color: #4D9FFF;">.</span></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#hero" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#design-flow">Design Flow</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="#contact" class="btn btn-secondary magnetic-btn">Let's Talk</a>
+    </header>
+
+    <main>
+        <!-- ════════════════════════════════════════════════════
+             PREMIUM HERO SECTION
+             ════════════════════════════════════════════════════ -->
+        <section id="hero" class="hero-section hero-premium">
+
+            <!-- Subtle grid background -->
+            <div class="hero-grid-bg" id="hero-grid-bg"></div>
+
+            <!-- Grain texture overlay -->
+            <div class="hero-grain"></div>
+
+            <!-- Background name (editorial watermark) -->
+            <div class="bg-name" id="bg-name">
+                <span>AYUR</span>
+                <span>SAGATHIYA</span>
+            </div>
+
+            <!-- Subtitle line (upper right) -->
+            <div class="hero-subtitle" id="hero-subtitle">
+                UI &bull; UX &bull; Motion &bull; Interaction
+            </div>
+
+            <!-- ─── Main Hero Layout ─── -->
+            <div class="hero-layout" id="hero-layout">
+
+                <!-- PORT text (slides from left) -->
+                <div class="hero-text-half port-text" id="port-text">PORT</div>
+
+                <!-- Portrait Center Block -->
+                <div class="portrait-block" id="portrait-block">
+                    <!-- Blue glow behind portrait -->
+                    <div class="portrait-glow" id="portrait-glow"></div>
+
+                    <!-- Rotating text ring -->
+                    <div class="rotating-ring" id="rotating-ring">
+                        <svg viewBox="0 0 300 300" class="ring-svg">
+                            <defs>
+                                <path id="ring-path" d="M150,150 m-120,0 a120,120 0 1,1 240,0 a120,120 0 1,1 -240,0"
+                                    fill="none" />
+                            </defs>
+                            <text class="ring-text">
+                                <textPath href="#ring-path">UI • UX • MOTION • INTERACTION • PRODUCT DESIGN • UI • UX •
+                                    MOTION • INTERACTION • PRODUCT DESIGN • </textPath>
+                            </text>
+                        </svg>
+                    </div>
+
+                    <!-- Portrait image -->
+                    <div class="portrait-wrapper" id="portrait-wrapper">
+                        <img src="./assets/portrait.png" alt="Ayur Sagathiya" class="portrait-image">
+                    </div>
+                </div>
+
+                <!-- FOLIO text (slides from right) -->
+                <div class="hero-text-half folio-text" id="folio-text">FOLIO</div>
+            </div>
+
+            <!-- ─── Floating Annotation Labels ─── -->
+            <div class="floating-labels" id="floating-labels">
+                <div class="floating-label fl-1" data-speed="0.8"><span class="floating-label-inner">UI/UX Design</span>
+                </div>
+                <div class="floating-label fl-2" data-speed="1.2"><span class="floating-label-inner">Mobile
+                        Interfaces</span></div>
+                <div class="floating-label fl-3" data-speed="0.6"><span class="floating-label-inner">Product
+                        Thinking</span></div>
+                <div class="floating-label fl-4" data-speed="1.0"><span class="floating-label-inner">User
+                        Research</span></div>
+                <div class="floating-label fl-5" data-speed="0.9"><span class="floating-label-inner">Interaction
+                        Design</span></div>
+                <div class="floating-label fl-6" data-speed="1.1"><span class="floating-label-inner">MCA Student</span>
+                </div>
+            </div>
+
+            <!-- Thin decorative lines -->
+            <div class="hero-line hero-line-top"></div>
+            <div class="hero-line hero-line-bottom"></div>
+
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             PREMIUM ABOUT SECTION
+             ════════════════════════════════════════════════════ -->
+        <section id="about" class="about-section">
+
+            <!-- Blueprint grid (continues from hero) -->
+            <div class="about-grid-bg"></div>
+
+            <!-- Grain texture (continues from hero) -->
+            <div class="about-grain"></div>
+
+            <!-- Subtle moving decorative lines -->
+            <div class="about-deco-line about-deco-line-1"></div>
+            <div class="about-deco-line about-deco-line-2"></div>
+
+            <div class="about-container">
+
+                <!-- ─── Section Header ─── -->
+                <div class="about-header" id="about-header">
+                    <span class="about-label">02 — ABOUT</span>
+                    <h2 class="about-title" id="about-title">WHO I AM</h2>
+                    <p class="about-subtitle" id="about-subtitle-text">Designing experiences, not just screens.</p>
+                </div>
+
+                <!-- ─── Two-Column Layout ─── -->
+                <div class="about-content">
+
+                    <!-- Left Column — Storytelling -->
+                    <div class="about-left" id="about-left">
+                        <p class="about-paragraph" data-reveal>
+                            I'm Ayur Sagathiya — a digital product designer with a passion for crafting interfaces that
+                            feel intuitive, purposeful, and alive. Currently pursuing my MCA, I channel every pixel into
+                            meaningful user experiences.
+                        </p>
+                        <p class="about-paragraph" data-reveal>
+                            My design philosophy blends <strong>product thinking</strong> with deep <strong>user
+                                research</strong>. I don't just make things look good — I make them work beautifully.
+                            Every decision is backed by empathy, data, and a relentless focus on the end user.
+                        </p>
+                        <p class="about-paragraph" data-reveal>
+                            From mobile banking interfaces to design systems, I approach each project as a holistic
+                            experience — understanding context, mapping user flows, and iterating toward clarity.
+                        </p>
+                        <p class="about-paragraph" data-reveal>
+                            When I'm not designing, I'm exploring <strong>interaction design</strong> patterns, studying
+                            motion principles, and pushing the boundaries of what a digital product can feel like.
+                        </p>
+
+                        <!-- Focus Areas -->
+                        <div class="about-focus-areas" data-reveal>
+                            <span class="focus-tag">UI/UX Design</span>
+                            <span class="focus-tag">Product Thinking</span>
+                            <span class="focus-tag">User Research</span>
+                            <span class="focus-tag">Interaction Design</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column — Interactive Visuals -->
+                    <div class="about-right" id="about-right">
+
+                        <!-- Floating profile with glow -->
+                        <div class="about-profile-float" id="about-profile-float">
+                            <div class="about-profile-glow"></div>
+                            <img src="./assets/portrait.png" alt="Ayur Sagathiya" class="about-profile-image">
+                        </div>
+
+                        <!-- Interactive Timeline -->
+                        <div class="about-timeline" id="about-timeline">
+                            <div class="timeline-track" id="timeline-track">
+                                <div class="timeline-progress" id="timeline-progress"></div>
+                            </div>
+                            <div class="about-timeline-item" data-year="2024">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-card">
+                                    <span class="timeline-year">2024</span>
+                                    <span class="timeline-desc">Starting UI/UX Journey</span>
+                                </div>
+                            </div>
+                            <div class="about-timeline-item" data-year="2025">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-card">
+                                    <span class="timeline-year">2025</span>
+                                    <span class="timeline-desc">MCA + UI/UX Focus</span>
+                                </div>
+                            </div>
+                            <div class="about-timeline-item" data-year="2026">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-card">
+                                    <span class="timeline-year">2026</span>
+                                    <span class="timeline-desc">Product Designer</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skill Cloud -->
+                        <div class="about-skill-cloud" id="about-skill-cloud">
+                            <div class="about-skill-chip" data-magnetic>UI Design</div>
+                            <div class="about-skill-chip" data-magnetic>UX Research</div>
+                            <div class="about-skill-chip" data-magnetic>Wireframing</div>
+                            <div class="about-skill-chip" data-magnetic>Prototyping</div>
+                            <div class="about-skill-chip" data-magnetic>Figma</div>
+                            <div class="about-skill-chip" data-magnetic>Design Systems</div>
+                            <div class="about-skill-chip" data-magnetic>Mobile Design</div>
+                            <div class="about-skill-chip" data-magnetic>User Flows</div>
+                            <div class="about-skill-chip" data-magnetic>Interaction Design</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── Design Philosophy Block ─── -->
+                <div class="about-philosophy" id="about-philosophy">
+                    <blockquote class="philosophy-quote" id="philosophy-quote">
+                        Turning Complex Problems Into Simple Experiences.
+                    </blockquote>
+                </div>
+
+                <!-- ─── Stats Section ─── -->
+                <div class="about-stats" id="about-stats">
+                    <div class="about-stat-card" data-count="2" data-suffix="+">
+                        <span class="stat-number">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="about-stat-card" data-count="100" data-suffix="+">
+                        <span class="stat-number">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Screens Designed</span>
+                    </div>
+                    <div class="about-stat-card" data-count="1" data-suffix="+">
+                        <span class="stat-number">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Year Learning</span>
+                    </div>
+                    <div class="about-stat-card" data-count="0" data-suffix="">
+                        <span class="stat-number stat-text">MCA</span>
+                        <span class="stat-suffix"></span>
+                        <span class="stat-label">Student</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             03 — PROJECTS SECTION (Horizontal Scroll)
+             ════════════════════════════════════════════════════ -->
+        <section id="projects" class="projects-section">
+            <div class="projects-grid-bg"></div>
+            <div class="projects-grain"></div>
+
+            <div class="projects-container">
+                <div class="projects-header container">
+                    <span class="projects-label">03 — SELECTED WORK</span>
+                    <h2 class="projects-title">MY WORK</h2>
+                    <p class="projects-subtitle">A curation of digital products, design systems, and interaction design
+                        concepts.</p>
+                </div>
+
+                <div class="projects-horizontal-scroll-container">
+                    <div class="projects-horizontal-scroll-wrapper" id="projects-scroll-wrapper">
+                        <!-- Project 1: Voltify -->
+                        <div class="project-card" data-project="voltify">
+                            <div class="project-card-image-wrapper">
+                                <img src="./assets/voltify-hero.svg" alt="Voltify EV Charging App"
+                                    class="project-card-image">
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">01 / 07</span>
+                                <span class="project-card-category">MOBILE APP • DESIGN SYSTEM</span>
+                                <h3 class="project-card-title">Voltify EV Charging</h3>
+                                <p class="project-card-desc">Redefining smart charging ecosystems for electric vehicles,
+                                    reducing user range anxiety with transparent state models.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="voltify">View Case
+                                    Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 2: NeroBean -->
+                        <div class="project-card" data-project="coffee-shop">
+                            <div class="project-card-image-wrapper">
+                                <img src="./assets/coffeeshop-hero.svg" alt="NeroBean Coffee Experience"
+                                    class="project-card-image">
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">02 / 07</span>
+                                <span class="project-card-category">BRAND IDENTITY • WEB DESIGN</span>
+                                <h3 class="project-card-title">NeroBean Coffee</h3>
+                                <p class="project-card-desc">A sensory, luxury technology-inspired ecommerce storefront
+                                    for elite, small-batch coffee roasters.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="coffee-shop">View Case
+                                    Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 3: Airport Experience -->
+                        <div class="project-card" data-project="airport">
+                            <div class="project-card-image-wrapper">
+                                <img src="./assets/airport-hero.svg" alt="Airport Departure Cockpit"
+                                    class="project-card-image">
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">03 / 07</span>
+                                <span class="project-card-category">SYSTEMS DESIGN • DASHBOARD</span>
+                                <h3 class="project-card-title">Airport Cockpit</h3>
+                                <p class="project-card-desc">Designing an intuitive flight departure wayfinding system
+                                    to minimize passenger stress at busy terminals.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="airport">View Case
+                                    Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 4: Sports Booking -->
+                        <div class="project-card" data-project="sports-booking">
+                            <div class="project-card-image-wrapper">
+                                <div class="project-card-fallback-bg gradient-sports"></div>
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">04 / 07</span>
+                                <span class="project-card-category">MOBILE APP • UI/UX</span>
+                                <h3 class="project-card-title">Sports Booking</h3>
+                                <p class="project-card-desc">A seamless multi-venue scheduling and community interaction
+                                    application designed for local athletes.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="sports-booking">View
+                                    Case Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 5: AirPods Max -->
+                        <div class="project-card" data-project="airpods-max">
+                            <div class="project-card-image-wrapper">
+                                <div class="project-card-fallback-bg gradient-airpods"></div>
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">05 / 07</span>
+                                <span class="project-card-category">LANDING EXPERIENCE • MOTION</span>
+                                <h3 class="project-card-title">AirPods Max</h3>
+                                <p class="project-card-desc">An editorial, high-end sensory product presentation
+                                    detailing premium acoustic mechanics.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="airpods-max">View Case
+                                    Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 6: Nike Air Max 270 -->
+                        <div class="project-card" data-project="nike-air-max">
+                            <div class="project-card-image-wrapper">
+                                <div class="project-card-fallback-bg gradient-nike"></div>
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">06 / 07</span>
+                                <span class="project-card-category">E-COMMERCE • INTERACTIVE</span>
+                                <h3 class="project-card-title">Nike Air Max 270</h3>
+                                <p class="project-card-desc">An experiential customization platform showcasing
+                                    interactive colorways and physical dynamics.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="nike-air-max">View
+                                    Case Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 7: Udankhatola -->
+                        <div class="project-card" data-project="udankhatola">
+                            <div class="project-card-image-wrapper">
+                                <div class="project-card-fallback-bg gradient-ropeway"></div>
+                                <div class="project-card-overlay"></div>
+                            </div>
+                            <div class="project-card-info">
+                                <span class="project-card-num">07 / 07</span>
+                                <span class="project-card-category">TICKETING • ROPEWAY APP</span>
+                                <h3 class="project-card-title">Udankhatola App</h3>
+                                <p class="project-card-desc">Simplifying ropeway reservations and boarding logistics for
+                                    thousands of tourists across spiritual destinations.</p>
+                                <a href="#" class="project-card-link open-case-study" data-study="udankhatola">View Case
+                                    Study <span class="arrow">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             04 — EXPERIENCE SECTION
+             ════════════════════════════════════════════════════ -->
+        <section id="experience" class="experience-section">
+            <div class="experience-grid-bg"></div>
+            <div class="experience-grain"></div>
+
+            <div class="experience-container container">
+                <div class="experience-header">
+                    <span class="experience-label">04 — EXPERIENCE</span>
+                    <h2 class="experience-title">EXPERIENCE</h2>
+                    <p class="experience-subtitle">Professional milestones and structural training in digital product
+                        design.</p>
+                </div>
+
+                <div class="experience-layout">
+                    <!-- Ashutec Intern Box -->
+                    <div class="experience-timeline-block">
+                        <div class="timeline-pulse-node"></div>
+                        <div class="experience-details-card">
+                            <div class="exp-card-header">
+                                <div>
+                                    <h3 class="exp-company">Ashutec Solutions Pvt. Ltd.</h3>
+                                    <span class="exp-role">UI/UX Design Intern</span>
+                                </div>
+                                <span class="exp-duration">Dec 2025 — April 2026</span>
+                            </div>
+
+                            <p class="exp-summary">
+                                Designing and iterating on high-fidelity user flows, responsive web dashboards, and
+                                mobile applications. Collaborating closely with product managers and frontend
+                                engineering teams to implement clean components.
+                            </p>
+
+                            <div class="exp-content-grid">
+                                <div class="exp-column">
+                                    <h4>Key Responsibilities</h4>
+                                    <ul>
+                                        <li>Conducting user interviews and consolidating feedback to refine app
+                                            structure.</li>
+                                        <li>Crafting responsive layouts, wireframes, and production-ready high-fidelity
+                                            Figma files.</li>
+                                        <li>Ensuring alignment with cross-functional design system guides and component
+                                            libraries.</li>
+                                    </ul>
+                                </div>
+                                <div class="exp-column">
+                                    <h4>Contributions & Learnings</h4>
+                                    <ul>
+                                        <li>Reduced user screen latency states by simplifying form navigation steps.
+                                        </li>
+                                        <li>Gained hands-on experience in typography hierarchy, accessibility, and
+                                            visual physics.</li>
+                                        <li>Engineered micro-interaction logic for advanced filter chips and nested
+                                            layouts.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             05 — TOOLS & SKILLS SECTION
+             ════════════════════════════════════════════════════ -->
+        <section id="skills" class="skills-section">
+            <div class="skills-grid-bg"></div>
+            <div class="skills-grain"></div>
+
+            <div class="skills-container container">
+                <div class="skills-header">
+                    <span class="skills-label">05 — TOOLS & SKILLS</span>
+                    <h2 class="skills-title">TOOLS & SKILLS</h2>
+                    <p class="skills-subtitle">Technological ecosystem and core designer attributes that drive product
+                        success.</p>
+                </div>
+            </div>
+
+            <!-- Full-width marquee rows wrapper outside the container -->
+            <div class="skills-marquee-container">
+                <!-- Row 1: Left to Right -->
+                <div class="skills-marquee-row row-left-to-right" id="skills-row-1">
+                    <div class="skills-marquee-track">
+                        <!-- Group A -->
+                        <div class="skills-marquee-group">
+                            <span class="skill-pill-marquee">UI Design</span>
+                            <span class="skill-pill-marquee">UX Research</span>
+                            <span class="skill-pill-marquee">Wireframing</span>
+                            <span class="skill-pill-marquee">Prototyping</span>
+                            <span class="skill-pill-marquee">User Flows</span>
+                            <span class="skill-pill-marquee">Information Architecture</span>
+                            <span class="skill-pill-marquee">Interaction Design</span>
+                            <span class="skill-pill-marquee">Mobile Design</span>
+                            <span class="skill-pill-marquee">Design Systems</span>
+                            <span class="skill-pill-marquee">Usability Testing</span>
+                            <span class="skill-pill-marquee">Visual Design</span>
+                            <span class="skill-pill-marquee">Accessibility Design</span>
+                            <span class="skill-pill-marquee">Product Thinking</span>
+                            <span class="skill-pill-marquee">User Journey Mapping</span>
+                            <span class="skill-pill-marquee">Micro Interactions</span>
+                        </div>
+                        <!-- Group B (Duplicate for infinite seamless loop) -->
+                        <div class="skills-marquee-group">
+                            <span class="skill-pill-marquee">UI Design</span>
+                            <span class="skill-pill-marquee">UX Research</span>
+                            <span class="skill-pill-marquee">Wireframing</span>
+                            <span class="skill-pill-marquee">Prototyping</span>
+                            <span class="skill-pill-marquee">User Flows</span>
+                            <span class="skill-pill-marquee">Information Architecture</span>
+                            <span class="skill-pill-marquee">Interaction Design</span>
+                            <span class="skill-pill-marquee">Mobile Design</span>
+                            <span class="skill-pill-marquee">Design Systems</span>
+                            <span class="skill-pill-marquee">Usability Testing</span>
+                            <span class="skill-pill-marquee">Visual Design</span>
+                            <span class="skill-pill-marquee">Accessibility Design</span>
+                            <span class="skill-pill-marquee">Product Thinking</span>
+                            <span class="skill-pill-marquee">User Journey Mapping</span>
+                            <span class="skill-pill-marquee">Micro Interactions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Right to Left -->
+                <div class="skills-marquee-row row-right-to-left" id="skills-row-2">
+                    <div class="skills-marquee-track">
+                        <!-- Group A -->
+                        <div class="skills-marquee-group">
+                            <span class="skill-pill-marquee">Figma</span>
+                            <span class="skill-pill-marquee">FigJam</span>
+                            <span class="skill-pill-marquee">Adobe XD</span>
+                            <span class="skill-pill-marquee">Photoshop</span>
+                            <span class="skill-pill-marquee">Illustrator</span>
+                            <span class="skill-pill-marquee">Auto Layout</span>
+                            <span class="skill-pill-marquee">Design Tokens</span>
+                            <span class="skill-pill-marquee">Component Libraries</span>
+                            <span class="skill-pill-marquee">Responsive Design</span>
+                            <span class="skill-pill-marquee">Mobile App Design</span>
+                            <span class="skill-pill-marquee">Web Design</span>
+                            <span class="skill-pill-marquee">Flutter Basics</span>
+                            <span class="skill-pill-marquee">HTML</span>
+                            <span class="skill-pill-marquee">CSS</span>
+                            <span class="skill-pill-marquee">Android Basics</span>
+                            <span class="skill-pill-marquee">Design Handoff</span>
+                            <span class="skill-pill-marquee">Developer Collaboration</span>
+                            <span class="skill-pill-marquee">Rapid Prototyping</span>
+                        </div>
+                        <!-- Group B (Duplicate for infinite seamless loop) -->
+                        <div class="skills-marquee-group">
+                            <span class="skill-pill-marquee">Figma</span>
+                            <span class="skill-pill-marquee">FigJam</span>
+                            <span class="skill-pill-marquee">Adobe XD</span>
+                            <span class="skill-pill-marquee">Photoshop</span>
+                            <span class="skill-pill-marquee">Illustrator</span>
+                            <span class="skill-pill-marquee">Auto Layout</span>
+                            <span class="skill-pill-marquee">Design Tokens</span>
+                            <span class="skill-pill-marquee">Component Libraries</span>
+                            <span class="skill-pill-marquee">Responsive Design</span>
+                            <span class="skill-pill-marquee">Mobile App Design</span>
+                            <span class="skill-pill-marquee">Web Design</span>
+                            <span class="skill-pill-marquee">Flutter Basics</span>
+                            <span class="skill-pill-marquee">HTML</span>
+                            <span class="skill-pill-marquee">CSS</span>
+                            <span class="skill-pill-marquee">Android Basics</span>
+                            <span class="skill-pill-marquee">Design Handoff</span>
+                            <span class="skill-pill-marquee">Developer Collaboration</span>
+                            <span class="skill-pill-marquee">Rapid Prototyping</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             06 — DESIGN FLOW SECTION
+             ════════════════════════════════════════════════════ -->
+        <section id="design-flow" class="design-flow-section">
+            <div class="flow-grid-bg"></div>
+            <div class="flow-grain"></div>
+
+            <div class="flow-container container">
+                <div class="flow-header">
+                    <span class="flow-label">06 — DESIGN PROCESS</span>
+                    <h2 class="flow-title">DESIGN PROCESS</h2>
+                    <p class="flow-subtitle">A highly analytical, step-by-step methodology from research to launch.</p>
+                </div>
+
+                <div class="flow-horizontal-container">
+                    <div class="flow-steps-wrapper" id="flow-steps-wrapper">
+                        <!-- Horizontal Track inside wrapper so it scrolls with cards -->
+                        <div class="flow-track-wrapper">
+                            <div class="flow-track">
+                                <div class="flow-track-progress" id="flow-track-progress"></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Research -->
+                        <div class="flow-step-card" data-step="1">
+                            <div class="step-num">01</div>
+                            <h3 class="step-title">Research & Empathize</h3>
+                            <p class="step-desc">Deep-diving into user demographics, conducting interviews, and
+                                analyzing competitor friction points.</p>
+                        </div>
+
+                        <!-- Step 2: Define -->
+                        <div class="flow-step-card" data-step="2">
+                            <div class="step-num">02</div>
+                            <h3 class="step-title">Define Problem</h3>
+                            <p class="step-desc">Synthesizing raw research into user personas, core HMW (How Might We)
+                                questions, and project scoping parameters.</p>
+                        </div>
+
+                        <!-- Step 3: Ideate -->
+                        <div class="flow-step-card" data-step="3">
+                            <div class="step-num">03</div>
+                            <h3 class="step-title">Ideate & Brainstorm</h3>
+                            <p class="step-desc">Sketching initial solutions, mapping conceptual flows, and reviewing
+                                architectural options for clarity.</p>
+                        </div>
+
+                        <!-- Step 4: Wireframe -->
+                        <div class="flow-step-card" data-step="4">
+                            <div class="step-num">04</div>
+                            <h3 class="step-title">Wireframing</h3>
+                            <p class="step-desc">Creating low-fidelity structures to establish structural layouts and
+                                validate path efficiency.</p>
+                        </div>
+
+                        <!-- Step 5: Prototype -->
+                        <div class="flow-step-card" data-step="5">
+                            <div class="step-num">05</div>
+                            <h3 class="step-title">High-Fidelity UI</h3>
+                            <p class="step-desc">Designing beautiful visual states, locking in typographic hierarchies,
+                                and crafting fluid micro-interactions.</p>
+                        </div>
+
+                        <!-- Step 6: Test -->
+                        <div class="flow-step-card" data-step="6">
+                            <div class="step-num">06</div>
+                            <h3 class="step-title">User Testing</h3>
+                            <p class="step-desc">Conducting interactive walkthroughs, noting user friction, and
+                                measuring task success rates.</p>
+                        </div>
+
+                        <!-- Step 7: Iterate & Handover -->
+                        <div class="flow-step-card" data-step="7">
+                            <div class="step-num">07</div>
+                            <h3 class="step-title">Iterate & Handover</h3>
+                            <p class="step-desc">Polishing components based on usability feedback, preparing redlines,
+                                exporting assets, and aligning design tokens for developer handoff.</p>
+                        </div>
+
+                        <!-- Right spacing spacer to fix flex scrollWidth bug -->
+                        <div class="flow-spacer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════
+             07 — CONTACT SECTION & FOOTER
+             ════════════════════════════════════════════════════ -->
+        <section id="contact" class="contact-section">
+            <div class="contact-grid-bg"></div>
+            <div class="contact-grain"></div>
+
+            <div class="contact-container container">
+                <div class="contact-header">
+                    <span class="contact-label">07 — GET IN TOUCH</span>
+                    <h2 class="contact-title">LET'S BUILD SOMETHING GREAT</h2>
+                    <p class="contact-subtitle">Have a vision? Let's turn it into a beautiful, functional reality.</p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact Cards -->
+                    <div class="contact-info-wrapper">
+                        <!-- Email Card -->
+                        <div class="contact-card" id="copy-email-card">
+                            <span class="contact-card-label">EMAIL ADDRESS</span>
+                            <div class="contact-card-value-group">
+                                <span class="contact-card-value">ayursagathiya@gmail.com</span>
+                                <button class="copy-btn" data-clipboard="ayursagathiya@gmail.com">
+                                    <span class="copy-text">Copy</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Phone Card -->
+                        <div class="contact-card" id="copy-phone-card">
+                            <span class="contact-card-label">PHONE NUMBER</span>
+                            <div class="contact-card-value-group">
+                                <span class="contact-card-value">+91 90161 81546</span>
+                                <button class="copy-btn" data-clipboard="+919429197792">
+                                    <span class="copy-text">Copy</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Location Card -->
+                        <div class="contact-card">
+                            <span class="contact-card-label">LOCATION</span>
+                            <div class="contact-card-value-group">
+                                <span class="contact-card-value">Junagadh, India</span>
+                                <span class="location-timezone">(GMT +5:30)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Actions -->
+                    <div class="contact-actions">
+                        <a href="mailto:ayursagathiya@gmail.com" class="btn btn-primary contact-cta-btn">
+                            START A PROJECT <span class="arrow">→</span>
+                        </a>
+                        <a href="./assets/resume.pdf" class="btn btn-secondary contact-resume-btn" download>
+                            DOWNLOAD RESUME <span class="arrow">↓</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer-minimal container">
+                <div class="footer-line"></div>
+                <div class="footer-bottom">
+                    <p class="footer-copyright">Designed &amp; Crafted by Ayur Sagathiya &copy; 2026</p>
+                    <div class="footer-socials">
+                        <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+                        <a href="https://behance.net" target="_blank" class="footer-link">Behance</a>
+                        <a href="https://dribbble.com" target="_blank" class="footer-link">Dribbble</a>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- Case Study Modal -->
+    <div id="case-study-modal" class="case-study-modal-overlay">
+        <div class="case-study-modal-bg"></div>
+        <div class="case-study-modal-wrapper">
+            <button class="modal-close-btn" id="modal-close-btn">
+                <span class="close-icon">&times;</span>
+                <span class="close-text">CLOSE</span>
+            </button>
+            <div class="case-study-modal-container" id="modal-content-container">
+                <!-- Case study content gets loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="./app.js"></script>
+</body>
+
+</html>
