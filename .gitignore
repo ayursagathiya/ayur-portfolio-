@@ -38,3 +38,7 @@ Temp/
 *.njsproj
 *.sln
 *.sw?
+.vercel/
+
+
+.vercel
