@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voltify EV Charging — Case Study</title>
+    <meta name="description"
+        content="Case study of Voltify EV Charging Application. Design system, research, wireframes, and mockups.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../index.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Custom local overrides for standalone page to make it extremely premium */
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            overflow-y: auto;
+            position: relative;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        /* Standalone blueprint grid backdrop */
+        .blueprint-grid-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(77, 159, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(77, 159, 255, 0.04) 1px, transparent 1px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Minimal Close Button */
+        .close-btn-standalone {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 1000;
+            background: transparent;
+            border: none;
+            color: #111111;
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+        }
+
+        .close-btn-standalone:hover {
+            color: #4D9FFF;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .close-btn-standalone {
+                top: 24px;
+                right: 24px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Grid Backdrop -->
+    <div class="blueprint-grid-backdrop"></div>
+
+    <!-- Minimal Close Button X -->
+    <button id="case-study-close-btn" class="close-btn-standalone" title="Return to Homepage">×</button>
+
+    <!-- Synchronized 16 Case Study Sections -->
+    <div class="case-study-content"
+        style="background-color: #ffffff; color: #111111; font-family: 'Space Grotesk', -apple-system, sans-serif; position: relative; z-index: 5; max-width: 1200px; margin: 0 auto; padding: 0 40px;">
+
+        <!-- ─── SECTION 1: HERO ─── -->
+        <header class="cs-section"
+            style="position: relative; padding: 140px 0 80px 0; border-bottom: 1px solid rgba(77, 159, 255, 0.15); background: radial-gradient(circle at 80% 20%, rgba(77, 159, 255, 0.05) 0%, transparent 60%);">
+            <div class="case-study-logo-wrapper" style="margin-bottom: 32px; display: inline-block;">
+                <img src="../Projects/Voltify/Logo/Volfify Web Logo.png" alt="Voltify Branding Logo"
+                    style="height: 48px; width: auto; object-fit: contain;">
+            </div>
+            <br>
+            <span
+                style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">01
+                / HERO BRAND BANNER</span>
+            <h1
+                style="font-family: 'Clash Display', sans-serif; font-size: clamp(40px, 6vw, 84px); margin-top: 16px; margin-bottom: 24px; font-weight: 700; line-height: 1.0; letter-spacing: -0.03em;">
+                Voltify EV Charging</h1>
+            <p
+                style="font-size: clamp(16px, 1.8vw, 22px); color: rgba(17, 17, 17, 0.6); max-width: 800px; font-weight: 400; line-height: 1.5;">
+                Designing a seamless smart charging experience for electric vehicles, addressing range anxiety with
+                real-time feedback loops and clean design systems.
+            </p>
+        </header>
+
+        <div class="case-study-body" style="padding: 80px 0;">
+
+            <!-- Metadata Info Grid -->
+            <section class="case-study-meta-grid"
+                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); padding-bottom: 48px; margin-bottom: 80px;">
+                <div>
+                    <h5
+                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
+                        ROLE</h5>
+                    <p style="color: #111111; font-weight: 700; font-size: 15px;">UI/UX Lead Designer</p>
+                </div>
+                <div>
+                    <h5
+                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
+                        TIMELINE</h5>
+                    <p style="color: #111111; font-weight: 700; font-size: 15px;">6 Weeks (2026)</p>
+                </div>
+                <div>
+                    <h5
+                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
+                        DELIVERABLES</h5>
+                    <p style="color: #111111; font-weight: 700; font-size: 15px;">Mobile App, Design System</p>
+                </div>
+                <div>
+                    <h5
+                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
+                        LOCATION</h5>
+                    <p style="color: #111111; font-weight: 700; font-size: 15px;">Ahmedabad, India</p>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 2: OVERVIEW ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">02.
+                            Context</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
+                            Overview</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            Voltify is an EV charging companion app built to address range anxiety for electric vehicle
+                            drivers. By delivering transparent, real-time feedback loops and booking structures, it
+                            helps motorists navigate to compatible and active charging plugs.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 3: PROBLEM ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">03.
+                            Challenge</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Problem
+                        </h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p
+                            style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin-bottom: 24px;">
+                            EV drivers suffer from acute "range anxiety" the persistent fear of being stranded. This
+                            is exacerbated by broken or unavailable charger ports, mismatched plug interfaces, and
+                            delayed status syncs within existing public infrastructure applications.
+                        </p>
+                        <div
+                            style="padding: 24px; border-left: 4px solid #4D9FFF; background: rgba(77, 159, 255, 0.02); border-radius: 0 12px 12px 0;">
+                            <p style="font-size: 14px; line-height: 1.6; color: #111111; margin: 0; font-weight: 500;">
+                                "I have driven 15km to three different charging locations listed as 'available' on my
+                                dashboard, only to find them out of order or occupied by other vehicles."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 4: GOAL ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">04.
+                            Vision</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Goal
+                        </h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            Our objective was to design a frictionless charging station reservation and status
+                            monitoring app that provides reassuring micro-interactions and transparent real-time state
+                            displays. By validating vehicle compatibility upfront, we aim to deliver absolute certainty
+                            to the navigation flow.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 5: RESEARCH ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <span
+                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">05.
+                    Discovery</span>
+                <h2
+                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
+                    Research</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                    <div
+                        style="padding: 32px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background-color: #ffffff;">
+                        <span
+                            style="font-size: 10px; font-weight: 700; color: #4D9FFF; letter-spacing: 1.5px; text-transform: uppercase;">USER
+                            PERSONA</span>
+                        <h3
+                            style="font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 600; margin-top: 12px; margin-bottom: 12px;">
+                            Neha Patel, 32</h3>
+                        <p style="font-size: 14px; line-height: 1.6; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            Neha Patel is a 32-year-old marketing manager from Surat who drives an electric car for her
+                            daily commute and work travel. With a busy schedule and moderatehigh tech comfort, she
+                            values reliable charging, advance slot booking, secure payments, and safe, well-rated
+                            stations to avoid delays and stress in her routine.
+                        </p>
+                    </div>
+                    <div
+                        style="padding: 32px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background-color: #ffffff;">
+                        <span
+                            style="font-size: 10px; font-weight: 700; color: #4D9FFF; letter-spacing: 1.5px; text-transform: uppercase;">JOURNEY
+                            MAP</span>
+                        <h3
+                            style="font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 600; margin-top: 12px; margin-bottom: 12px;">
+                            Charging Journey</h3>
+                        <p style="font-size: 14px; line-height: 1.6; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            Vikram spots a low battery warning, filters locations for rápido CCS2 plugs, books a station
+                            slot for 20 minutes to hold availability, plugs in on arrival, and returns to work while
+                            tracking statistics.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 6: WIREFRAMES ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <span
+                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">06.
+                    Layout Iterations</span>
+                <h2
+                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
+                    Wireframes</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center;">
+                    <div
+                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
+                        <img src="../Projects/Voltify/Wireframes/Low Fidelity.png" alt="Low Fidelity wireframes"
+                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
+                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">1. Low Fidelity
+                            Sketches</span>
+                    </div>
+                    <div
+                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
+                        <img src="../Projects/Voltify/Wireframes/HIgh Fidelity.png" alt="High Fidelity wireframes"
+                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
+                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">2. Mid Fidelity
+                            Wireframes</span>
+                    </div>
+                    <div
+                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
+                        <img src="../Projects/Voltify/Wireframes/Drown.png" alt="Sketches and flows"
+                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
+                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">3. Component
+                            Layouts</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 7: TYPOGRAPHY ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">07.
+                            Visual Typography</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
+                            Typography</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <h3
+                            style="font-family: 'Clash Display', sans-serif; font-size: 24px; font-weight: 600; margin-bottom: 16px;">
+                            Geometric Scale</h3>
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            We paired the wide-aligned geometric display font **Clash Display** with **Inter** to create
+                            high contrast layouts that remain readable even on a shaking dashboard mount inside a
+                            vehicle.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 8: COLOR SYSTEM ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">08.
+                            Brand Hues</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Color
+                            System</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <img src="../Projects/Voltify/Design system/Typography & colors.png"
+                            alt="Color System and Tokens"
+                            style="width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 9: DESIGN SYSTEM ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">09.
+                            Foundations</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Design
+                            System</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            The Voltify Design System utilizes a strict 8px layout grid and structural border tokens.
+                            This creates a cohesive blueprint look, aligning user interface guidelines with robust
+                            mechanical engineering concepts.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 10: COMPONENTS ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">10.
+                            Modular Assets</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
+                            Components</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <img src="../Projects/Voltify/Design system/Icons.png" alt="Voltify Component Library"
+                            style="width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 11: USER FLOW ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <span
+                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">11.
+                    Architecture</span>
+                <h2
+                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 24px;">
+                    User Flow</h2>
+                <div
+                    style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; font-size: 14px; text-align: center; font-weight: 500;">
+                    <div
+                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
+                        Locate Station</div>
+                    <div
+                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
+                        Filter Plug Speed</div>
+                    <div
+                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
+                        Claim Socket Slot</div>
+                    <div
+                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
+                        Initiate Session</div>
+                    <div
+                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
+                        Live Feedback loop</div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 12: MOCKUPS ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">12.
+                            Layout Presentation</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Mockups
+                        </h2>
+                    </div>
+                    <div
+                        style="grid-column: span 8; text-align: center; background-color: #fafafa; padding: 32px; border-radius: 16px;">
+                        <img src="../Projects/Voltify/Mockups/17.png" alt="Search and map views mockup"
+                            style="width: 100%; max-width: 320px; height: auto; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 13: FINAL SCREENS ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">13.
+                            Finished UI</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Final
+                            Screens</h2>
+                    </div>
+                    <div
+                        style="grid-column: span 8; text-align: center; background-color: #fafafa; padding: 32px; border-radius: 16px;">
+                        <img src="../Projects/Voltify/Mockups/Frame 427318922.png"
+                            alt="Circular charging feedback gauge"
+                            style="width: 100%; max-width: 320px; height: auto; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 14: KEY FEATURES ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <span
+                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">14.
+                    Product Functions</span>
+                <h2
+                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
+                    Key Features</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                    <div
+                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
+                        <h4
+                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
+                            Live plug sensor</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
+                            Validates the real-time availability of station plugs through hardware sensors, preventing
+                            wasted journeys.
+                        </p>
+                    </div>
+                    <div
+                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
+                        <h4
+                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
+                            Instant slot reserve</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
+                            Enables drivers to hold a connector plug for 20 minutes with a single tap, locking in
+                            availability.
+                        </p>
+                    </div>
+                    <div
+                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
+                        <h4
+                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
+                            Circular telemetry</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
+                            Visualizes charging rate progress curves, remaining charge times, and live cost calculation
+                            clearly.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 15: LEARNINGS ─── -->
+            <section class="cs-section"
+                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">15.
+                            Takeaways</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
+                            Learnings</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            EV UI design requires severe cognitive noise control. Replacing complex data matrices with a
+                            single circular telemetry glow and color-coded statuses creates much safer interactions for
+                            drivers looking at phone mounts.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── SECTION 16: REFLECTION ─── -->
+            <section class="cs-section" style="padding-bottom: 80px;">
+                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                    <div style="grid-column: span 4;">
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">16.
+                            Conclusion</span>
+                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
+                            Reflection</h2>
+                    </div>
+                    <div style="grid-column: span 8;">
+                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
+                            Voltify successfully combines real-time hardware status metrics with clean, luxury
+                            aesthetics. Streamlining slot bookings from five clicks to a single confirmation tap
+                            resulted in a 48% reduction in booking cancellations during testing.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Standalone Transition Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fade page in smoothly on load
+            requestAnimationFrame(() => {
+                document.body.style.opacity = '1';
+            });
+
+            // Handle close button X
+            const closeBtn = document.getElementById('case-study-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Set flag to tell home page to skip preloader
+                    sessionStorage.setItem('fromCaseStudy', 'true');
+
+                    // Fade out
+                    document.body.style.opacity = '0';
+
+                    // Redirect after transition completes
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 400);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

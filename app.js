@@ -60,22 +60,223 @@ document.addEventListener('DOMContentLoaded', () => {
         behavior: 'instant'
     });
 
-    initPreloader();
-    initSmoothScroll();
-    initCustomCursor();
-    initPremiumHero();
-    initAboutSection();
-    initProjectsSection();
-    initExperienceSection();
-    initSkillsSection();
-    initDesignFlowSection();
-    initContactSection();
-    initCaseStudyModal();
-    initMagnetics();
-    initFloatingLabelsIdle();
-    // CRITICAL: Always start the unified loop regardless of WebGL success
-    startUnifiedLoop();
+    // Handle return from case study
+    if (sessionStorage.getItem('fromCaseStudy') === 'true') {
+        sessionStorage.removeItem('fromCaseStudy');
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+        }
+        
+        initSmoothScroll();
+        initCustomCursor();
+        initPremiumHero();
+        initAboutSection();
+        initProjectsSection();
+        initCardMagnetics();
+        initNikeConfigurator();
+        initCoffeeSelector();
+        initSportsBookingSlots();
+        initExperienceSection();
+        initSkillsSection();
+        initDesignFlowSection();
+        initContactSection();
+        initCaseStudyModal();
+        initMagnetics();
+        initFloatingLabelsIdle();
+        
+        // Skip preloader animation and reveal hero instantly
+        triggerPremiumHeroReveal();
+        startUnifiedLoop();
+    } else {
+        initPreloader();
+        initSmoothScroll();
+        initCustomCursor();
+        initPremiumHero();
+        initAboutSection();
+        initProjectsSection();
+        initCardMagnetics();
+        initNikeConfigurator();
+        initCoffeeSelector();
+        initSportsBookingSlots();
+        initExperienceSection();
+        initSkillsSection();
+        initDesignFlowSection();
+        initContactSection();
+        initCaseStudyModal();
+        initMagnetics();
+        initFloatingLabelsIdle();
+        startUnifiedLoop();
+    }
+
+    // SPA Routing: Click interceptor for /voltify links
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href="/voltify"]');
+        if (link) {
+            e.preventDefault();
+            navigateToCaseStudy(false);
+        }
+    });
+
+    // SPA Routing: popstate listener for browser back/forward navigation
+    window.addEventListener('popstate', (e) => {
+        const path = window.location.pathname;
+        if (path === '/voltify' || path.endsWith('/voltify')) {
+            navigateToCaseStudy(true);
+        } else {
+            navigateToHome(true);
+        }
+    });
 });
+
+/* ============================================================
+   SPA CLIENT-SIDE ROUTER FOR VOLTIFY
+   ============================================================ */
+let caseStudyCache = null;
+let savedScrollY = 0;
+
+function navigateToCaseStudy(isPopState = false) {
+    const homeView = document.getElementById('homepage-view');
+    const caseStudyView = document.getElementById('case-study-view');
+    const contentContainer = document.getElementById('case-study-spa-content');
+    if (!homeView || !caseStudyView || !contentContainer) return;
+
+    // Save home scroll position
+    if (!isPopState) {
+        savedScrollY = window.scrollY;
+    }
+
+    // Disable scroll trigger updates and Lenis scroll
+    if (lenisInstance) {
+        lenisInstance.stop();
+    }
+
+    // Apply fade/slide transition to homepage view
+    homeView.classList.remove('spa-transition-in');
+    homeView.classList.add('spa-transition-out');
+
+    const displayCaseStudy = (html) => {
+        setTimeout(() => {
+            // Hide homepage view completely
+            homeView.style.display = 'none';
+            homeView.classList.remove('spa-transition-out');
+
+            // Inject the case study HTML content
+            contentContainer.innerHTML = html;
+            caseStudyView.style.display = 'block';
+
+            // Reset scroll position to top
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            
+            if (lenisInstance) {
+                lenisInstance.scrollTo(0, { immediate: true });
+                lenisInstance.start();
+            }
+
+            // Refresh ScrollTrigger so that triggers on the loaded page calculate correctly
+            if (typeof ScrollTrigger !== 'undefined') {
+                ScrollTrigger.refresh();
+            }
+
+            // Animate case study entrance
+            caseStudyView.classList.remove('spa-transition-out');
+            caseStudyView.classList.add('spa-transition-in');
+
+            // Update URL without page reload
+            if (!isPopState) {
+                history.pushState({ page: 'voltify' }, '', '/voltify');
+            }
+
+            // Bind SPA close button
+            setupSPACloseButton();
+        }, 500); // Wait for transition duration
+    };
+
+    if (caseStudyCache) {
+        displayCaseStudy(caseStudyCache);
+    } else {
+        fetch('/case-studies/voltify.html')
+            .then(res => {
+                if (!res.ok) return fetch('./case-studies/voltify.html');
+                return res;
+            })
+            .then(res => res.text())
+            .then(html => {
+                caseStudyCache = html;
+                displayCaseStudy(html);
+            })
+            .catch(err => {
+                console.error('SPA case study load error:', err);
+                displayCaseStudy(`
+                    <div style="padding: 120px 40px; text-align: center; font-family: 'Space Grotesk', sans-serif;">
+                        <h3 style="color: #4D9FFF; font-size: 24px; margin-bottom: 16px;">Failed to load case study</h3>
+                        <p style="color: rgba(17,17,17,0.6); max-width: 500px; margin: 0 auto;">
+                            Please check your network connection and try again.
+                        </p>
+                    </div>
+                `);
+            });
+    }
+}
+
+function navigateToHome(isPopState = false) {
+    const homeView = document.getElementById('homepage-view');
+    const caseStudyView = document.getElementById('case-study-view');
+    const contentContainer = document.getElementById('case-study-spa-content');
+    if (!homeView || !caseStudyView) return;
+
+    if (lenisInstance) {
+        lenisInstance.stop();
+    }
+
+    // Apply fade/slide transition to case study view
+    caseStudyView.classList.remove('spa-transition-in');
+    caseStudyView.classList.add('spa-transition-out');
+
+    setTimeout(() => {
+        // Hide case study view, clear its inner HTML
+        caseStudyView.style.display = 'none';
+        caseStudyView.classList.remove('spa-transition-out');
+        if (contentContainer) contentContainer.innerHTML = '';
+
+        // Show homepage view
+        homeView.style.display = 'block';
+
+        // Restore saved scroll position instantly
+        window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' });
+        if (lenisInstance) {
+            lenisInstance.scrollTo(savedScrollY, { immediate: true });
+            lenisInstance.start();
+        }
+
+        // Refresh GSAP ScrollTrigger to recalculate exact triggers for homepage elements
+        if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+        }
+
+        // Animate homepage entrance
+        homeView.classList.remove('spa-transition-out');
+        homeView.classList.add('spa-transition-in');
+
+        // Update URL to root
+        if (!isPopState) {
+            history.pushState({ page: 'home' }, '', '/');
+        }
+    }, 500);
+}
+
+function setupSPACloseButton() {
+    const closeBtn = document.getElementById('case-study-close-btn-spa');
+    if (closeBtn) {
+        const newCloseBtn = closeBtn.cloneNode(true);
+        closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+        newCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateToHome(false);
+        });
+    }
+}
+
 
 // Force absolute scroll reset on full window load to override any delayed browser restorations
 window.addEventListener('load', () => {
@@ -171,11 +372,21 @@ function initCustomCursor() {
 
     // Track actual mouse coords for other effects
     let isHovering = false;
+    const cursorGlow = document.getElementById('cursor-glow');
     window.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         if (cursorTextLabel) {
             cursorTextLabel.style.transform = `translate(${mouseX + 15}px, ${mouseY + 15}px)`;
+        }
+        if (cursorGlow) {
+            gsap.to(cursorGlow, {
+                x: mouseX,
+                y: mouseY,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
         }
     }, { passive: true });
 
@@ -1270,16 +1481,6 @@ function initHeroInteractions() {
 
     // Mouse movement tracking for parallax and glow
     hero.addEventListener('mousemove', (e) => {
-        // Update cursor glow position
-        if (cursorGlow) {
-            gsap.to(cursorGlow, {
-                x: e.clientX,
-                y: e.clientY,
-                duration: 0.6,
-                ease: "power2.out",
-                overwrite: "auto"
-            });
-        }
 
         // Parallax calculations (normalized dx/dy from -1 to 1)
         const cx = window.innerWidth / 2;
@@ -1416,7 +1617,7 @@ function initHeroScrollTransitions() {
 }
 
 function initMagnetics() {
-    const interactiveElements = document.querySelectorAll('.nav-links li a, .logo, .btn, .about-skill-chip, .floating-label, .skill-pill-marquee');
+    const interactiveElements = document.querySelectorAll('.nav-links li a, .logo, .btn, .about-skill-pill, .floating-label, .skill-pill-marquee');
     interactiveElements.forEach(el => {
         el.addEventListener('mousemove', (e) => {
             const bounds = el.getBoundingClientRect();
@@ -1624,67 +1825,23 @@ function initAboutSection() {
         });
     });
 
-    // ─── 7. Skill Cloud Staggered Reveal + Magnetic Hover ───
-    const skillChips = document.querySelectorAll('.about-skill-chip');
-
-    skillChips.forEach((chip, i) => {
-        gsap.to(chip, {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.5,
-            ease: 'back.out(1.4)',
-            scrollTrigger: {
-                trigger: '.about-skill-cloud',
-                start: 'top 82%',
-                toggleActions: 'play none none reverse',
-            },
-            delay: i * 0.06
-        });
-    });
-
-    // Magnetic mouse attraction for skill chips
-    const skillCloud = document.getElementById('about-skill-cloud');
-    if (skillCloud) {
-        skillCloud.addEventListener('mousemove', (e) => {
-            skillChips.forEach(chip => {
-                const rect = chip.getBoundingClientRect();
-                const chipCX = rect.left + rect.width / 2;
-                const chipCY = rect.top + rect.height / 2;
-                const dist = Math.hypot(e.clientX - chipCX, e.clientY - chipCY);
-
-                if (dist < 120) {
-                    const pullX = (e.clientX - chipCX) * 0.15;
-                    const pullY = (e.clientY - chipCY) * 0.15;
-                    gsap.to(chip, {
-                        x: pullX,
-                        y: pullY,
-                        duration: 0.3,
-                        ease: 'power2.out',
-                        overwrite: 'auto'
-                    });
-                } else {
-                    gsap.to(chip, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.5,
-                        ease: 'power2.out',
-                        overwrite: 'auto'
-                    });
+    // ─── 7. Auto Scrolling Skills Marquee Reveal ───
+    const aboutMarquee = document.querySelector('.about-skills-marquee-container');
+    if (aboutMarquee) {
+        gsap.fromTo(aboutMarquee, 
+            { opacity: 0, y: 30 },
+            { 
+                opacity: 1, 
+                y: 0, 
+                duration: 1.0, 
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: aboutMarquee,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
                 }
-            });
-        });
-
-        skillCloud.addEventListener('mouseleave', () => {
-            skillChips.forEach(chip => {
-                gsap.to(chip, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.6,
-                    ease: 'power2.out'
-                });
-            });
-        });
+            }
+        );
     }
 
     // ─── 8. Philosophy Quote — Word-by-Word Blur Reveal ───
@@ -1757,28 +1914,6 @@ function initAboutSection() {
         }
     });
 
-    // ─── 10. Cursor Glow on About Section ───
-    const cursorGlow = document.getElementById('cursor-glow');
-    if (cursorGlow) {
-        aboutSection.addEventListener('mousemove', (e) => {
-            gsap.to(cursorGlow, {
-                x: e.clientX,
-                y: e.clientY,
-                opacity: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                overwrite: 'auto'
-            });
-        });
-
-        aboutSection.addEventListener('mouseleave', () => {
-            gsap.to(cursorGlow, {
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power2.out'
-            });
-        });
-    }
 }
 
 /* ============================================================
@@ -1786,8 +1921,9 @@ function initAboutSection() {
    ============================================================ */
 function initProjectsSection() {
     const projectsSection = document.getElementById('projects');
-    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
-    if (!projectsSection || !scrollWrapper) return;
+    const editorialContainer = document.querySelector('.projects-editorial-container');
+    const floatingPreview = document.getElementById('projects-floating-preview');
+    if (!projectsSection) return;
 
     // Header reveal timeline
     const headerTl = gsap.timeline({
@@ -1801,41 +1937,26 @@ function initProjectsSection() {
             .to('.projects-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
             .to('.projects-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
 
-    // Calculate dynamic scroll amount (content width minus screen width)
-    const getScrollAmount = () => {
-        return scrollWrapper.scrollWidth - window.innerWidth;
-    };
-
-    // Horizontal Scroll Trigger with Pinning
-    const pinTween = gsap.to(scrollWrapper, {
-        x: () => -getScrollAmount(),
-        ease: 'none',
-        scrollTrigger: {
-            trigger: '#projects',
-            pin: true,
-            scrub: 1,
-            start: 'top top',
-            end: () => `+=${getScrollAmount()}`,
-            invalidateOnRefresh: true,
-        }
-    });
-
-    // Reveal project cards progressively as they enter the viewport horizontally
-    const projectCards = document.querySelectorAll('.project-card');
-    projectCards.forEach((card) => {
-        gsap.to(card, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: card,
-                containerAnimation: pinTween,
-                start: 'left 85%',
-                toggleActions: 'play none none reverse',
+    // Reveal project rows progressively
+    const rows = document.querySelectorAll('.project-editorial-row');
+    rows.forEach((row, idx) => {
+        gsap.fromTo(row, 
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: row,
+                    start: 'top 90%',
+                    toggleActions: 'play none none reverse',
+                },
+                delay: idx * 0.08
             }
-        });
+        );
     });
+
 
     // Navigation Active Link Syncing
     ScrollTrigger.create({
@@ -2106,11 +2227,28 @@ function initCaseStudyModal() {
 
     // Open Case Study click listener
     document.addEventListener('click', (e) => {
-        const trigger = e.target.closest('.open-case-study');
-        if (trigger) {
+        const card = e.target.closest('.project-card');
+        const isInteractive = e.target.closest('.color-picker-dot, .roast-chip, .calendar-slot');
+        if (card && !isInteractive) {
             e.preventDefault();
-            const studyName = trigger.getAttribute('data-study');
+            const studyName = card.getAttribute('data-project');
             if (studyName) {
+                // Fade out other cards for a smooth transition focus
+                const otherCards = document.querySelectorAll(`.project-card:not([data-project="${studyName}"])`);
+                gsap.to(otherCards, {
+                    opacity: 0.15,
+                    scale: 0.96,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
+
+                // Focus/scale clicked card slightly for feedback
+                gsap.to(card, {
+                    scale: 1.02,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
+
                 // Fetch dynamic HTML file contents
                 fetch(`./case-studies/${studyName}.html`)
                     .then(response => {
@@ -2133,9 +2271,9 @@ function initCaseStudyModal() {
                     .catch(err => {
                         console.error('Case Study Router error:', err);
                         container.innerHTML = `
-                            <div style="padding: 120px 40px; text-align: center; color: #ffffff; font-family: 'Space Grotesk', sans-serif;">
+                            <div style="padding: 120px 40px; text-align: center; color: #111111; font-family: 'Space Grotesk', sans-serif;">
                                 <h3 style="font-size: 24px; color: #4D9FFF; margin-bottom: 16px;">Case Study under construction</h3>
-                                <p style="color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto; line-height: 1.6;">
+                                <p style="color: rgba(17,17,17,0.6); max-width: 500px; margin: 0 auto; line-height: 1.6;">
                                     This visual prototype folder is currently being finalized. Feel free to explore other selected case studies.
                                 </p>
                             </div>
@@ -2153,6 +2291,17 @@ function initCaseStudyModal() {
         if (lenisInstance) lenisInstance.start();
         document.body.style.overflow = '';
         
+        // Restore all project cards to normal opacity
+        const allCards = document.querySelectorAll('.project-card');
+        gsap.to(allCards, {
+            opacity: 1,
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out"
+        });
+
         // Wait for slide-out/fade animation, then purge modal content
         setTimeout(() => {
             container.innerHTML = '';
@@ -2216,4 +2365,159 @@ function startUnifiedLoop() {
         requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+}
+
+/* ============================================================
+   PROJECT CARD INTERACTIVES (Magnetics & Configurators)
+   ============================================================ */
+
+function initCardMagnetics() {
+    const cards = document.querySelectorAll('.project-card:not(.project-editorial-row)');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const bounds = card.getBoundingClientRect();
+            const cx = bounds.left + bounds.width / 2;
+            const cy = bounds.top + bounds.height / 2;
+            const dx = e.clientX - cx;
+            const dy = e.clientY - cy;
+
+            // Update relative mouse coordinates for radial background glows
+            const rx = e.clientX - bounds.left;
+            const ry = e.clientY - bounds.top;
+            card.style.setProperty('--x', `${rx}px`);
+            card.style.setProperty('--y', `${ry}px`);
+
+            // Subtle magnetic pull (5% max offset for heavy cards)
+            gsap.to(card, {
+                x: dx * 0.05,
+                y: dy * 0.05,
+                duration: 0.5,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+            
+            // Subtle offset tilt on card inner wrapper
+            const inner = card.querySelector('.project-card-image-wrapper');
+            if (inner) {
+                gsap.to(inner, {
+                    x: dx * 0.02,
+                    y: dy * 0.02,
+                    rotationY: dx * 0.015,
+                    rotationX: -dy * 0.015,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    overwrite: "auto"
+                });
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                overwrite: "auto"
+            });
+            
+            const inner = card.querySelector('.project-card-image-wrapper');
+            if (inner) {
+                gsap.to(inner, {
+                    x: 0,
+                    y: 0,
+                    rotationY: 0,
+                    rotationX: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    overwrite: "auto"
+                });
+            }
+        });
+    });
+}
+
+function initNikeConfigurator() {
+    const dots = document.querySelectorAll('.color-picker-dot');
+    const nikeCard = document.getElementById('nike-card-view');
+    if (!nikeCard) return;
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            dots.forEach(d => d.classList.remove('active'));
+            dot.classList.add('active');
+
+            const color = dot.getAttribute('data-color');
+            const colorDark = dot.getAttribute('data-color-dark');
+
+            // Apply style overrides to color shoe layers in card
+            nikeCard.style.setProperty('--nike-accent', color);
+            nikeCard.style.setProperty('--nike-accent-dark', colorDark);
+
+            // Animate shoe scaling on selection
+            const shoe = nikeCard.querySelector('.nike-shoe-wrapper');
+            if (shoe) {
+                gsap.fromTo(shoe,
+                    { scale: 0.95 },
+                    { scale: 1.08, duration: 0.6, ease: "elastic.out(1.2, 0.5)" }
+                );
+            }
+        });
+    });
+}
+
+function initCoffeeSelector() {
+    const chips = document.querySelectorAll('.roast-chip');
+    chips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const labelSticker = chip.closest('.mockup-coffeeshop').querySelector('.sticker-roast');
+            if (labelSticker) {
+                labelSticker.textContent = `LEVEL: ${chip.textContent.toUpperCase()}`;
+            }
+
+            const bag = chip.closest('.mockup-coffeeshop').querySelector('.coffee-bag');
+            if (bag) {
+                gsap.fromTo(bag,
+                    { scale: 0.92 },
+                    { scale: 1, duration: 0.5, ease: "back.out(1.5)" }
+                );
+            }
+        });
+    });
+}
+
+function initSportsBookingSlots() {
+    const slots = document.querySelectorAll('.calendar-slot');
+    slots.forEach(slot => {
+        slot.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            slots.forEach(s => s.classList.remove('active'));
+            slot.classList.add('active');
+
+            const liveBadge = slot.closest('.mockup-sports').querySelector('.sports-live-badge');
+            if (liveBadge) {
+                if (slot.textContent.includes("12:00")) {
+                    liveBadge.textContent = "BOOKED";
+                    liveBadge.style.borderColor = "#ef4444";
+                    liveBadge.style.color = "#ef4444";
+                    liveBadge.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+                } else {
+                    liveBadge.textContent = "AVAILABLE";
+                    liveBadge.style.borderColor = "#22c55e";
+                    liveBadge.style.color = "#22c55e";
+                    liveBadge.style.backgroundColor = "rgba(34, 197, 94, 0.15)";
+                }
+            }
+        });
+    });
 }

@@ -42,6 +42,9 @@
 
 <body>
 
+    <!-- Global Grain Overlay -->
+    <div class="global-grain-overlay"></div>
+
     <!-- Custom Fluid Wave Cursor -->
     <canvas id="cursor-canvas" class="cursor-canvas"></canvas>
     <div id="cursor-text-label" class="cursor-text-label"></div>
@@ -66,8 +69,9 @@
         </div>
     </div>
 
-    <!-- Navigation -->
-    <header id="header-nav" class="header-nav">
+    <div id="homepage-view">
+        <!-- Navigation -->
+        <header id="header-nav" class="header-nav">
         <a href="#hero" class="logo">AS<span style="color: #4D9FFF;">.</span></a>
         <nav>
             <ul class="nav-links">
@@ -88,12 +92,10 @@
              PREMIUM HERO SECTION
              ════════════════════════════════════════════════════ -->
         <section id="hero" class="hero-section hero-premium">
-
-            <!-- Subtle grid background -->
+            <!-- Blueprint Grid and Texture System -->
             <div class="hero-grid-bg" id="hero-grid-bg"></div>
-
-            <!-- Grain texture overlay -->
             <div class="hero-grain"></div>
+            <div class="radial-glow"></div>
 
             <!-- Background name (editorial watermark) -->
             <div class="bg-name" id="bg-name">
@@ -166,13 +168,13 @@
         <!-- ════════════════════════════════════════════════════
              PREMIUM ABOUT SECTION
              ════════════════════════════════════════════════════ -->
-        <section id="about" class="about-section">
+        <div class="light-canvas-wrapper">
+            <div class="canvas-grid-bg"></div>
+            <div class="canvas-grain"></div>
 
-            <!-- Blueprint grid (continues from hero) -->
-            <div class="about-grid-bg"></div>
-
-            <!-- Grain texture (continues from hero) -->
-            <div class="about-grain"></div>
+            <section id="about" class="about-section">
+                <div class="radial-glow" style="top: 35%; left: 25%;"></div>
+                <div class="radial-glow" style="top: 75%; left: 75%;"></div>
 
             <!-- Subtle moving decorative lines -->
             <div class="about-deco-line about-deco-line-1"></div>
@@ -210,14 +212,6 @@
                             When I'm not designing, I'm exploring <strong>interaction design</strong> patterns, studying
                             motion principles, and pushing the boundaries of what a digital product can feel like.
                         </p>
-
-                        <!-- Focus Areas -->
-                        <div class="about-focus-areas" data-reveal>
-                            <span class="focus-tag">UI/UX Design</span>
-                            <span class="focus-tag">Product Thinking</span>
-                            <span class="focus-tag">User Research</span>
-                            <span class="focus-tag">Interaction Design</span>
-                        </div>
                     </div>
 
                     <!-- Right Column — Interactive Visuals -->
@@ -257,21 +251,73 @@
                             </div>
                         </div>
 
-                        <!-- Skill Cloud -->
-                        <div class="about-skill-cloud" id="about-skill-cloud">
-                            <div class="about-skill-chip" data-magnetic>UI Design</div>
-                            <div class="about-skill-chip" data-magnetic>UX Research</div>
-                            <div class="about-skill-chip" data-magnetic>Wireframing</div>
-                            <div class="about-skill-chip" data-magnetic>Prototyping</div>
-                            <div class="about-skill-chip" data-magnetic>Figma</div>
-                            <div class="about-skill-chip" data-magnetic>Design Systems</div>
-                            <div class="about-skill-chip" data-magnetic>Mobile Design</div>
-                            <div class="about-skill-chip" data-magnetic>User Flows</div>
-                            <div class="about-skill-chip" data-magnetic>Interaction Design</div>
+                    </div>
+                </div>
+            </div> <!-- Close first about-container -->
+
+            <!-- ─── Auto Scrolling Skill Ticker ─── -->
+            <div class="about-skills-marquee-container">
+                <div class="about-skills-marquee-row">
+                    <div class="about-skills-marquee-track">
+                        <div class="about-skills-marquee-group">
+                            <span class="about-skill-pill" data-magnetic>UI/UX Design</span>
+                            <span class="about-skill-pill" data-magnetic>Product Thinking</span>
+                            <span class="about-skill-pill" data-magnetic>User Research</span>
+                            <span class="about-skill-pill" data-magnetic>Interaction Design</span>
+                            <span class="about-skill-pill" data-magnetic>UI Design</span>
+                            <span class="about-skill-pill" data-magnetic>UX Research</span>
+                            <span class="about-skill-pill" data-magnetic>Wireframing</span>
+                            <span class="about-skill-pill" data-magnetic>Prototyping</span>
+                            <span class="about-skill-pill" data-magnetic>Figma</span>
+                            <span class="about-skill-pill" data-magnetic>Design Systems</span>
+                            <span class="about-skill-pill" data-magnetic>Mobile Design</span>
+                            <span class="about-skill-pill" data-magnetic>User Flows</span>
+                            <span class="about-skill-pill" data-magnetic>Information Architecture</span>
+                            <span class="about-skill-pill" data-magnetic>Usability Testing</span>
+                            <span class="about-skill-pill" data-magnetic>Visual Design</span>
+                            <span class="about-skill-pill" data-magnetic>Accessibility Design</span>
+                            <span class="about-skill-pill" data-magnetic>Micro Interactions</span>
+                            <span class="about-skill-pill" data-magnetic>Auto Layout</span>
+                            <span class="about-skill-pill" data-magnetic>Responsive Design</span>
+                            <span class="about-skill-pill" data-magnetic>Design Tokens</span>
+                            <span class="about-skill-pill" data-magnetic>Component Libraries</span>
+                            <span class="about-skill-pill" data-magnetic>Design Handoff</span>
+                            <span class="about-skill-pill" data-magnetic>Developer Collaboration</span>
+                            <span class="about-skill-pill" data-magnetic>Rapid Prototyping</span>
+                            <span class="about-skill-pill" data-magnetic>User Journey Mapping</span>
+                        </div>
+                        <div class="about-skills-marquee-group">
+                            <span class="about-skill-pill" data-magnetic>UI/UX Design</span>
+                            <span class="about-skill-pill" data-magnetic>Product Thinking</span>
+                            <span class="about-skill-pill" data-magnetic>User Research</span>
+                            <span class="about-skill-pill" data-magnetic>Interaction Design</span>
+                            <span class="about-skill-pill" data-magnetic>UI Design</span>
+                            <span class="about-skill-pill" data-magnetic>UX Research</span>
+                            <span class="about-skill-pill" data-magnetic>Wireframing</span>
+                            <span class="about-skill-pill" data-magnetic>Prototyping</span>
+                            <span class="about-skill-pill" data-magnetic>Figma</span>
+                            <span class="about-skill-pill" data-magnetic>Design Systems</span>
+                            <span class="about-skill-pill" data-magnetic>Mobile Design</span>
+                            <span class="about-skill-pill" data-magnetic>User Flows</span>
+                            <span class="about-skill-pill" data-magnetic>Information Architecture</span>
+                            <span class="about-skill-pill" data-magnetic>Usability Testing</span>
+                            <span class="about-skill-pill" data-magnetic>Visual Design</span>
+                            <span class="about-skill-pill" data-magnetic>Accessibility Design</span>
+                            <span class="about-skill-pill" data-magnetic>Micro Interactions</span>
+                            <span class="about-skill-pill" data-magnetic>Auto Layout</span>
+                            <span class="about-skill-pill" data-magnetic>Responsive Design</span>
+                            <span class="about-skill-pill" data-magnetic>Design Tokens</span>
+                            <span class="about-skill-pill" data-magnetic>Component Libraries</span>
+                            <span class="about-skill-pill" data-magnetic>Design Handoff</span>
+                            <span class="about-skill-pill" data-magnetic>Developer Collaboration</span>
+                            <span class="about-skill-pill" data-magnetic>Rapid Prototyping</span>
+                            <span class="about-skill-pill" data-magnetic>User Journey Mapping</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="about-container">
                 <!-- ─── Design Philosophy Block ─── -->
                 <div class="about-philosophy" id="about-philosophy">
                     <blockquote class="philosophy-quote" id="philosophy-quote">
@@ -310,140 +356,43 @@
              03 — PROJECTS SECTION (Horizontal Scroll)
              ════════════════════════════════════════════════════ -->
         <section id="projects" class="projects-section">
-            <div class="projects-grid-bg"></div>
-            <div class="projects-grain"></div>
+            <div class="radial-glow" style="top: 30%; left: 50%;"></div>
 
             <div class="projects-container">
                 <div class="projects-header container">
-                    <span class="projects-label">03 — SELECTED WORK</span>
+                    <span class="projects-label">03 — FEATURED WORK</span>
                     <h2 class="projects-title">MY WORK</h2>
                     <p class="projects-subtitle">A curation of digital products, design systems, and interaction design
                         concepts.</p>
                 </div>
 
-                <div class="projects-horizontal-scroll-container">
-                    <div class="projects-horizontal-scroll-wrapper" id="projects-scroll-wrapper">
-                        <!-- Project 1: Voltify -->
-                        <div class="project-card" data-project="voltify">
-                            <div class="project-card-image-wrapper">
-                                <img src="./assets/voltify-hero.svg" alt="Voltify EV Charging App"
-                                    class="project-card-image">
-                                <div class="project-card-overlay"></div>
+                <div class="projects-editorial-container container">
+                    <!-- Editorial Rows -->
+                    <div class="projects-list-rows">
+                        <!-- Row 1: Voltify -->
+                        <a href="/voltify" class="project-editorial-row project-row-link">
+                            <!-- Column 1: Preview Area -->
+                            <div class="project-row-preview-area">
+                                <div class="project-row-logo-container">
+                                    <img src="./Projects/Voltify/Logo/Volfify Logo.png" alt="Voltify Logo" class="project-row-logo-img">
+                                </div>
                             </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">01 / 07</span>
-                                <span class="project-card-category">MOBILE APP • DESIGN SYSTEM</span>
-                                <h3 class="project-card-title">Voltify EV Charging</h3>
-                                <p class="project-card-desc">Redefining smart charging ecosystems for electric vehicles,
-                                    reducing user range anxiety with transparent state models.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="voltify">View Case
-                                    Study <span class="arrow">→</span></a>
+                            <!-- Column 2: Project Number -->
+                            <div class="project-row-num">01</div>
+                            <!-- Column 3: Project Title -->
+                            <div class="project-row-name">Voltify</div>
+                            <!-- Column 4: Project Category -->
+                            <div class="project-row-category">Mobile App • Design System</div>
+                            <!-- Column 5: Arrow -->
+                            <div class="project-row-cta">
+                                <span class="arrow-cta">→</span>
                             </div>
-                        </div>
+                        </a>
+                    </div>
 
-                        <!-- Project 2: NeroBean -->
-                        <div class="project-card" data-project="coffee-shop">
-                            <div class="project-card-image-wrapper">
-                                <img src="./assets/coffeeshop-hero.svg" alt="NeroBean Coffee Experience"
-                                    class="project-card-image">
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">02 / 07</span>
-                                <span class="project-card-category">BRAND IDENTITY • WEB DESIGN</span>
-                                <h3 class="project-card-title">NeroBean Coffee</h3>
-                                <p class="project-card-desc">A sensory, luxury technology-inspired ecommerce storefront
-                                    for elite, small-batch coffee roasters.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="coffee-shop">View Case
-                                    Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Project 3: Airport Experience -->
-                        <div class="project-card" data-project="airport">
-                            <div class="project-card-image-wrapper">
-                                <img src="./assets/airport-hero.svg" alt="Airport Departure Cockpit"
-                                    class="project-card-image">
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">03 / 07</span>
-                                <span class="project-card-category">SYSTEMS DESIGN • DASHBOARD</span>
-                                <h3 class="project-card-title">Airport Cockpit</h3>
-                                <p class="project-card-desc">Designing an intuitive flight departure wayfinding system
-                                    to minimize passenger stress at busy terminals.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="airport">View Case
-                                    Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Project 4: Sports Booking -->
-                        <div class="project-card" data-project="sports-booking">
-                            <div class="project-card-image-wrapper">
-                                <div class="project-card-fallback-bg gradient-sports"></div>
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">04 / 07</span>
-                                <span class="project-card-category">MOBILE APP • UI/UX</span>
-                                <h3 class="project-card-title">Sports Booking</h3>
-                                <p class="project-card-desc">A seamless multi-venue scheduling and community interaction
-                                    application designed for local athletes.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="sports-booking">View
-                                    Case Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Project 5: AirPods Max -->
-                        <div class="project-card" data-project="airpods-max">
-                            <div class="project-card-image-wrapper">
-                                <div class="project-card-fallback-bg gradient-airpods"></div>
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">05 / 07</span>
-                                <span class="project-card-category">LANDING EXPERIENCE • MOTION</span>
-                                <h3 class="project-card-title">AirPods Max</h3>
-                                <p class="project-card-desc">An editorial, high-end sensory product presentation
-                                    detailing premium acoustic mechanics.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="airpods-max">View Case
-                                    Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Project 6: Nike Air Max 270 -->
-                        <div class="project-card" data-project="nike-air-max">
-                            <div class="project-card-image-wrapper">
-                                <div class="project-card-fallback-bg gradient-nike"></div>
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">06 / 07</span>
-                                <span class="project-card-category">E-COMMERCE • INTERACTIVE</span>
-                                <h3 class="project-card-title">Nike Air Max 270</h3>
-                                <p class="project-card-desc">An experiential customization platform showcasing
-                                    interactive colorways and physical dynamics.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="nike-air-max">View
-                                    Case Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Project 7: Udankhatola -->
-                        <div class="project-card" data-project="udankhatola">
-                            <div class="project-card-image-wrapper">
-                                <div class="project-card-fallback-bg gradient-ropeway"></div>
-                                <div class="project-card-overlay"></div>
-                            </div>
-                            <div class="project-card-info">
-                                <span class="project-card-num">07 / 07</span>
-                                <span class="project-card-category">TICKETING • ROPEWAY APP</span>
-                                <h3 class="project-card-title">Udankhatola App</h3>
-                                <p class="project-card-desc">Simplifying ropeway reservations and boarding logistics for
-                                    thousands of tourists across spiritual destinations.</p>
-                                <a href="#" class="project-card-link open-case-study" data-study="udankhatola">View Case
-                                    Study <span class="arrow">→</span></a>
-                            </div>
-                        </div>
+                    <!-- View All Button replaced with single flagship CTA -->
+                    <div class="projects-view-all-wrapper">
+                        <a href="/voltify" class="projects-view-all">EXPLORE VOLTIFY <span class="arrow-cta">→</span></a>
                     </div>
                 </div>
             </div>
@@ -453,8 +402,7 @@
              04 — EXPERIENCE SECTION
              ════════════════════════════════════════════════════ -->
         <section id="experience" class="experience-section">
-            <div class="experience-grid-bg"></div>
-            <div class="experience-grain"></div>
+            <div class="radial-glow" style="top: 50%; left: 30%;"></div>
 
             <div class="experience-container container">
                 <div class="experience-header">
@@ -517,8 +465,7 @@
              05 — TOOLS & SKILLS SECTION
              ════════════════════════════════════════════════════ -->
         <section id="skills" class="skills-section">
-            <div class="skills-grid-bg"></div>
-            <div class="skills-grain"></div>
+            <div class="radial-glow" style="top: 50%; left: 50%;"></div>
 
             <div class="skills-container container">
                 <div class="skills-header">
@@ -627,8 +574,7 @@
              06 — DESIGN FLOW SECTION
              ════════════════════════════════════════════════════ -->
         <section id="design-flow" class="design-flow-section">
-            <div class="flow-grid-bg"></div>
-            <div class="flow-grain"></div>
+            <div class="radial-glow" style="top: 30%; left: 50%;"></div>
 
             <div class="flow-container container">
                 <div class="flow-header">
@@ -713,8 +659,7 @@
              07 — CONTACT SECTION & FOOTER
              ════════════════════════════════════════════════════ -->
         <section id="contact" class="contact-section">
-            <div class="contact-grid-bg"></div>
-            <div class="contact-grain"></div>
+            <div class="radial-glow" style="top: 40%; left: 50%;"></div>
 
             <div class="contact-container container">
                 <div class="contact-header">
@@ -772,7 +717,6 @@
 
             <!-- Footer -->
             <footer class="footer-minimal container">
-                <div class="footer-line"></div>
                 <div class="footer-bottom">
                     <p class="footer-copyright">Designed &amp; Crafted by Ayur Sagathiya &copy; 2026</p>
                     <div class="footer-socials">
@@ -783,21 +727,15 @@
                 </div>
             </footer>
         </section>
+        </div>
 
     </main>
+    </div>
 
-    <!-- Case Study Modal -->
-    <div id="case-study-modal" class="case-study-modal-overlay">
-        <div class="case-study-modal-bg"></div>
-        <div class="case-study-modal-wrapper">
-            <button class="modal-close-btn" id="modal-close-btn">
-                <span class="close-icon">&times;</span>
-                <span class="close-text">CLOSE</span>
-            </button>
-            <div class="case-study-modal-container" id="modal-content-container">
-                <!-- Case study content gets loaded dynamically here -->
-            </div>
-        </div>
+    <!-- SPA Case Study View -->
+    <div id="case-study-view" class="case-study-spa-overlay" style="display: none;">
+        <button id="case-study-close-btn-spa" class="close-btn-standalone" title="Return to Homepage">×</button>
+        <div id="case-study-spa-content"></div>
     </div>
 
     <!-- Scripts -->
