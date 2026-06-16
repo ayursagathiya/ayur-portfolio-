@@ -60,13 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
         behavior: 'instant'
     });
 
-    // Handle return from case study
-    if (sessionStorage.getItem('fromCaseStudy') === 'true') {
+    // Handle opening preloader and session state
+    const skipIntro = sessionStorage.getItem('fromCaseStudy') === 'true';
+    if (skipIntro) {
         sessionStorage.removeItem('fromCaseStudy');
+        
         const preloader = document.getElementById('preloader');
         if (preloader) {
             preloader.style.display = 'none';
         }
+        document.body.classList.remove('preloader-active');
         
         initSmoothScroll();
         initCustomCursor();
@@ -84,9 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
         initCaseStudyModal();
         initMagnetics();
         initFloatingLabelsIdle();
+        initNavScrollSync();
+        initHeaderScroll();
         
         // Skip preloader animation and reveal hero instantly
-        triggerPremiumHeroReveal();
+        triggerPremiumHeroReveal(true);
         startUnifiedLoop();
     } else {
         initPreloader();
@@ -106,25 +111,99 @@ document.addEventListener('DOMContentLoaded', () => {
         initCaseStudyModal();
         initMagnetics();
         initFloatingLabelsIdle();
+        initNavScrollSync();
+        initHeaderScroll();
         startUnifiedLoop();
     }
 
-    // SPA Routing: Click interceptor for /voltify links
+    // SPA Routing: Click interceptor for /voltify and smooth scroll hash links
     document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[href="/voltify"]');
-        if (link) {
+        const voltifyLink = e.target.closest('a[href="/voltify"]');
+        if (voltifyLink) {
             e.preventDefault();
             navigateToCaseStudy(false);
+            return;
+        }
+
+        const hashLink = e.target.closest('a[href^="#"]');
+        if (hashLink) {
+            const href = hashLink.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement && lenisInstance) {
+                    const targetScrollPos = targetElement.getBoundingClientRect().top + window.scrollY;
+                    const distance = Math.abs(targetScrollPos - window.scrollY);
+                    
+                    // Duration: 600ms to 1000ms based on distance
+                    const minDuration = 0.6; // 600ms
+                    const maxDuration = 1.0; // 1000ms
+                    const maxDistance = 3000;
+                    const distanceRatio = Math.min(Math.max(distance / maxDistance, 0), 1);
+                    const scrollDuration = minDuration + distanceRatio * (maxDuration - minDuration);
+                    
+                    lenisInstance.scrollTo(targetElement, {
+                        duration: scrollDuration,
+                        offset: -64, // navbar height
+                        easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // easeOutExpo
+                    });
+
+                    updateNavActiveLink(targetId);
+                    
+                    // Push state to update the URL without page reload/popstate trigger
+                    history.pushState({ page: 'home', hash: targetId }, '', window.location.pathname + targetId);
+                }
+            }
         }
     });
 
     // SPA Routing: popstate listener for browser back/forward navigation
     window.addEventListener('popstate', (e) => {
         const path = window.location.pathname;
+        const hash = window.location.hash;
+        
         if (path === '/voltify' || path.endsWith('/voltify')) {
             navigateToCaseStudy(true);
         } else {
-            navigateToHome(true);
+            // We are navigating to homepage (root path)
+            const homeView = document.getElementById('homepage-view');
+            const isHomeVisible = homeView && homeView.style.display !== 'none';
+            
+            if (isHomeVisible) {
+                // Homepage is already visible, just scroll to hash/top smoothly
+                if (hash) {
+                    const targetElement = document.querySelector(hash);
+                    if (targetElement && lenisInstance) {
+                        lenisInstance.scrollTo(targetElement, {
+                            duration: 0.8,
+                            offset: -64,
+                            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+                        });
+                        updateNavActiveLink(hash);
+                    }
+                } else {
+                    if (lenisInstance) {
+                        lenisInstance.scrollTo(0, {
+                            duration: 0.8,
+                            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+                        });
+                        updateNavActiveLink('#hero');
+                    }
+                }
+            } else {
+                // Return from case study
+                navigateToHome(true);
+                if (hash) {
+                    setTimeout(() => {
+                        const targetElement = document.querySelector(hash);
+                        if (targetElement && lenisInstance) {
+                            lenisInstance.scrollTo(targetElement, { immediate: true });
+                            updateNavActiveLink(hash);
+                        }
+                    }, 550);
+                }
+            }
         }
     });
 });
@@ -139,6 +218,7 @@ function navigateToCaseStudy(isPopState = false) {
     const homeView = document.getElementById('homepage-view');
     const caseStudyView = document.getElementById('case-study-view');
     const contentContainer = document.getElementById('case-study-spa-content');
+    const header = document.getElementById('header-nav');
     if (!homeView || !caseStudyView || !contentContainer) return;
 
     // Save home scroll position
@@ -151,6 +231,12 @@ function navigateToCaseStudy(isPopState = false) {
         lenisInstance.stop();
     }
 
+    // Fade out navbar
+    if (header) {
+        header.style.opacity = '0';
+        header.style.pointerEvents = 'none';
+    }
+
     // Apply fade/slide transition to homepage view
     homeView.classList.remove('spa-transition-in');
     homeView.classList.add('spa-transition-out');
@@ -160,6 +246,10 @@ function navigateToCaseStudy(isPopState = false) {
             // Hide homepage view completely
             homeView.style.display = 'none';
             homeView.classList.remove('spa-transition-out');
+            
+            if (header) {
+                header.style.display = 'none';
+            }
 
             // Inject the case study HTML content
             contentContainer.innerHTML = html;
@@ -223,6 +313,7 @@ function navigateToHome(isPopState = false) {
     const homeView = document.getElementById('homepage-view');
     const caseStudyView = document.getElementById('case-study-view');
     const contentContainer = document.getElementById('case-study-spa-content');
+    const header = document.getElementById('header-nav');
     if (!homeView || !caseStudyView) return;
 
     if (lenisInstance) {
@@ -241,6 +332,12 @@ function navigateToHome(isPopState = false) {
 
         // Show homepage view
         homeView.style.display = 'block';
+        if (header) {
+            header.style.display = 'flex';
+            void header.offsetWidth; // Force browser layout reflow
+            header.style.opacity = '1';
+            header.style.pointerEvents = 'auto';
+        }
 
         // Restore saved scroll position instantly
         window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' });
@@ -293,6 +390,41 @@ window.addEventListener('load', () => {
     }
 });
 
+// Global Image Fallback Handler for missing/broken assets
+window.addEventListener('error', (e) => {
+    if (e.target && e.target.tagName === 'IMG') {
+        const img = e.target;
+        
+        // Prevent infinite loops if fallback itself fails
+        if (img.classList.contains('fallback-triggered')) return;
+        img.classList.add('fallback-triggered');
+        
+        // Hide the original broken image
+        img.style.display = 'none';
+        
+        // Inject a premium styling placeholder container
+        const placeholder = document.createElement('div');
+        placeholder.className = 'img-placeholder';
+        
+        // Copy dimensions or use defaults
+        const w = img.getAttribute('width') || img.style.width;
+        const h = img.getAttribute('height') || img.style.height || '220px';
+        if (w) placeholder.style.width = w;
+        placeholder.style.height = h;
+        
+        // Copy margins, border-radius, display layout to fit inline nicely
+        placeholder.style.margin = img.style.margin;
+        placeholder.style.borderRadius = img.style.borderRadius || '16px';
+        
+        // Display fallback information
+        const altText = img.getAttribute('alt') || 'Asset failed to load';
+        placeholder.innerHTML = `<span>${altText}</span>`;
+        
+        // Insert fallback
+        img.parentNode.insertBefore(placeholder, img);
+    }
+}, true);
+
 /* ============================================================
    1. CINEMATIC PRELOADER WITH PROGRESS LINE
    ============================================================ */
@@ -303,23 +435,46 @@ function initPreloader() {
     if (!preloader || !counterElement) return;
 
     let count = 0;
-    const interval = setInterval(() => {
-        count += Math.floor(Math.random() * 8) + 4;
-        if (count >= 100) {
-            count = 100;
-            clearInterval(interval);
-            if (progressLine) progressLine.style.width = '100%';
-            // Trigger instantly — zero gap between loader end and animation start
-            preloader.classList.add('fade-out');
-            requestAnimationFrame(() => {
-                triggerPremiumHeroReveal();
-            });
-        }
-        counterElement.textContent = count;
+    const duration = 1000; // 1 second duration
+    const startTime = performance.now();
+
+    const updateCounter = (timestamp) => {
+        const elapsed = timestamp - startTime;
+        const progress = Math.max(0, Math.min(elapsed / duration, 1));
+        count = Math.floor(progress * 100);
+
+        counterElement.textContent = String(count);
         if (progressLine) {
             progressLine.style.width = count + '%';
         }
-    }, 30);
+
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+        } else {
+            // Loading complete - start window reveal transition sequence
+            setTimeout(() => {
+                // Slide the entire preloader panel upward using GSAP
+                gsap.to(preloader, {
+                    yPercent: -100,
+                    duration: 1.2,
+                    ease: "power3.inOut",
+                    onStart: () => {
+                        document.body.classList.remove('preloader-active');
+                    },
+                    onComplete: () => {
+                        preloader.style.display = 'none';
+                    }
+                });
+
+                // Trigger hero reveal animations simultaneously with slide-up
+                requestAnimationFrame(() => {
+                    triggerPremiumHeroReveal(false);
+                });
+            }, 150); // Premium brief hold before lifting the sheet
+        }
+    };
+
+    requestAnimationFrame(updateCounter);
 }
 
 /* ============================================================
@@ -1429,15 +1584,7 @@ function initPremiumHero() {
     floatingLabels.forEach(label => gsap.set(label, { opacity: 0, y: 30 }));
 }
 
-function triggerPremiumHeroReveal() {
-    const tl = gsap.timeline({
-        onComplete: () => {
-            initHeroInteractions();
-            startWatermarkAnimation();
-            initHeroScrollTransitions();
-        }
-    });
-
+function triggerPremiumHeroReveal(isInstant = false) {
     const gridBg = document.getElementById('hero-grid-bg');
     const bgName = document.getElementById('bg-name');
     const subtitle = document.getElementById('hero-subtitle');
@@ -1448,6 +1595,32 @@ function triggerPremiumHeroReveal() {
     const rotatingRing = document.getElementById('rotating-ring');
     const floatingLabels = document.querySelectorAll('.floating-label');
     const heroLines = document.querySelectorAll('.hero-line');
+
+    if (isInstant) {
+        // Render final animation states instantly
+        if (gridBg) gsap.set(gridBg, { opacity: 1 });
+        if (heroLines.length) heroLines.forEach(line => gsap.set(line, { scaleX: 1 }));
+        if (portText) gsap.set(portText, { opacity: 1, x: 0 });
+        if (folioText) gsap.set(folioText, { opacity: 1, x: 0 });
+        if (portraitWrapper) gsap.set(portraitWrapper, { opacity: 1, y: 0 });
+        if (portraitGlow) gsap.set(portraitGlow, { opacity: 1, scale: 1 });
+        if (rotatingRing) gsap.set(rotatingRing, { opacity: 1, scale: 1 });
+        if (subtitle) gsap.set(subtitle, { opacity: 1, y: 0 });
+        if (floatingLabels.length) floatingLabels.forEach(label => gsap.set(label, { opacity: 1, y: 0 }));
+
+        initHeroInteractions();
+        startWatermarkAnimation();
+        initHeroScrollTransitions();
+        return;
+    }
+
+    const tl = gsap.timeline({
+        onComplete: () => {
+            initHeroInteractions();
+            startWatermarkAnimation();
+            initHeroScrollTransitions();
+        }
+    });
 
     // 1. Grid and lines fade in
     tl.to(gridBg, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0)
@@ -1667,24 +1840,6 @@ function initAboutSection() {
     }
     const aboutSection = document.getElementById('about');
     if (!aboutSection) return;
-
-    // ─── 2. Nav Active Indicator ───
-    const navLinks = document.querySelectorAll('.nav-links li a');
-    ScrollTrigger.create({
-        trigger: '#about',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => {
-            navLinks.forEach(l => l.classList.remove('active'));
-            const aboutLink = document.querySelector('.nav-links a[href="#about"]');
-            if (aboutLink) aboutLink.classList.add('active');
-        },
-        onLeaveBack: () => {
-            navLinks.forEach(l => l.classList.remove('active'));
-            const homeLink = document.querySelector('.nav-links a[href="#hero"]');
-            if (homeLink) homeLink.classList.add('active');
-        }
-    });
 
     // ─── 3. Section Header Reveal ───
     const aboutLabel = document.querySelector('.about-label');
@@ -1958,14 +2113,6 @@ function initProjectsSection() {
     });
 
 
-    // Navigation Active Link Syncing
-    ScrollTrigger.create({
-        trigger: '#projects',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => updateNavActiveLink('#projects'),
-        onEnterBack: () => updateNavActiveLink('#projects')
-    });
 }
 
 /* ============================================================
@@ -2000,14 +2147,6 @@ function initExperienceSection() {
         }
     });
 
-    // Navigation Active Link Syncing
-    ScrollTrigger.create({
-        trigger: '#experience',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => updateNavActiveLink('#experience'),
-        onEnterBack: () => updateNavActiveLink('#experience')
-    });
 }
 
 /* ============================================================
@@ -2033,14 +2172,6 @@ function initSkillsSection() {
             .fromTo('#skills-row-1', { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=0.55')
             .fromTo('#skills-row-2', { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0');
 
-    // Navigation Active Link Syncing
-    ScrollTrigger.create({
-        trigger: '#skills',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => updateNavActiveLink('#skills'),
-        onEnterBack: () => updateNavActiveLink('#skills')
-    });
 }
 
 /* ============================================================
@@ -2064,72 +2195,45 @@ function initDesignFlowSection() {
             .to('.flow-title', { opacity: 1, y: 0, duration: 0.8, ease: 'power4.out' }, '-=0.45')
             .to('.flow-subtitle', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45');
 
-    // Calculate dynamic horizontal distance
-    const getScrollAmount = () => {
-        return stepsWrapper.scrollWidth - window.innerWidth;
-    };
-
-    // Horizontal Scroll Trigger with Pinning
-    const pinTimeline = gsap.timeline({
-        scrollTrigger: {
-            trigger: '#design-flow',
-            pin: true,
-            scrub: 1,
-            start: 'top top',
-            end: () => `+=${getScrollAmount()}`,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-                // Activate steps cards sequentially
-                const stepCards = document.querySelectorAll('.flow-step-card');
-                const stepIndex = Math.floor(self.progress * stepCards.length);
-                stepCards.forEach((card, idx) => {
-                    if (idx <= stepIndex) {
-                        card.classList.add('active');
-                    } else {
-                        card.classList.remove('active');
-                    }
-                });
-            }
-        }
-    });
-
-    pinTimeline.to(stepsWrapper, {
-        x: () => -getScrollAmount(),
-        ease: 'none'
-    }, 0);
-
+    // Vertical Scroll Tracker line animation
     if (progressLine) {
-        pinTimeline.to(progressLine, {
-            width: '100%',
-            ease: 'none'
-        }, 0);
+        gsap.to(progressLine, {
+            height: '100%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#flow-steps-wrapper',
+                start: 'top 70%',
+                end: 'bottom 70%',
+                scrub: true
+            }
+        });
     }
 
-    // Reveal step cards progressively on entrance
+    // Step cards animations
     const stepCards = document.querySelectorAll('.flow-step-card');
     stepCards.forEach((card) => {
-        gsap.to(card, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: card,
-                containerAnimation: pinTimeline,
-                start: 'left 85%',
-                toggleActions: 'play none none reverse',
+        // 1. Reveal on viewport entrance (only once)
+        ScrollTrigger.create({
+            trigger: card,
+            start: 'top 85%',
+            once: true,
+            onEnter: () => {
+                card.classList.add('revealed');
             }
+        });
+
+        // 2. Toggle active state focus sequentially as card passes the sweet spot
+        ScrollTrigger.create({
+            trigger: card,
+            start: 'top 65%',
+            end: 'bottom 45%',
+            onEnter: () => card.classList.add('active'),
+            onLeave: () => card.classList.remove('active'),
+            onEnterBack: () => card.classList.add('active'),
+            onLeaveBack: () => card.classList.remove('active')
         });
     });
 
-    // Navigation Active Link Syncing
-    ScrollTrigger.create({
-        trigger: '#design-flow',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => updateNavActiveLink('#design-flow'),
-        onEnterBack: () => updateNavActiveLink('#design-flow')
-    });
 }
 
 /* ============================================================
@@ -2206,14 +2310,6 @@ function initContactSection() {
         });
     });
 
-    // Navigation Active Link Syncing
-    ScrollTrigger.create({
-        trigger: '#contact',
-        start: 'top 60%',
-        end: 'bottom 40%',
-        onEnter: () => updateNavActiveLink('#contact'),
-        onEnterBack: () => updateNavActiveLink('#contact')
-    });
 }
 
 /* ============================================================
@@ -2339,6 +2435,101 @@ function updateNavActiveLink(targetSelector) {
     }
 }
 
+/* Centralized navigation active state Scroll Syncing */
+function initNavScrollSync() {
+    if (typeof ScrollTrigger === 'undefined') return;
+
+    const sections = [
+        { id: '#hero' },
+        { id: '#about' },
+        { id: '#projects' },
+        { id: '#experience' },
+        { id: '#skills' },
+        { id: '#design-flow' },
+        { id: '#contact' }
+    ];
+
+    sections.forEach(sec => {
+        const el = document.querySelector(sec.id);
+        if (!el) return;
+
+        ScrollTrigger.create({
+            trigger: el,
+            start: sec.id === '#hero' ? 'top 10%' : 'top 50%',
+            end: 'bottom 50%',
+            onToggle: (self) => {
+                if (self.isActive) {
+                    updateNavActiveLink(sec.id);
+                }
+            }
+        });
+    });
+}
+
+/* Redesigned navbar scroll-morphic transition logic */
+let headerResizeHandler = null;
+function initHeaderScroll() {
+    const header = document.getElementById('header-nav');
+    if (!header) return;
+
+    if (headerResizeHandler) {
+        window.removeEventListener('resize', headerResizeHandler);
+    }
+
+    const updateScaleFactor = () => {
+        const w = window.innerWidth;
+        let targetWidth = w * 0.75;
+        let targetHeight = 54;
+        let targetTop = 16;
+        let padding = 40;
+        
+        if (w <= 768) {
+            targetWidth = w * 0.92;
+            targetHeight = 52;
+            targetTop = 12;
+            padding = 16;
+        } else if (w <= 992) {
+            targetWidth = w * 0.85;
+            targetHeight = 54;
+            targetTop = 16;
+            padding = 24;
+        } else {
+            targetWidth = Math.min(w * 0.75, 1100);
+            targetHeight = 54;
+            targetTop = 16;
+            padding = 40;
+        }
+        
+        const scaleX = w / targetWidth;
+        const scaleY = 64 / targetHeight;
+        
+        document.documentElement.style.setProperty('--nav-scale-x', scaleX);
+        document.documentElement.style.setProperty('--nav-inv-scale-x', 1 / scaleX);
+        document.documentElement.style.setProperty('--nav-scale-y', scaleY);
+        document.documentElement.style.setProperty('--nav-inv-scale-y', 1 / scaleY);
+        document.documentElement.style.setProperty('--nav-target-top', `${targetTop}px`);
+        document.documentElement.style.setProperty('--nav-target-height', `${targetHeight}px`);
+        document.documentElement.style.setProperty('--nav-target-width', `${targetWidth}px`);
+        document.documentElement.style.setProperty('--nav-padding', `${padding}px`);
+    };
+
+    headerResizeHandler = updateScaleFactor;
+    window.addEventListener('resize', updateScaleFactor, { passive: true });
+    updateScaleFactor();
+}
+
+/* Synced Scroll state helper for active navbar morph transition */
+function updateHeaderScroll() {
+    const header = document.getElementById('header-nav');
+    if (!header) return;
+    const y = lenisInstance ? lenisInstance.scroll : window.scrollY;
+    if (y > 80) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+}
+
 /* ============================================================
    UNIFIED ANIMATION LOOP
    Single rAF drives Lenis, cursor ring, WebGL, hero tilt, widgets
@@ -2351,6 +2542,9 @@ function startUnifiedLoop() {
     function tick(time) {
         // 1. Lenis smooth scroll
         if (lenisInstance) lenisInstance.raf(time);
+
+        // Update header scrolled morph class synced with Lenis scroll
+        updateHeaderScroll();
 
         // 2. Cursor ring interpolation
         if (window._cursorRingUpdate) window._cursorRingUpdate();

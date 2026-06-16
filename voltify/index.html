@@ -253,9 +253,7 @@
                             style="font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 600; margin-top: 12px; margin-bottom: 12px;">
                             Charging Journey</h3>
                         <p style="font-size: 14px; line-height: 1.6; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Vikram spots a low battery warning, filters locations for rápido CCS2 plugs, books a station
-                            slot for 20 minutes to hold availability, plugs in on arrival, and returns to work while
-                            tracking statistics.
+                            Neha starts her day with a planned work schedule and relies on her EV for city commuting and client visits. Before traveling, she checks nearby charging stations, compares ratings and availability, books a charging slot in advance, navigates to the selected station, completes a secure payment, and monitors charging progress in real time while continuing her work. After charging, she receives confirmation and trip insights for future planning.
                         </p>
                     </div>
                 </div>
@@ -535,6 +533,9 @@
     <!-- Standalone Transition Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Set flag immediately to tell home page to skip preloader when returning via back button or close
+            sessionStorage.setItem('fromCaseStudy', 'true');
+
             // Fade page in smoothly on load
             requestAnimationFrame(() => {
                 document.body.style.opacity = '1';

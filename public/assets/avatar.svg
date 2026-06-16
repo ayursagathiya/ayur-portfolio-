@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" style="background:#111111; font-family:'Inter', sans-serif;">
+    <defs>
+        <linearGradient id="avatar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4F46E5" />
+            <stop offset="50%" stop-color="#7C3AED" />
+            <stop offset="100%" stop-color="#06B6D4" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="400" rx="200" fill="#111111"/>
+    <circle cx="200" cy="200" r="190" fill="none" stroke="url(#avatar-grad)" stroke-width="2" opacity="0.8"/>
+    
+    <path d="M 100 200 L 200 100 L 300 200 L 200 300 Z" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+    <circle cx="200" cy="200" r="60" fill="none" stroke="url(#avatar-grad)" stroke-width="4"/>
+    
+    <text x="200" y="215" text-anchor="middle" fill="#FFFFFF" font-size="52" font-weight="900" letter-spacing="-2">AS</text>
+</svg>

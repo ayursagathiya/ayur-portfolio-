@@ -1,0 +1,9 @@
+# Exclude large local directories from Vercel CLI uploads
+node_modules/
+.gemini/
+.git/
+dist/
+Temp/
+.idea/
+.vscode/
+.vercel/
