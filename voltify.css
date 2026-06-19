@@ -759,14 +759,14 @@
 
         /* Masonry layout using CSS columns */
         .v-screens-masonry {
-            column-count: 4;
-            column-gap: 36px;
+            column-count: 6;
+            column-gap: 20px;
         }
 
         .v-screen-card {
             break-inside: avoid;
-            margin-bottom: 36px;
-            border-radius: 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: #fafafa;
@@ -784,6 +784,7 @@
         .v-screen-card img {
             width: 100%;
             height: auto;
+            object-fit: contain;
             display: block;
         }
 
@@ -863,6 +864,34 @@
             .v-col-8 {
                 grid-column: span 12;
             }
+
+            .v-screens-masonry {
+                column-count: 3;
+                column-gap: 16px;
+            }
+
+            .v-screen-card {
+                margin-bottom: 16px;
+            }
+        }
+
+        @media (min-width: 577px) and (max-width: 1024px) {
+            /* 2-column grid for Wireframes on tablet */
+            #v-wireframes {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 32px !important;
+            }
+            
+            #v-wireframes .v-section-title {
+                grid-column: span 2 !important;
+            }
+
+            /* 2 columns for Color System on tablet */
+            .v-color-gallery {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 24px !important;
+            }
         }
 
         @media (max-width: 768px) {
@@ -910,16 +939,35 @@
 
             .v-screens-masonry {
                 column-count: 3;
-                column-gap: 28px;
+                column-gap: 16px;
             }
 
             .v-screen-card {
-                margin-bottom: 28px;
+                margin-bottom: 16px;
             }
 
             .v-screens-dark-bg {
                 padding: 28px;
                 border-radius: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            /* Responsive Icon Grid on mobile */
+            .v-icon-traits {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+            }
+            
+            .v-icon-trait {
+                padding: 12px !important;
+                gap: 8px !important;
+                border-radius: 10px !important;
+            }
+            
+            .v-icon-trait span {
+                font-size: 12px !important;
             }
         }
 
@@ -938,12 +986,12 @@
 
             .v-screens-masonry {
                 column-count: 2;
-                column-gap: 20px;
+                column-gap: 12px;
             }
 
             .v-screen-card {
-                margin-bottom: 20px;
-                border-radius: 14px;
+                margin-bottom: 12px;
+                border-radius: 10px;
             }
 
             .v-screens-dark-bg {

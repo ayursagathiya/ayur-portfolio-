@@ -311,14 +311,14 @@
 
         /* ─── Masonry Screens ─── */
         .l-masonry {
-            column-count: 2;
-            column-gap: 36px;
+            column-count: 6;
+            column-gap: 20px;
         }
 
         .l-masonry-card {
             break-inside: avoid;
-            margin-bottom: 36px;
-            border-radius: 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.06);
             background: #fafafa;
@@ -336,6 +336,7 @@
         .l-masonry-card img {
             width: 100%;
             height: auto;
+            object-fit: contain;
             display: block;
         }
 
@@ -424,6 +425,11 @@
             .l-reflection-content-col {
                 grid-column: span 12;
             }
+
+            .l-masonry {
+                column-count: 3;
+                column-gap: 16px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -443,12 +449,12 @@
             }
 
             .l-masonry {
-                column-count: 2;
-                column-gap: 28px;
+                column-count: 3;
+                column-gap: 16px;
             }
 
             .l-masonry-card {
-                margin-bottom: 28px;
+                margin-bottom: 16px;
             }
         }
 
@@ -462,13 +468,13 @@
             }
 
             .l-masonry {
-                column-count: 1;
-                column-gap: 20px;
+                column-count: 2;
+                column-gap: 12px;
             }
 
             .l-masonry-card {
-                margin-bottom: 20px;
-                border-radius: 14px;
+                margin-bottom: 12px;
+                border-radius: 10px;
             }
         }
     

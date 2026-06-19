@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initFloatingLabelsIdle();
         initNavScrollSync();
         initHeaderScroll();
+        initMobileMenu();
         
         // Skip preloader animation and reveal hero instantly
         triggerPremiumHeroReveal(true);
@@ -154,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initFloatingLabelsIdle();
         initNavScrollSync();
         initHeaderScroll();
+        initMobileMenu();
         startUnifiedLoop();
     }
 
@@ -2669,6 +2671,13 @@ function updateNavActiveLink(targetSelector) {
     if (matchingLink) {
         matchingLink.classList.add('active');
     }
+
+    const mobileLinks = document.querySelectorAll('.mobile-nav-links li a');
+    mobileLinks.forEach(link => link.classList.remove('active'));
+    const matchingMobileLink = document.querySelector(`.mobile-nav-links a[href="${targetSelector}"]`);
+    if (matchingMobileLink) {
+        matchingMobileLink.classList.add('active');
+    }
 }
 
 /* Centralized navigation active state Scroll Syncing */
@@ -2752,6 +2761,61 @@ function initHeaderScroll() {
     headerResizeHandler = updateScaleFactor;
     window.addEventListener('resize', updateScaleFactor, { passive: true });
     updateScaleFactor();
+}
+
+/* Mobile Hamburger Navigation Menu Toggle Overlay Handler */
+function initMobileMenu() {
+    const toggleBtn = document.getElementById('menu-toggle');
+    const overlay = document.getElementById('mobile-nav-overlay');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    const headerNav = document.getElementById('header-nav');
+
+    if (!toggleBtn || !overlay) return;
+
+    const toggleMenu = (forceClose = false) => {
+        const isOpen = forceClose ? false : !overlay.classList.contains('active');
+        
+        if (isOpen) {
+            toggleBtn.classList.add('active');
+            overlay.classList.add('active');
+            headerNav.classList.add('menu-open');
+            document.body.style.overflow = 'hidden';
+            if (lenisInstance) lenisInstance.stop();
+        } else {
+            toggleBtn.classList.remove('active');
+            overlay.classList.remove('active');
+            headerNav.classList.remove('menu-open');
+            document.body.style.overflow = '';
+            if (lenisInstance) lenisInstance.start();
+        }
+    };
+
+    toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleMenu();
+    });
+
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            toggleMenu(true);
+            
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    if (lenisInstance) {
+                        lenisInstance.scrollTo(target, { offset: -60, duration: 1.2 });
+                    } else {
+                        window.scrollTo({
+                            top: target.offsetTop - 60,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+        });
+    });
 }
 
 /* Synced Scroll state helper for active navbar morph transition */
