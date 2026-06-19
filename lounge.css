@@ -239,7 +239,7 @@
         }
 
         .l-type-font-name {
-            font-family: 'Clash Display', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 48px;
             font-weight: 600;
             color: #111111;
@@ -248,6 +248,7 @@
         }
 
         .l-type-alphabet {
+            font-family: 'Inter', sans-serif;
             font-size: 20px;
             font-weight: 500;
             color: #111111;
@@ -258,6 +259,7 @@
         }
 
         .l-type-alphabet-lower {
+            font-family: 'Inter', sans-serif;
             font-size: 20px;
             font-weight: 400;
             color: rgba(17, 17, 17, 0.6);
@@ -268,6 +270,7 @@
         }
 
         .l-type-numbers {
+            font-family: 'Inter', sans-serif;
             font-size: 20px;
             font-weight: 400;
             color: rgba(17, 17, 17, 0.45);
