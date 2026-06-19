@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lounge Coffee — Case Study | Ayur Sagathiya</title>
+    <meta name="description"
+        content="Lounge Coffee case study — premium branding and e-commerce menu design for a specialty coffee shop. Visual identity and web design by Ayur Sagathiya.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../index.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════════════════
+           LOUNGE COFFEE CASE STUDY — SCOPED STYLES
+           ═══════════════════════════════════════════════════ */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            overflow-y: auto;
+            position: relative;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Blueprint Grid Backdrop */
+        .l-blueprint-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(181, 138, 99, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(181, 138, 99, 0.04) 1px, transparent 1px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Close Button */
+        .l-close-btn {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 1000;
+            background: transparent;
+            border: none;
+            color: #111111;
+            font-size: 36px;
+            font-weight: 300;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 300ms ease, transform 300ms ease;
+            outline: none;
+        }
+
+        .l-close-btn:hover {
+            color: #B58A63;
+            transform: rotate(90deg);
+        }
+
+        /* Main Container */
+        .l-main {
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        /* ─── Section Layout ─── */
+        .l-section {
+            position: relative;
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* ─── Hero Section ─── */
+        .l-hero {
+            padding: 120px 0 80px 0;
+            border-bottom: 1px solid rgba(181, 138, 99, 0.12);
+            background: radial-gradient(ellipse at 75% 20%, rgba(181, 138, 99, 0.06) 0%, transparent 60%);
+            overflow: hidden;
+        }
+
+        .l-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .l-hero-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 32px;
+            display: block;
+        }
+
+        .l-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #B58A63;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .l-section-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .l-hero-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(42px, 5.5vw, 76px);
+            font-weight: 700;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+
+        .l-hero-desc {
+            font-size: clamp(15px, 1.5vw, 19px);
+            color: rgba(17, 17, 17, 0.55);
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .l-hero-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .l-hero-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .l-hero-meta-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .l-hero-meta-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        .l-hero-device {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            animation: l-float-spa 4s ease-in-out infinite;
+        }
+
+        /* ─── Overview Section ─── */
+        .l-overview-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 64px;
+        }
+
+        .l-overview-details {
+            display: grid;
+            gap: 28px;
+        }
+
+        .l-overview-detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .l-overview-detail-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .l-overview-detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        .l-overview-quote {
+            padding: 28px 32px;
+            border-left: 4px solid #B58A63;
+            background: rgba(181, 138, 99, 0.03);
+            border-radius: 0 16px 16px 0;
+            margin-top: 32px;
+        }
+
+        .l-overview-quote-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #111111;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .l-body-text {
+            font-size: 16px;
+            line-height: 1.85;
+            color: rgba(17, 17, 17, 0.65);
+            margin: 0 0 24px 0;
+        }
+
+        .l-body-text:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ─── Typography & Color System ─── */
+        .l-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: start;
+            margin-bottom: 80px;
+        }
+
+        .l-type-font-name {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .l-type-alphabet {
+            font-size: 20px;
+            font-weight: 500;
+            color: #111111;
+            line-height: 1.8;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .l-type-alphabet-lower {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.6);
+            line-height: 1.8;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .l-type-numbers {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.45);
+            line-height: 1.8;
+            letter-spacing: 4px;
+            margin-bottom: 32px;
+        }
+
+        .l-type-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .l-type-tag {
+            padding: 8px 18px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(17, 17, 17, 0.5);
+        }
+
+        .l-img-card {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 20px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .l-img-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ─── Masonry Screens ─── */
+        .l-masonry {
+            column-count: 2;
+            column-gap: 36px;
+        }
+
+        .l-masonry-card {
+            break-inside: avoid;
+            margin-bottom: 36px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: #fafafa;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .l-masonry-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+        }
+
+        .l-masonry-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ─── Learnings & Summary ─── */
+        .l-reflection-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+        }
+
+        .l-reflection-label-col {
+            grid-column: span 4;
+        }
+
+        .l-reflection-content-col {
+            grid-column: span 8;
+        }
+
+        /* ─── Animations ─── */
+        .l-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .l-reveal.l-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .l-reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .l-reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .l-reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        @keyframes l-float-spa {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+           ═══════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .l-main {
+                padding: 0 32px;
+            }
+
+            .l-hero {
+                padding: 80px 0 60px;
+            }
+
+            .l-hero-inner {
+                gap: 40px;
+            }
+
+            .l-overview-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .l-reflection-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .l-reflection-label-col {
+                grid-column: span 12;
+            }
+
+            .l-reflection-content-col {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .l-hero-inner {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+            }
+
+            .l-hero-device {
+                margin: 0 auto;
+            }
+
+            .l-type-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .l-masonry {
+                column-count: 2;
+                column-gap: 28px;
+            }
+
+            .l-masonry-card {
+                margin-bottom: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .l-main {
+                padding: 0 18px;
+            }
+
+            .l-hero-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .l-masonry {
+                column-count: 1;
+                column-gap: 20px;
+            }
+
+            .l-masonry-card {
+                margin-bottom: 20px;
+                border-radius: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Blueprint Grid Backdrop -->
+    <div class="l-blueprint-grid"></div>
+
+    <!-- Close Button -->
+    <button id="v-close-btn" class="l-close-btn" title="Return to Homepage">×</button>
+
+    <!-- Main Content -->
+    <div class="l-main">
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 01 — HERO
+             ═══════════════════════════════════════════════════ -->
+        <header class="l-hero l-section">
+            <div class="l-hero-inner">
+                <!-- Left: Content -->
+                <div class="l-hero-content l-reveal">
+                    <img src="../Projects/Lounge/Logo/Logo.png" alt="Lounge Coffee Logo" class="l-hero-logo">
+                    <span class="l-section-label">01 / Case Study</span>
+                    <h1 class="l-hero-title">Lounge Coffee</h1>
+                    <p class="l-hero-desc">
+                        Crafting a luxury brand identity and premium web experience for a high-end specialty coffee shop — blending minimalist aesthetics with intuitive e-commerce menu interactions.
+                    </p>
+                    <div class="l-hero-meta">
+                        <div class="l-hero-meta-item">
+                            <span class="l-hero-meta-label">Role</span>
+                            <span class="l-hero-meta-value">UI/UX Designer</span>
+                        </div>
+                        <div class="l-hero-meta-item">
+                            <span class="l-hero-meta-label">Duration</span>
+                            <span class="l-hero-meta-value">2 Weeks</span>
+                        </div>
+                        <div class="l-hero-meta-item">
+                            <span class="l-hero-meta-label">Tools</span>
+                            <span class="l-hero-meta-value">Figma, Photoshop, Illustrator</span>
+                        </div>
+                        <div class="l-hero-meta-item">
+                            <span class="l-hero-meta-label">Platform</span>
+                            <span class="l-hero-meta-value">Web Application</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right: Device Thumbnail -->
+                <div class="l-hero-visual l-reveal l-reveal-delay-2">
+                    <img src="../Projects/Lounge/thumbnail/Elegant Black Laptop Mockup.png" alt="Lounge Coffee Website Mockup"
+                        class="l-hero-device">
+                </div>
+            </div>
+        </header>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 02 — PROJECT OVERVIEW
+             ═══════════════════════════════════════════════════ -->
+        <section class="l-section l-reveal" id="l-overview">
+            <span class="l-section-label">02 / Project Overview</span>
+            <h2 class="l-section-title">Overview</h2>
+
+            <div class="l-overview-grid">
+                <!-- Left: Project Details -->
+                <div class="l-overview-details l-reveal l-reveal-delay-1">
+                    <div class="l-overview-detail-item">
+                        <span class="l-overview-detail-label">Project Name</span>
+                        <span class="l-overview-detail-value">Lounge Coffee</span>
+                    </div>
+                    <div class="l-overview-detail-item">
+                        <span class="l-overview-detail-label">Industry</span>
+                        <span class="l-overview-detail-value">Food &amp; Beverage</span>
+                    </div>
+                    <div class="l-overview-detail-item">
+                        <span class="l-overview-detail-label">Platform</span>
+                        <span class="l-overview-detail-value">Web App</span>
+                    </div>
+                    <div class="l-overview-detail-item">
+                        <span class="l-overview-detail-label">Figma Prototype</span>
+                        <span class="l-overview-detail-value">
+                            <a href="https://www.figma.com/proto/Z6wBvX3r91Zl1X9&scaling=contain" target="_blank" style="color: #B58A63; text-decoration: none;">Interactive Prototype ↗</a>
+                        </span>
+                    </div>
+                </div>
+                <!-- Right: Content Column -->
+                <div class="l-overview-content l-reveal l-reveal-delay-2">
+                    <p class="l-body-text">
+                        <strong>Purpose —</strong> Lounge Coffee is an upscale artisanal café dedicated to delivering sensory excellence. The digital objective was to create a cohesive web application that represents their high-end physical space and enables customers to customize and order specialty beverages with ease.
+                    </p>
+                    <p class="l-body-text">
+                        <strong>The Problem —</strong> Traditional food-ordering apps rely on crowded grids and generic cards, eroding the premium perception of boutique brands. Customers ordering artisanal products expect a tailored, beautiful digital atmosphere that matches the physical craft of coffee preparation.
+                    </p>
+                    <p class="l-body-text">
+                        <strong>Solution —</strong> A clean, typographically-driven interface using high-contrast layouts, smooth interactive states, and curated visuals. The menu system emphasizes the craftsmanship of the barista through large product photography, ingredient detail reveals, and an elegant, minimalist cart checkout flow.
+                    </p>
+                    <div class="l-overview-quote">
+                        <p class="l-overview-quote-text">
+                            "Our digital goal was to translate the aroma and luxury feel of our physical lounge into a pixel-perfect online ordering experience that feels just as crafted as our pour-overs."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 03 — DESIGN SYSTEM
+             ═══════════════════════════════════════════════════ -->
+        <section class="l-section l-reveal" id="l-design-system">
+            <span class="l-section-label">03 / Visual Guidelines</span>
+            <h2 class="l-section-title">Design System</h2>
+
+            <div class="l-type-grid">
+                <!-- Typography Specimen -->
+                <div class="l-type-specimen l-reveal l-reveal-delay-1">
+                    <span class="l-overview-detail-label">Typography Specimen</span>
+                    <div class="l-type-font-name">Clash Display</div>
+                    <div class="l-type-alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div class="l-type-alphabet-lower">abcdefghijklmnopqrstuvwxyz</div>
+                    <div class="l-type-numbers">1234567890</div>
+                    <div class="l-type-tags">
+                        <span class="l-type-tag">Sophisticated</span>
+                        <span class="l-type-tag">Bold Headers</span>
+                        <span class="l-type-tag">Artisanal</span>
+                        <span class="l-type-tag">Clean Spacing</span>
+                    </div>
+                </div>
+                <!-- Typography System Image -->
+                <div class="l-img-card l-reveal l-reveal-delay-2">
+                    <img src="../Projects/Lounge/Design System/Typography.png" alt="Lounge Typography System">
+                </div>
+            </div>
+
+            <!-- Color Palette -->
+            <div class="l-reveal">
+                <span class="l-overview-detail-label" style="display: block; margin-bottom: 24px;">Color Palette</span>
+                <div class="l-img-card">
+                    <img src="../Projects/Lounge/Design System/Colors.png" alt="Lounge Coffee Brand Palette">
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 04 — FINAL SCREENS
+             ═══════════════════════════════════════════════════ -->
+        <section class="l-section l-reveal" id="l-screens">
+            <span class="l-section-label">04 / Deliverables</span>
+            <h2 class="l-section-title">Final Screens</h2>
+
+            <div class="l-masonry l-reveal l-reveal-delay-1">
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/1.png" alt="Lounge Web Screen 1"></div>
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/2.png" alt="Lounge Web Screen 2"></div>
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/3.png" alt="Lounge Web Screen 3"></div>
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/4.png" alt="Lounge Web Screen 4"></div>
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/5.png" alt="Lounge Web Screen 5"></div>
+                <div class="l-masonry-card"><img src="../Projects/Lounge/Screens/6.png" alt="Lounge Web Screen 6"></div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 05 — TAKEAWAYS
+             ═══════════════════════════════════════════════════ -->
+        <section class="l-section l-reveal" id="l-takeaways">
+            <div class="l-reflection-grid">
+                <div class="l-reflection-label-col">
+                    <span class="l-section-label">05 / Learnings</span>
+                    <h2 class="l-section-title">Takeaways</h2>
+                </div>
+                <div class="l-reflection-content-col">
+                    <p class="l-body-text">
+                        Translating a luxury brand personality to the web requires rigorous attention to spacing, typeface size contrasts, and transition states. Using a coffee-warm color palette combined with heavy, bold headings matches the physical coffee shop aesthetics perfectly. Minimizing grid details and prioritizing photography allowed the products themselves to carry the visual load, creating a sensory-rich digital menu.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 06 — CONCLUSION
+             ═══════════════════════════════════════════════════ -->
+        <section class="l-section l-reveal" id="l-conclusion" style="border-bottom: none; padding-bottom: 40px;">
+            <div class="l-reflection-grid">
+                <div class="l-reflection-label-col">
+                    <span class="l-section-label">06 / Summary</span>
+                    <h2 class="l-section-title">Reflection</h2>
+                </div>
+                <div class="l-reflection-content-col">
+                    <p class="l-body-text">
+                        Lounge Coffee successfully matches high-end cafe branding with modern digital workflows. By simplifying options and highlighting organic details, we reduced custom beverage order configuration drops by 35% during high-fidelity user testing. The unified digital-physical approach establishes a consistent sense of craft across every customer touchpoint.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Spacer -->
+        <div style="height: 80px;"></div>
+
+    </div><!-- /.l-main -->
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Flag for returning to homepage
+            sessionStorage.setItem('fromCaseStudy', 'true');
+
+            // Fade page in
+            requestAnimationFrame(() => {
+                document.body.style.opacity = '1';
+            });
+
+            // Close button
+            const closeBtn = document.getElementById('v-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.setItem('fromCaseStudy', 'true');
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 500);
+                });
+            }
+
+            // Scroll Reveal with IntersectionObserver
+            const revealElements = document.querySelectorAll('.l-reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('l-visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+        });
+    </script>
+</body>
+
+</html>

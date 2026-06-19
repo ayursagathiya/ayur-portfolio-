@@ -116,12 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
         startUnifiedLoop();
     }
 
-    // SPA Routing: Click interceptor for /voltify and smooth scroll hash links
+    // SPA Routing: Click interceptor for case studies and smooth scroll hash links
     document.addEventListener('click', (e) => {
-        const voltifyLink = e.target.closest('a[href="/voltify"]');
-        if (voltifyLink) {
+        const projectLink = e.target.closest('a[href="/voltify"], a[href="/lounge"]');
+        if (projectLink) {
             e.preventDefault();
-            navigateToCaseStudy(false);
+            const targetPath = projectLink.getAttribute('href');
+            navigateToCaseStudy(targetPath, false);
             return;
         }
 
@@ -164,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const hash = window.location.hash;
         
         if (path === '/voltify' || path.endsWith('/voltify')) {
-            navigateToCaseStudy(true);
+            navigateToCaseStudy('/voltify', true);
+        } else if (path === '/lounge' || path.endsWith('/lounge')) {
+            navigateToCaseStudy('/lounge', true);
         } else {
             // We are navigating to homepage (root path)
             const homeView = document.getElementById('homepage-view');
@@ -209,17 +212,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================
-   SPA CLIENT-SIDE ROUTER FOR VOLTIFY
+   SPA CLIENT-SIDE ROUTER FOR PROJECTS
    ============================================================ */
-let caseStudyCache = null;
+let caseStudyCache = {};
 let savedScrollY = 0;
 
-function navigateToCaseStudy(isPopState = false) {
+function navigateToCaseStudy(path, isPopState = false) {
     const homeView = document.getElementById('homepage-view');
     const caseStudyView = document.getElementById('case-study-view');
     const contentContainer = document.getElementById('case-study-spa-content');
     const header = document.getElementById('header-nav');
     if (!homeView || !caseStudyView || !contentContainer) return;
+
+    const projectId = path.replace(/^\//, '');
 
     // Save home scroll position
     if (!isPopState) {
@@ -274,7 +279,7 @@ function navigateToCaseStudy(isPopState = false) {
 
             // Update URL without page reload
             if (!isPopState) {
-                history.pushState({ page: 'voltify' }, '', '/voltify');
+                history.pushState({ page: projectId }, '', path);
             }
 
             // Bind SPA close button
@@ -286,17 +291,17 @@ function navigateToCaseStudy(isPopState = false) {
         }, 500); // Wait for transition duration
     };
 
-    if (caseStudyCache) {
-        displayCaseStudy(caseStudyCache);
+    if (caseStudyCache[projectId]) {
+        displayCaseStudy(caseStudyCache[projectId]);
     } else {
-        fetch('/case-studies/voltify.html')
+        fetch(`/case-studies/${projectId}.html`)
             .then(res => {
-                if (!res.ok) return fetch('./case-studies/voltify.html');
+                if (!res.ok) return fetch(`./case-studies/${projectId}.html`);
                 return res;
             })
             .then(res => res.text())
             .then(html => {
-                caseStudyCache = html;
+                caseStudyCache[projectId] = html;
                 displayCaseStudy(html);
             })
             .catch(err => {
