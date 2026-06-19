@@ -2483,6 +2483,69 @@ function initContactSection() {
         });
     });
 
+    // Resume Download Toast Action
+    const resumeBtn = document.querySelector('.contact-resume-btn');
+    if (resumeBtn) {
+        resumeBtn.addEventListener('click', () => {
+            showToast('Resume Download Started');
+        });
+    }
+
+    // Helper to create and show premium toast notification
+    function showToast(message) {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.style.position = 'fixed';
+            container.style.bottom = '40px';
+            container.style.right = '40px';
+            container.style.zIndex = '99999';
+            container.style.display = 'flex';
+            container.style.flexDirection = 'column';
+            container.style.gap = '12px';
+            container.style.pointerEvents = 'none';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.textContent = message;
+        
+        toast.style.background = 'rgba(255, 255, 255, 0.85)';
+        toast.style.backdropFilter = 'blur(12px)';
+        toast.style.webkitBackdropFilter = 'blur(12px)';
+        toast.style.border = '1px solid rgba(77, 159, 255, 0.35)';
+        toast.style.borderRadius = '12px';
+        toast.style.padding = '14px 24px';
+        toast.style.color = '#111111';
+        toast.style.fontFamily = "'Space Grotesk', sans-serif";
+        toast.style.fontSize = '14px';
+        toast.style.fontWeight = '600';
+        toast.style.boxShadow = '0 10px 30px rgba(77, 159, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03)';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        toast.style.transition = 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+        toast.style.pointerEvents = 'auto';
+
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+        });
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                toast.remove();
+                if (container.children.length === 0) {
+                    container.remove();
+                }
+            }, 400);
+        }, 2000);
+    }
 }
 
 /* ============================================================

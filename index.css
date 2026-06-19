@@ -4106,14 +4106,14 @@ body.page-transitioning {
     justify-content: center;
     gap: 10px;
     box-shadow: 0 15px 40px rgba(77, 159, 255, 0.25);
-    transition: all 0.4s var(--ease-out-expo);
+    transition: all 300ms ease-out;
 }
 
 .contact-cta-btn:hover {
     background: #111111;
     color: #ffffff;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(74, 144, 255, 0.18);
+    transform: translateY(-2px);
 }
 
 .contact-resume-btn {
@@ -4129,12 +4129,12 @@ body.page-transitioning {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: all 0.4s var(--ease-out-expo);
+    transition: all 300ms ease-out;
 }
 
 .contact-resume-btn:hover {
-    border-color: #111111;
-    background: rgba(0, 0, 0, 0.04);
+    border-color: #4D9FFF;
+    background: rgba(77, 159, 255, 0.04);
     transform: translateY(-2px);
 }
 
