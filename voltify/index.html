@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voltify EV Charging — Case Study</title>
+    <title>Voltify EV Charging — Case Study | Ayur Sagathiya</title>
     <meta name="description"
-        content="Case study of Voltify EV Charging Application. Design system, research, wireframes, and mockups.">
+        content="Voltify EV Charging case study — a premium mobile app design for electric vehicle charging. UX Research, Design System, and Product Design by Ayur Sagathiya.">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../index.css">
@@ -15,13 +15,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap"
         rel="stylesheet">
 
     <style>
-        /* Custom local overrides for standalone page to make it extremely premium */
+        /* ═══════════════════════════════════════════════════
+           VOLTIFY CASE STUDY — SCOPED STYLES
+           ═══════════════════════════════════════════════════ */
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #ffffff;
             color: #111111;
@@ -30,11 +37,13 @@
             position: relative;
             min-height: 100vh;
             opacity: 0;
-            transition: opacity 0.4s ease-in-out;
+            transition: opacity 0.6s ease-in-out;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Standalone blueprint grid backdrop */
-        .blueprint-grid-backdrop {
+        /* Blueprint Grid Backdrop */
+        .v-blueprint-grid {
             position: fixed;
             top: 0;
             left: 0;
@@ -48,16 +57,18 @@
             z-index: 1;
         }
 
-        /* Minimal Close Button */
-        .close-btn-standalone {
+        /* Close Button */
+        .v-close-btn {
             position: fixed;
             top: 40px;
             right: 40px;
             z-index: 1000;
-            background: transparent;
-            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             color: #111111;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 300;
             cursor: pointer;
             width: 48px;
@@ -65,499 +76,1394 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             outline: none;
         }
 
-        .close-btn-standalone:hover {
+        .v-close-btn:hover {
             color: #4D9FFF;
             transform: rotate(90deg);
+            border-color: rgba(77, 159, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(77, 159, 255, 0.12);
+        }
+
+        /* Main Container */
+        .v-main {
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        /* ─── Section Meta Label ─── */
+        .v-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4D9FFF;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* ─── Section Title ─── */
+        .v-section-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        /* ─── Section Wrapper ─── */
+        .v-section {
+            margin-bottom: 120px;
+            padding-bottom: 80px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .v-section:last-child {
+            border-bottom: none;
+        }
+
+        /* ─── 12-Column Grid Layout ─── */
+        .v-grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+        }
+
+        .v-col-4 {
+            grid-column: span 4;
+        }
+
+        .v-col-5 {
+            grid-column: span 5;
+        }
+
+        .v-col-6 {
+            grid-column: span 6;
+        }
+
+        .v-col-7 {
+            grid-column: span 7;
+        }
+
+        .v-col-8 {
+            grid-column: span 8;
+        }
+
+        .v-col-12 {
+            grid-column: span 12;
+        }
+
+        /* ─── Body Text ─── */
+        .v-body-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(17, 17, 17, 0.65);
+            margin: 0;
+        }
+
+        /* ─── Scroll Reveal ─── */
+        .v-reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .v-reveal.v-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .v-reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .v-reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .v-reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .v-reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 01 — HERO
+           ═══════════════════════════════════════════════════ */
+        .v-hero {
+            position: relative;
+            padding: 140px 0 80px 0;
+            border-bottom: 1px solid rgba(77, 159, 255, 0.12);
+            background: radial-gradient(ellipse at 75% 20%, rgba(77, 159, 255, 0.06) 0%, transparent 60%);
+            overflow: hidden;
+        }
+
+        .v-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .v-hero-content {}
+
+        .v-hero-logo {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 32px;
+        }
+
+        .v-hero-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(42px, 5.5vw, 76px);
+            font-weight: 700;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            color: #111111;
+        }
+
+        .v-hero-desc {
+            font-size: clamp(15px, 1.5vw, 19px);
+            color: rgba(17, 17, 17, 0.55);
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .v-hero-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .v-hero-meta-item {}
+
+        .v-hero-meta-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .v-hero-meta-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        /* Hero Device / Thumbnail */
+        .v-hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .v-hero-device {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+            animation: v-float 4s ease-in-out infinite;
+        }
+
+        @keyframes v-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* Soft glow behind device */
+        .v-hero-visual::before {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(77, 159, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 02 — PROJECT OVERVIEW
+           ═══════════════════════════════════════════════════ */
+        .v-overview-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 64px;
+        }
+
+        .v-overview-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        .v-detail-item {}
+
+        .v-detail-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .v-detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        .v-overview-narrative {}
+
+        .v-overview-narrative p {
+            font-size: 16px;
+            line-height: 1.85;
+            color: rgba(17, 17, 17, 0.65);
+            margin-bottom: 24px;
+        }
+
+        .v-overview-narrative p:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-callout-box {
+            padding: 28px 32px;
+            border-left: 4px solid #4D9FFF;
+            background: rgba(77, 159, 255, 0.03);
+            border-radius: 0 16px 16px 0;
+            margin-top: 32px;
+        }
+
+        .v-callout-box p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #111111;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 03 — EXISTING SECTIONS (Problem, Goal, Research, etc.)
+           ═══════════════════════════════════════════════════ */
+        .v-existing-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+        }
+
+        .v-existing-label-col {
+            grid-column: span 4;
+        }
+
+        .v-existing-content-col {
+            grid-column: span 8;
+        }
+
+        .v-quote-block {
+            padding: 24px 28px;
+            border-left: 4px solid #4D9FFF;
+            background: rgba(77, 159, 255, 0.02);
+            border-radius: 0 12px 12px 0;
+            margin-top: 20px;
+        }
+
+        .v-quote-block p {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #111111;
+            margin: 0;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* Research Cards */
+        .v-research-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .v-research-card {
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            background: #ffffff;
+            transition: box-shadow 0.4s ease, transform 0.4s ease;
+        }
+
+        .v-research-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .v-research-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #4D9FFF;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .v-research-card-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 12px 0;
+            color: #111111;
+        }
+
+        .v-research-card p {
+            font-size: 14px;
+            line-height: 1.65;
+            color: rgba(17, 17, 17, 0.6);
+            margin: 0;
+        }
+
+        /* User Flow Steps */
+        .v-flow-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .v-flow-step {
+            padding: 20px 12px;
+            border: 1px solid rgba(77, 159, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(77, 159, 255, 0.02);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111111;
+            transition: all 0.3s ease;
+        }
+
+        .v-flow-step:hover {
+            background: rgba(77, 159, 255, 0.06);
+            border-color: rgba(77, 159, 255, 0.4);
+        }
+
+        /* Feature Cards */
+        .v-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .v-feature-card {
+            padding: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            background: #ffffff;
+            transition: all 0.4s ease;
+        }
+
+        .v-feature-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .v-feature-card h4 {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #4D9FFF;
+            margin-bottom: 12px;
+        }
+
+        .v-feature-card p {
+            font-size: 13px;
+            line-height: 1.65;
+            color: rgba(17, 17, 17, 0.55);
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 04 — WIREFRAMES
+           ═══════════════════════════════════════════════════ */
+        .v-wireframe-subsection {
+            margin-bottom: 64px;
+        }
+
+        .v-wireframe-subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-wireframe-subtitle {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 12px;
+        }
+
+        .v-wireframe-desc {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(17, 17, 17, 0.55);
+            margin-bottom: 28px;
+            max-width: 600px;
+        }
+
+        .v-wireframe-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 24px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-wireframe-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 05 — TYPOGRAPHY
+           ═══════════════════════════════════════════════════ */
+        .v-typography-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .v-type-specimen {}
+
+        .v-type-font-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+        }
+
+        .v-type-alphabet {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #111111;
+            line-height: 2;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .v-type-alphabet-lower {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.6);
+            line-height: 2;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .v-type-numbers {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.45);
+            line-height: 2;
+            letter-spacing: 5px;
+            margin-bottom: 32px;
+        }
+
+        .v-type-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .v-type-tag {
+            padding: 8px 18px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(17, 17, 17, 0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .v-type-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 20px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-type-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 06 — COLOR SYSTEM
+           ═══════════════════════════════════════════════════ */
+        .v-color-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        .v-color-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 20px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-color-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 07 — ICONOGRAPHY
+           ═══════════════════════════════════════════════════ */
+        .v-icon-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .v-icon-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 24px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-icon-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .v-icon-traits {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 12px;
+        }
+
+        .v-icon-trait {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 22px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 14px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .v-icon-trait:hover {
+            border-color: rgba(77, 159, 255, 0.25);
+            box-shadow: 0 4px 16px rgba(77, 159, 255, 0.06);
+        }
+
+        .v-icon-trait-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4D9FFF;
+            flex-shrink: 0;
+        }
+
+        .v-icon-trait span {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(17, 17, 17, 0.65);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 08 — MOCKUPS
+           ═══════════════════════════════════════════════════ */
+        .v-mockup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .v-mockup-wrapper {
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fafafa;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .v-mockup-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .v-mockup-wrapper img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 09 — FINAL SCREENS (Masonry / Editorial)
+           ═══════════════════════════════════════════════════ */
+        .v-screens-mode {
+            margin-bottom: 80px;
+        }
+
+        .v-screens-mode:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-screens-mode-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 10px;
+        }
+
+        .v-screens-mode-desc {
+            font-size: 15px;
+            color: rgba(17, 17, 17, 0.45);
+            margin-bottom: 48px;
+            max-width: 520px;
+        }
+
+        /* Masonry layout using CSS columns */
+        .v-screens-masonry {
+            column-count: 4;
+            column-gap: 36px;
+        }
+
+        .v-screen-card {
+            break-inside: avoid;
+            margin-bottom: 36px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: #fafafa;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .v-screen-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .v-screen-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Dark mode screens container */
+        .v-screens-dark-bg {
+            background: #1a1a1a;
+            border-radius: 28px;
+            padding: 48px;
+            margin-top: 24px;
+        }
+
+        .v-screens-dark-bg .v-screens-mode-title {
+            color: #ffffff;
+        }
+
+        .v-screens-dark-bg .v-screens-mode-desc {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .v-screens-dark-bg .v-screen-card {
+            border-color: rgba(255, 255, 255, 0.08);
+            background: #222222;
+        }
+
+        .v-screens-dark-bg .v-screen-card:hover {
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+           ═══════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .v-main {
+                padding: 0 32px;
+            }
+
+            .v-hero-inner {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .v-hero-visual {
+                order: -1;
+            }
+
+            .v-hero-device {
+                max-width: 360px;
+            }
+
+            .v-overview-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .v-typography-showcase {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .v-icon-layout {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .v-existing-label-col {
+                grid-column: span 12;
+            }
+
+            .v-existing-content-col {
+                grid-column: span 12;
+            }
+
+            .v-col-4 {
+                grid-column: span 12;
+            }
+
+            .v-col-8 {
+                grid-column: span 12;
+            }
         }
 
         @media (max-width: 768px) {
-            .close-btn-standalone {
+            .v-main {
+                padding: 0 24px;
+            }
+
+            .v-section {
+                margin-bottom: 80px;
+                padding-bottom: 60px;
+            }
+
+            .v-close-btn {
                 top: 24px;
                 right: 24px;
-                font-size: 28px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+
+            .v-hero {
+                padding: 100px 0 60px 0;
+            }
+
+            .v-hero-meta {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .v-research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-flow-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .v-features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-mockup-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-screens-masonry {
+                column-count: 3;
+                column-gap: 28px;
+            }
+
+            .v-screen-card {
+                margin-bottom: 28px;
+            }
+
+            .v-screens-dark-bg {
+                padding: 28px;
+                border-radius: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .v-main {
+                padding: 0 18px;
+            }
+
+            .v-hero-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .v-flow-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .v-screens-masonry {
+                column-count: 2;
+                column-gap: 20px;
+            }
+
+            .v-screen-card {
+                margin-bottom: 20px;
+                border-radius: 14px;
+            }
+
+            .v-screens-dark-bg {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .v-type-font-name {
+                font-size: 36px;
+            }
+
+            .v-type-alphabet,
+            .v-type-alphabet-lower {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Grid Backdrop -->
-    <div class="blueprint-grid-backdrop"></div>
+    <!-- Blueprint Grid Backdrop -->
+    <div class="v-blueprint-grid"></div>
 
-    <!-- Minimal Close Button X -->
-    <button id="case-study-close-btn" class="close-btn-standalone" title="Return to Homepage">×</button>
+    <!-- Close Button -->
+    <button id="v-close-btn" class="v-close-btn" title="Return to Homepage">×</button>
 
-    <!-- Synchronized 16 Case Study Sections -->
-    <div class="case-study-content"
-        style="background-color: #ffffff; color: #111111; font-family: 'Space Grotesk', -apple-system, sans-serif; position: relative; z-index: 5; max-width: 1200px; margin: 0 auto; padding: 0 40px;">
+    <!-- Main Content -->
+    <div class="v-main">
 
-        <!-- ─── SECTION 1: HERO ─── -->
-        <header class="cs-section"
-            style="position: relative; padding: 140px 0 80px 0; border-bottom: 1px solid rgba(77, 159, 255, 0.15); background: radial-gradient(circle at 80% 20%, rgba(77, 159, 255, 0.05) 0%, transparent 60%);">
-            <div class="case-study-logo-wrapper" style="margin-bottom: 32px; display: inline-block;">
-                <img src="../Projects/Voltify/Logo/Volfify Web Logo.png" alt="Voltify Branding Logo"
-                    style="height: 48px; width: auto; object-fit: contain;">
-            </div>
-            <br>
-            <span
-                style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">01
-                / HERO BRAND BANNER</span>
-            <h1
-                style="font-family: 'Clash Display', sans-serif; font-size: clamp(40px, 6vw, 84px); margin-top: 16px; margin-bottom: 24px; font-weight: 700; line-height: 1.0; letter-spacing: -0.03em;">
-                Voltify EV Charging</h1>
-            <p
-                style="font-size: clamp(16px, 1.8vw, 22px); color: rgba(17, 17, 17, 0.6); max-width: 800px; font-weight: 400; line-height: 1.5;">
-                Designing a seamless smart charging experience for electric vehicles, addressing range anxiety with
-                real-time feedback loops and clean design systems.
-            </p>
-        </header>
-
-        <div class="case-study-body" style="padding: 80px 0;">
-
-            <!-- Metadata Info Grid -->
-            <section class="case-study-meta-grid"
-                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); padding-bottom: 48px; margin-bottom: 80px;">
-                <div>
-                    <h5
-                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
-                        ROLE</h5>
-                    <p style="color: #111111; font-weight: 700; font-size: 15px;">UI/UX Lead Designer</p>
-                </div>
-                <div>
-                    <h5
-                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
-                        TIMELINE</h5>
-                    <p style="color: #111111; font-weight: 700; font-size: 15px;">6 Weeks (2026)</p>
-                </div>
-                <div>
-                    <h5
-                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
-                        DELIVERABLES</h5>
-                    <p style="color: #111111; font-weight: 700; font-size: 15px;">Mobile App, Design System</p>
-                </div>
-                <div>
-                    <h5
-                        style="color: rgba(17, 17, 17, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">
-                        LOCATION</h5>
-                    <p style="color: #111111; font-weight: 700; font-size: 15px;">Ahmedabad, India</p>
-                </div>
-            </section>
-
-            <!-- ─── SECTION 2: OVERVIEW ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">02.
-                            Context</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
-                            Overview</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Voltify is an EV charging companion app built to address range anxiety for electric vehicle
-                            drivers. By delivering transparent, real-time feedback loops and booking structures, it
-                            helps motorists navigate to compatible and active charging plugs.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ─── SECTION 3: PROBLEM ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">03.
-                            Challenge</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Problem
-                        </h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <p
-                            style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin-bottom: 24px;">
-                            EV drivers suffer from acute "range anxiety" the persistent fear of being stranded. This
-                            is exacerbated by broken or unavailable charger ports, mismatched plug interfaces, and
-                            delayed status syncs within existing public infrastructure applications.
-                        </p>
-                        <div
-                            style="padding: 24px; border-left: 4px solid #4D9FFF; background: rgba(77, 159, 255, 0.02); border-radius: 0 12px 12px 0;">
-                            <p style="font-size: 14px; line-height: 1.6; color: #111111; margin: 0; font-weight: 500;">
-                                "I have driven 15km to three different charging locations listed as 'available' on my
-                                dashboard, only to find them out of order or occupied by other vehicles."
-                            </p>
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 01 — HERO
+             ═══════════════════════════════════════════════════ -->
+        <header class="v-hero v-section">
+            <div class="v-hero-inner">
+                <!-- Left: Content -->
+                <div class="v-hero-content v-reveal">
+                    <img src="../Projects/Voltify/Logo/Volfify Web Logo.png" alt="Voltify Logo" class="v-hero-logo">
+                    <span class="v-section-label">01 / Case Study</span>
+                    <h1 class="v-hero-title">Voltify<br>EV Charging</h1>
+                    <p class="v-hero-desc">
+                        Designing a seamless smart charging experience for electric vehicle owners — addressing range
+                        anxiety through real-time feedback, intelligent slot booking, and a clean mobile-first design
+                        system.
+                    </p>
+                    <div class="v-hero-meta">
+                        <div class="v-hero-meta-item">
+                            <span class="v-hero-meta-label">Role</span>
+                            <span class="v-hero-meta-value">UI/UX Designer</span>
+                        </div>
+                        <div class="v-hero-meta-item">
+                            <span class="v-hero-meta-label">Duration</span>
+                            <span class="v-hero-meta-value">1 Month</span>
+                        </div>
+                        <div class="v-hero-meta-item">
+                            <span class="v-hero-meta-label">Tools</span>
+                            <span class="v-hero-meta-value">Figma, Photoshop, Freepik</span>
+                        </div>
+                        <div class="v-hero-meta-item">
+                            <span class="v-hero-meta-label">Platform</span>
+                            <span class="v-hero-meta-value">Mobile Application</span>
                         </div>
                     </div>
                 </div>
-            </section>
+                <!-- Right: Device Thumbnail -->
+                <div class="v-hero-visual v-reveal v-reveal-delay-2">
+                    <img src="../Projects/Voltify/thumbnail/thumbnail image.png" alt="Voltify Mobile App Mockup"
+                        class="v-hero-device">
+                </div>
+            </div>
+        </header>
 
-            <!-- ─── SECTION 4: GOAL ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">04.
-                            Vision</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Goal
-                        </h2>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 02 — PROJECT OVERVIEW
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-overview">
+            <span class="v-section-label">02 / Project Overview</span>
+            <h2 class="v-section-title">Overview</h2>
+
+            <div class="v-overview-grid">
+                <!-- Left: Project Details -->
+                <div class="v-overview-details v-reveal v-reveal-delay-1">
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Project Name</span>
+                        <span class="v-detail-value">Voltify</span>
                     </div>
-                    <div style="grid-column: span 8;">
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Our objective was to design a frictionless charging station reservation and status
-                            monitoring app that provides reassuring micro-interactions and transparent real-time state
-                            displays. By validating vehicle compatibility upfront, we aim to deliver absolute certainty
-                            to the navigation flow.
-                        </p>
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Industry</span>
+                        <span class="v-detail-value">Electric Vehicle Charging</span>
+                    </div>
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Platform</span>
+                        <span class="v-detail-value">Mobile Application</span>
+                    </div>
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Role</span>
+                        <span class="v-detail-value">UI/UX Designer</span>
+                    </div>
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Duration</span>
+                        <span class="v-detail-value">1 Month</span>
+                    </div>
+                    <div class="v-detail-item">
+                        <span class="v-detail-label">Tools</span>
+                        <span class="v-detail-value">Figma, Photoshop, Freepik</span>
                     </div>
                 </div>
-            </section>
 
-            <!-- ─── SECTION 5: RESEARCH ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <span
-                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">05.
-                    Discovery</span>
-                <h2
-                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
-                    Research</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-                    <div
-                        style="padding: 32px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background-color: #ffffff;">
-                        <span
-                            style="font-size: 10px; font-weight: 700; color: #4D9FFF; letter-spacing: 1.5px; text-transform: uppercase;">USER
-                            PERSONA</span>
-                        <h3
-                            style="font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 600; margin-top: 12px; margin-bottom: 12px;">
-                            Neha Patel, 32</h3>
-                        <p style="font-size: 14px; line-height: 1.6; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Neha Patel is a 32-year-old marketing manager from Surat who drives an electric car for her
-                            daily commute and work travel. With a busy schedule and moderatehigh tech comfort, she
-                            values reliable charging, advance slot booking, secure payments, and safe, well-rated
-                            stations to avoid delays and stress in her routine.
-                        </p>
-                    </div>
-                    <div
-                        style="padding: 32px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background-color: #ffffff;">
-                        <span
-                            style="font-size: 10px; font-weight: 700; color: #4D9FFF; letter-spacing: 1.5px; text-transform: uppercase;">JOURNEY
-                            MAP</span>
-                        <h3
-                            style="font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 600; margin-top: 12px; margin-bottom: 12px;">
-                            Charging Journey</h3>
-                        <p style="font-size: 14px; line-height: 1.6; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Neha starts her day with a planned work schedule and relies on her EV for city commuting and client visits. Before traveling, she checks nearby charging stations, compares ratings and availability, books a charging slot in advance, navigates to the selected station, completes a secure payment, and monitors charging progress in real time while continuing her work. After charging, she receives confirmation and trip insights for future planning.
-                        </p>
+                <!-- Right: Narrative -->
+                <div class="v-overview-narrative v-reveal v-reveal-delay-2">
+                    <p>
+                        <strong>Purpose —</strong> Voltify is a mobile companion app designed for electric vehicle
+                        owners who need reliable, stress-free access to charging infrastructure. The platform bridges
+                        the gap between EV drivers and charging stations through an intuitive, data-rich interface.
+                    </p>
+                    <p>
+                        <strong>The Problem —</strong> EV drivers face acute "range anxiety" — the persistent fear of
+                        being stranded without charge. Existing charging apps suffer from stale availability data,
+                        broken station listings, mismatched plug compatibility, and convoluted booking flows that erode
+                        trust.
+                    </p>
+                    <p>
+                        <strong>Business Goal —</strong> Reduce charger-related trip failures by 60% and increase
+                        booking completion rates through streamlined UX. Create a design system scalable to multi-city
+                        deployment and integrate real-time hardware telemetry.
+                    </p>
+                    <p>
+                        <strong>Solution —</strong> A mobile-first platform featuring live plug-status sensors, one-tap
+                        slot reservations, circular telemetry visualizations for charging progress, and a comprehensive
+                        design system optimized for in-vehicle dashboard mounting.
+                    </p>
+
+                    <div class="v-callout-box">
+                        <p>"I have driven 15km to three different charging locations listed as 'available' on my
+                            dashboard, only to find them out of order or occupied by other vehicles."</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 6: WIREFRAMES ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <span
-                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">06.
-                    Layout Iterations</span>
-                <h2
-                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
-                    Wireframes</h2>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center;">
-                    <div
-                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
-                        <img src="../Projects/Voltify/Wireframes/Low Fidelity.png" alt="Low Fidelity wireframes"
-                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
-                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">1. Low Fidelity
-                            Sketches</span>
-                    </div>
-                    <div
-                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
-                        <img src="../Projects/Voltify/Wireframes/HIgh Fidelity.png" alt="High Fidelity wireframes"
-                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
-                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">2. Mid Fidelity
-                            Wireframes</span>
-                    </div>
-                    <div
-                        style="padding: 16px; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; background: #fafafa;">
-                        <img src="../Projects/Voltify/Wireframes/Drown.png" alt="Sketches and flows"
-                            style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px;">
-                        <span style="font-size: 13px; font-weight: 600; color: rgba(17, 17, 17, 0.5);">3. Component
-                            Layouts</span>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 03 — EXISTING SECTIONS (Research, User Flow, Features)
+             ═══════════════════════════════════════════════════ -->
+
+        <!-- 03a. Research -->
+        <section class="v-section v-reveal" id="v-research">
+            <span class="v-section-label">03 / Discovery</span>
+            <h2 class="v-section-title">Research</h2>
+            <div class="v-research-grid">
+                <div class="v-research-card v-reveal v-reveal-delay-1">
+                    <span class="v-research-card-label">User Persona</span>
+                    <h3 class="v-research-card-title">Neha Patel, 32</h3>
+                    <p>Neha Patel is a 32-year-old marketing manager from Surat who drives an electric car for her daily
+                        commute and work travel. With a busy schedule and moderate-high tech comfort, she values
+                        reliable charging, advance slot booking, secure payments, and safe, well-rated stations to avoid
+                        delays and stress in her routine.</p>
+                </div>
+                <div class="v-research-card v-reveal v-reveal-delay-2">
+                    <span class="v-research-card-label">Journey Map</span>
+                    <h3 class="v-research-card-title">Charging Journey</h3>
+                    <p>Neha starts her day with a planned work schedule and relies on her EV for city commuting and
+                        client visits. Before traveling, she checks nearby charging stations, compares ratings and
+                        availability, books a charging slot in advance, navigates to the selected station, completes a
+                        secure payment, and monitors charging progress in real time while continuing her work.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03b. User Flow -->
+        <section class="v-section v-reveal" id="v-userflow">
+            <span class="v-section-label">04 / Architecture</span>
+            <h2 class="v-section-title">User Flow</h2>
+            <div class="v-flow-grid">
+                <div class="v-flow-step v-reveal v-reveal-delay-1">Locate Station</div>
+                <div class="v-flow-step v-reveal v-reveal-delay-1">Filter Plug Speed</div>
+                <div class="v-flow-step v-reveal v-reveal-delay-2">Claim Socket Slot</div>
+                <div class="v-flow-step v-reveal v-reveal-delay-2">Initiate Session</div>
+                <div class="v-flow-step v-reveal v-reveal-delay-3">Live Feedback Loop</div>
+            </div>
+        </section>
+
+        <!-- 03c. Key Features -->
+        <section class="v-section v-reveal" id="v-features">
+            <span class="v-section-label">05 / Product Functions</span>
+            <h2 class="v-section-title">Key Features</h2>
+            <div class="v-features-grid">
+                <div class="v-feature-card v-reveal v-reveal-delay-1">
+                    <h4>Live Plug Sensor</h4>
+                    <p>Validates the real-time availability of station plugs through hardware sensors, preventing wasted
+                        journeys to out-of-order stations.</p>
+                </div>
+                <div class="v-feature-card v-reveal v-reveal-delay-2">
+                    <h4>Instant Slot Reserve</h4>
+                    <p>Enables drivers to hold a connector plug for 20 minutes with a single tap, locking in
+                        availability before they arrive at the station.</p>
+                </div>
+                <div class="v-feature-card v-reveal v-reveal-delay-3">
+                    <h4>Circular Telemetry</h4>
+                    <p>Visualizes charging rate progress curves, remaining charge times, and live cost calculation
+                        through an intuitive circular gauge interface.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 04 — WIREFRAMES
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-wireframes">
+            <span class="v-section-label">06 / Layout Iterations</span>
+            <h2 class="v-section-title">Wireframes</h2>
+
+            <!-- Sketch Wireframes -->
+            <div class="v-wireframe-subsection v-reveal v-reveal-delay-1">
+                <h3 class="v-wireframe-subtitle">Sketch Wireframes</h3>
+                <p class="v-wireframe-desc">
+                    Initial hand-drawn explorations to rapidly map out core user flows, screen hierarchies, and
+                    interaction patterns before moving to digital tools.
+                </p>
+                <div class="v-wireframe-image-wrapper">
+                    <img src="../Projects/Voltify/Wireframes/Sckeched.png" alt="Voltify Sketch Wireframes"
+                        loading="lazy">
+                </div>
+            </div>
+
+            <!-- Low Fidelity Wireframes -->
+            <div class="v-wireframe-subsection v-reveal v-reveal-delay-1">
+                <h3 class="v-wireframe-subtitle">Low Fidelity Wireframes</h3>
+                <p class="v-wireframe-desc">
+                    Structured grayscale layouts defining information hierarchy, content placement, and navigation
+                    patterns — focused on usability over aesthetics.
+                </p>
+                <div class="v-wireframe-image-wrapper">
+                    <img src="../Projects/Voltify/Wireframes/Low Fidelity.png" alt="Voltify Low Fidelity Wireframes"
+                        loading="lazy">
+                </div>
+            </div>
+
+            <!-- High Fidelity Wireframes -->
+            <div class="v-wireframe-subsection v-reveal v-reveal-delay-1">
+                <h3 class="v-wireframe-subtitle">High Fidelity Wireframes</h3>
+                <p class="v-wireframe-desc">
+                    Polished wireframes integrating the final design system, color tokens, and component library — the
+                    blueprint for production-ready screens.
+                </p>
+                <div class="v-wireframe-image-wrapper">
+                    <img src="../Projects/Voltify/Wireframes/HIgh Fidelity.png" alt="Voltify High Fidelity Wireframes"
+                        loading="lazy">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 05 — TYPOGRAPHY
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-typography">
+            <span class="v-section-label">07 / Visual Typography</span>
+            <h2 class="v-section-title">Typography</h2>
+
+            <div class="v-typography-showcase">
+                <!-- Left: Font Specimen -->
+                <div class="v-type-specimen v-reveal v-reveal-delay-1">
+                    <div class="v-type-font-name">Poppins</div>
+                    <div class="v-type-alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div class="v-type-alphabet-lower">abcdefghijklmnopqrstuvwxyz</div>
+                    <div class="v-type-numbers">1234567890</div>
+                    <div class="v-type-tags">
+                        <span class="v-type-tag">Modern</span>
+                        <span class="v-type-tag">Readable</span>
+                        <span class="v-type-tag">Friendly</span>
+                        <span class="v-type-tag">Clean</span>
+                        <span class="v-type-tag">Mobile First</span>
+                        <span class="v-type-tag">Product Focused</span>
                     </div>
                 </div>
-            </section>
+                <!-- Right: Typography Image -->
+                <div class="v-type-image-wrapper v-reveal v-reveal-delay-2">
+                    <img src="../Projects/Voltify/Design system/Typography.png" alt="Voltify Typography System"
+                        loading="lazy">
+                </div>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 7: TYPOGRAPHY ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">07.
-                            Visual Typography</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
-                            Typography</h2>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 06 — COLOR SYSTEM
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-colors">
+            <span class="v-section-label">08 / Brand Palette</span>
+            <h2 class="v-section-title">Color System</h2>
+            <p class="v-body-text" style="max-width: 640px; margin-bottom: 40px;">
+                A comprehensive color system encompassing primary, secondary, success, warning, error, neutral,
+                background, and text tokens — engineered for accessibility and visual clarity across light and dark
+                interfaces.
+            </p>
+
+            <div class="v-color-gallery">
+                <div class="v-color-image-wrapper v-reveal v-reveal-delay-1">
+                    <img src="../Projects/Voltify/Design system/Color System.png"
+                        alt="Voltify Color System — Primary & Secondary Palettes" loading="lazy">
+                </div>
+                <div class="v-color-image-wrapper v-reveal v-reveal-delay-2">
+                    <img src="../Projects/Voltify/Design system/Color System2.png"
+                        alt="Voltify Color System — Extended Palette & Tokens" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 07 — ICONOGRAPHY
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-icons">
+            <span class="v-section-label">09 / Visual Assets</span>
+            <h2 class="v-section-title">Iconography</h2>
+
+            <div class="v-icon-layout">
+                <div class="v-icon-image-wrapper v-reveal v-reveal-delay-1">
+                    <img src="../Projects/Voltify/Design system/Icons.png" alt="Voltify Icon Library" loading="lazy">
+                </div>
+                <div class="v-icon-traits v-reveal v-reveal-delay-2">
+                    <div class="v-icon-trait">
+                        <div class="v-icon-trait-dot"></div>
+                        <span>Consistent visual weight</span>
                     </div>
-                    <div style="grid-column: span 8;">
-                        <h3
-                            style="font-family: 'Clash Display', sans-serif; font-size: 24px; font-weight: 600; margin-bottom: 16px;">
-                            Geometric Scale</h3>
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            We paired the wide-aligned geometric display font **Clash Display** with **Inter** to create
-                            high contrast layouts that remain readable even on a shaking dashboard mount inside a
-                            vehicle.
-                        </p>
+                    <div class="v-icon-trait">
+                        <div class="v-icon-trait-dot"></div>
+                        <span>Minimal & geometric</span>
+                    </div>
+                    <div class="v-icon-trait">
+                        <div class="v-icon-trait-dot"></div>
+                        <span>Easy to recognize at glance</span>
+                    </div>
+                    <div class="v-icon-trait">
+                        <div class="v-icon-trait-dot"></div>
+                        <span>Optimized for mobile screens</span>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 8: COLOR SYSTEM ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">08.
-                            Brand Hues</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Color
-                            System</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <img src="../Projects/Voltify/Design system/Typography & colors.png"
-                            alt="Color System and Tokens"
-                            style="width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 08 — MOCKUPS
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-mockups">
+            <span class="v-section-label">10 / Presentation</span>
+            <h2 class="v-section-title">Mockups</h2>
+
+            <div class="v-mockup-grid">
+                <div class="v-mockup-wrapper v-reveal v-reveal-delay-1">
+                    <img src="../Projects/Voltify/Mockups/17.png" alt="Voltify Search & Map Mockup" loading="lazy">
+                </div>
+                <div class="v-mockup-wrapper v-reveal v-reveal-delay-2">
+                    <img src="../Projects/Voltify/Mockups/Frame 427318922.png" alt="Voltify Charging Telemetry Mockup"
+                        loading="lazy">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 09 — FINAL SCREENS (Masonry / Editorial)
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-screens">
+            <span class="v-section-label">11 / Final Deliverables</span>
+            <h2 class="v-section-title">Final Screens</h2>
+
+            <!-- Light Mode -->
+            <div class="v-screens-mode">
+                <h3 class="v-screens-mode-title">Light Mode</h3>
+                <p class="v-screens-mode-desc">12 production-ready screens optimized for daylight readability — each displayed at its authentic mobile proportions.</p>
+
+                <div class="v-screens-masonry v-reveal v-reveal-delay-1">
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/1.png" alt="Light Screen 1 — Splash" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/2.png" alt="Light Screen 2 — Onboarding" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/3.png" alt="Light Screen 3 — Login" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/4.png" alt="Light Screen 4 — Home" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/5.png" alt="Light Screen 5 — Map" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/6.png" alt="Light Screen 6 — Station" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/7.png" alt="Light Screen 7 — Booking" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/8.png" alt="Light Screen 8 — Payment" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/9.png" alt="Light Screen 9 — Charging" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/10.png" alt="Light Screen 10 — Status" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/11.png" alt="Light Screen 11 — History" loading="lazy"></div>
+                    <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Light Mode/12.png" alt="Light Screen 12 — Profile" loading="lazy"></div>
+                </div>
+            </div>
+
+            <!-- Dark Mode -->
+            <div class="v-screens-mode">
+                <div class="v-screens-dark-bg">
+                    <h3 class="v-screens-mode-title">Dark Mode</h3>
+                    <p class="v-screens-mode-desc">12 production-ready screens optimized for low-light environments — preserving the same authentic proportions.</p>
+
+                    <div class="v-screens-masonry v-reveal v-reveal-delay-1">
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/1.png" alt="Dark Screen 1 — Splash" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/2.png" alt="Dark Screen 2 — Onboarding" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/3.png" alt="Dark Screen 3 — Login" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/4.png" alt="Dark Screen 4 — Home" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/5.png" alt="Dark Screen 5 — Map" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/6.png" alt="Dark Screen 6 — Station" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/7.png" alt="Dark Screen 7 — Booking" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/8.png" alt="Dark Screen 8 — Payment" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/9.png" alt="Dark Screen 9 — Charging" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/10.png" alt="Dark Screen 10 — Status" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/11.png" alt="Dark Screen 11 — History" loading="lazy"></div>
+                        <div class="v-screen-card"><img src="../Projects/Voltify/Final Screens/Dark Mode/12.png" alt="Dark Screen 12 — Profile" loading="lazy"></div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 9: DESIGN SYSTEM ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">09.
-                            Foundations</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Design
-                            System</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            The Voltify Design System utilizes a strict 8px layout grid and structural border tokens.
-                            This creates a cohesive blueprint look, aligning user interface guidelines with robust
-                            mechanical engineering concepts.
-                        </p>
-                    </div>
+
+        <!-- ═══════════════════════════════════════════════════
+             CLOSING SECTIONS — Learnings & Reflection
+             ═══════════════════════════════════════════════════ -->
+        <section class="v-section v-reveal" id="v-learnings">
+            <div class="v-existing-grid">
+                <div class="v-existing-label-col">
+                    <span class="v-section-label">12 / Takeaways</span>
+                    <h2 class="v-section-title">Learnings</h2>
                 </div>
-            </section>
-
-            <!-- ─── SECTION 10: COMPONENTS ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">10.
-                            Modular Assets</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
-                            Components</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <img src="../Projects/Voltify/Design system/Icons.png" alt="Voltify Component Library"
-                            style="width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                    </div>
+                <div class="v-existing-content-col">
+                    <p class="v-body-text">
+                        EV UI design requires severe cognitive noise control. Replacing complex data matrices with a
+                        single circular telemetry glow and color-coded statuses creates much safer interactions for
+                        drivers looking at phone mounts. Designing for glance-ability — where critical information must
+                        be absorbed in under 2 seconds — fundamentally changes how you approach hierarchy, contrast, and
+                        motion.
+                    </p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 11: USER FLOW ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <span
-                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">11.
-                    Architecture</span>
-                <h2
-                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 24px;">
-                    User Flow</h2>
-                <div
-                    style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; font-size: 14px; text-align: center; font-weight: 500;">
-                    <div
-                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
-                        Locate Station</div>
-                    <div
-                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
-                        Filter Plug Speed</div>
-                    <div
-                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
-                        Claim Socket Slot</div>
-                    <div
-                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
-                        Initiate Session</div>
-                    <div
-                        style="padding: 16px 8px; border: 1px solid rgba(77, 159, 255, 0.2); border-radius: 8px; background-color: rgba(77, 159, 255, 0.02);">
-                        Live Feedback loop</div>
+        <section class="v-section v-reveal" id="v-reflection" style="border-bottom: none; padding-bottom: 40px;">
+            <div class="v-existing-grid">
+                <div class="v-existing-label-col">
+                    <span class="v-section-label">13 / Conclusion</span>
+                    <h2 class="v-section-title">Reflection</h2>
                 </div>
-            </section>
-
-            <!-- ─── SECTION 12: MOCKUPS ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">12.
-                            Layout Presentation</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Mockups
-                        </h2>
-                    </div>
-                    <div
-                        style="grid-column: span 8; text-align: center; background-color: #fafafa; padding: 32px; border-radius: 16px;">
-                        <img src="../Projects/Voltify/Mockups/17.png" alt="Search and map views mockup"
-                            style="width: 100%; max-width: 320px; height: auto; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                    </div>
+                <div class="v-existing-content-col">
+                    <p class="v-body-text">
+                        Voltify successfully combines real-time hardware status metrics with clean, luxury aesthetics.
+                        Streamlining slot bookings from five clicks to a single confirmation tap resulted in a 48%
+                        reduction in booking cancellations during testing. The design system scales to support
+                        multi-city deployments and integrates seamlessly with backend telemetry services.
+                    </p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ─── SECTION 13: FINAL SCREENS ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">13.
-                            Finished UI</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">Final
-                            Screens</h2>
-                    </div>
-                    <div
-                        style="grid-column: span 8; text-align: center; background-color: #fafafa; padding: 32px; border-radius: 16px;">
-                        <img src="../Projects/Voltify/Mockups/Frame 427318922.png"
-                            alt="Circular charging feedback gauge"
-                            style="width: 100%; max-width: 320px; height: auto; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                    </div>
-                </div>
-            </section>
+        <!-- Bottom Spacer -->
+        <div style="height: 80px;"></div>
 
-            <!-- ─── SECTION 14: KEY FEATURES ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <span
-                    style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">14.
-                    Product Functions</span>
-                <h2
-                    style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 32px;">
-                    Key Features</h2>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                    <div
-                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
-                        <h4
-                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
-                            Live plug sensor</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
-                            Validates the real-time availability of station plugs through hardware sensors, preventing
-                            wasted journeys.
-                        </p>
-                    </div>
-                    <div
-                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
-                        <h4
-                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
-                            Instant slot reserve</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
-                            Enables drivers to hold a connector plug for 20 minutes with a single tap, locking in
-                            availability.
-                        </p>
-                    </div>
-                    <div
-                        style="padding: 24px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; background: #ffffff;">
-                        <h4
-                            style="font-family: 'Clash Display', sans-serif; font-size: 18px; font-weight: 600; color: #4D9FFF; margin-bottom: 12px;">
-                            Circular telemetry</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: rgba(17,17,17,0.6); margin: 0;">
-                            Visualizes charging rate progress curves, remaining charge times, and live cost calculation
-                            clearly.
-                        </p>
-                    </div>
-                </div>
-            </section>
+    </div><!-- /.v-main -->
 
-            <!-- ─── SECTION 15: LEARNINGS ─── -->
-            <section class="cs-section"
-                style="margin-bottom: 100px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 60px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">15.
-                            Takeaways</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
-                            Learnings</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            EV UI design requires severe cognitive noise control. Replacing complex data matrices with a
-                            single circular telemetry glow and color-coded statuses creates much safer interactions for
-                            drivers looking at phone mounts.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ─── SECTION 16: REFLECTION ─── -->
-            <section class="cs-section" style="padding-bottom: 80px;">
-                <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
-                    <div style="grid-column: span 4;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #4D9FFF; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px;">16.
-                            Conclusion</span>
-                        <h2 style="font-family: 'Clash Display', sans-serif; font-size: 32px; font-weight: 600;">
-                            Reflection</h2>
-                    </div>
-                    <div style="grid-column: span 8;">
-                        <p style="font-size: 16px; line-height: 1.8; color: rgba(17, 17, 17, 0.7); margin: 0;">
-                            Voltify successfully combines real-time hardware status metrics with clean, luxury
-                            aesthetics. Streamlining slot bookings from five clicks to a single confirmation tap
-                            resulted in a 48% reduction in booking cancellations during testing.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-    </div>
-
-    <!-- Standalone Transition Scripts -->
+    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Set flag immediately to tell home page to skip preloader when returning via back button or close
+            // Flag for returning to homepage
             sessionStorage.setItem('fromCaseStudy', 'true');
 
-            // Fade page in smoothly on load
+            // Fade page in
             requestAnimationFrame(() => {
                 document.body.style.opacity = '1';
             });
 
-            // Handle close button X
-            const closeBtn = document.getElementById('case-study-close-btn');
+            // Close button
+            const closeBtn = document.getElementById('v-close-btn');
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    // Set flag to tell home page to skip preloader
                     sessionStorage.setItem('fromCaseStudy', 'true');
-
-                    // Fade out
                     document.body.style.opacity = '0';
-
-                    // Redirect after transition completes
                     setTimeout(() => {
                         window.location.href = '/';
-                    }, 400);
+                    }, 500);
                 });
             }
+
+            // Scroll Reveal with IntersectionObserver
+            const revealElements = document.querySelectorAll('.v-reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('v-visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
         });
     </script>
 </body>
