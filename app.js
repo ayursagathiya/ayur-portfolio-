@@ -279,6 +279,10 @@ function navigateToCaseStudy(isPopState = false) {
 
             // Bind SPA close button
             setupSPACloseButton();
+
+            // Initialize scroll reveal for SPA-injected content
+            // (innerHTML does not execute <script> tags, so we must run this manually)
+            initSPAScrollReveal();
         }, 500); // Wait for transition duration
     };
 
@@ -372,6 +376,20 @@ function setupSPACloseButton() {
             navigateToHome(false);
         });
     }
+}
+
+function initSPAScrollReveal() {
+    const els = document.querySelectorAll('.v-reveal-spa');
+    if (!els.length) return;
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('v-visible-spa');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => obs.observe(el));
 }
 
 
