@@ -1,0 +1,172 @@
+<div class="case-study-content" style="background-color: #ffffff; color: #111111; font-family: 'Space Grotesk', -apple-system, sans-serif;">
+    
+    <style>
+        /* Lounge Coffee Case Study — Scoped Inline Styles for SPA Overlay */
+        .l-reveal-spa { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+        .l-reveal-spa.l-visible-spa { opacity: 1; transform: translateY(0); }
+        .l-rd1 { transition-delay: 0.1s; } .l-rd2 { transition-delay: 0.2s; } .l-rd3 { transition-delay: 0.3s; }
+        @keyframes l-float-spa { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+        /* Masonry layout for Final Screens */
+        .l-masonry-spa { column-count: 2; column-gap: 36px; }
+        .l-masonry-card-spa { break-inside: avoid; margin-bottom: 36px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); background: #fafafa; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s cubic-bezier(0.16,1,0.3,1); display: inline-block; width: 100%; }
+        .l-masonry-card-spa:hover { transform: scale(1.01); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+        .l-masonry-card-spa img { width: 100%; height: auto; display: block; }
+        @media (max-width: 768px) { .l-masonry-spa { column-count: 2; column-gap: 28px; } .l-masonry-card-spa { margin-bottom: 28px; } }
+        @media (max-width: 480px) { .l-masonry-spa { column-count: 1; column-gap: 20px; } .l-masonry-card-spa { margin-bottom: 20px; border-radius: 14px; } }
+    </style>
+
+    <!-- ═══════════════════════════════════════════════════
+         SECTION 01 — HERO
+         ═══════════════════════════════════════════════════ -->
+    <header class="cs-section" style="position: relative; padding: 120px 0 80px 0; border-bottom: 1px solid rgba(181,138,99,0.12); background: radial-gradient(ellipse at 75% 20%, rgba(181,138,99,0.06) 0%, transparent 60%); overflow: hidden;">
+        <div class="container case-study-header-content">
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center;">
+                <!-- Left: Content -->
+                <div class="l-reveal-spa">
+                    <img src="./Projects/Lounge/Logo/Logo.png" alt="Lounge Coffee Logo" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 32px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">01 / Case Study</span>
+                    <h1 style="font-family: 'Clash Display', sans-serif; font-size: clamp(42px, 5.5vw, 76px); font-weight: 700; line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 20px;">Lounge Coffee</h1>
+                    <p style="font-size: clamp(15px, 1.5vw, 19px); color: rgba(17,17,17,0.55); font-weight: 400; line-height: 1.6; max-width: 520px; margin-bottom: 40px;">
+                        Crafting a luxury brand identity and premium web experience for a high-end specialty coffee shop — blending minimalist aesthetics with intuitive e-commerce menu interactions.
+                    </p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Role</span><span style="font-size: 14px; font-weight: 600; color: #111;">UI/UX Designer</span></div>
+                        <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Duration</span><span style="font-size: 14px; font-weight: 600; color: #111;">2 Weeks</span></div>
+                        <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Tools</span><span style="font-size: 14px; font-weight: 600; color: #111;">Figma, Photoshop, Illustrator</span></div>
+                        <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Platform</span><span style="font-size: 14px; font-weight: 600; color: #111;">Web Application</span></div>
+                    </div>
+                </div>
+                <!-- Right: Device -->
+                <div class="l-reveal-spa l-rd2" style="display: flex; justify-content: center; align-items: center; position: relative;">
+                    <img src="./Projects/Lounge/thumbnail/Elegant Black Laptop Mockup.png" alt="Lounge Coffee Website Mockup" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; animation: l-float-spa 4s ease-in-out infinite;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="case-study-body container" style="padding: 80px 0;">
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 02 — PROJECT OVERVIEW
+             ═══════════════════════════════════════════════════ -->
+        <section class="cs-section l-reveal-spa" style="margin-bottom: 120px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 80px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">02 / Project Overview</span>
+            <h2 style="font-family: 'Clash Display', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; margin-bottom: 24px; letter-spacing: -0.02em;">Overview</h2>
+
+            <div style="display: grid; grid-template-columns: 300px 1fr; gap: 64px;">
+                <!-- Left: Details -->
+                <div class="l-reveal-spa l-rd1" style="display: grid; gap: 28px;">
+                    <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Project Name</span><span style="font-size: 15px; font-weight: 600; color: #111;">Lounge Coffee</span></div>
+                    <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Industry</span><span style="font-size: 15px; font-weight: 600; color: #111;">Food &amp; Beverage, E-Commerce</span></div>
+                    <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Platform</span><span style="font-size: 15px; font-weight: 600; color: #111;">Web App</span></div>
+                    <div><span style="font-size: 10px; font-weight: 700; color: rgba(17,17,17,0.35); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px;">Figma Prototype</span><span style="font-size: 15px; font-weight: 600; color: #111;"><a href="https://www.figma.com/proto/Z6wBvX3r91Zl1X9&scaling=contain" target="_blank" style="color: #B58A63; text-decoration: none;">Interactive Prototype ↗</a></span></div>
+                </div>
+                <!-- Right: Narrative -->
+                <div class="l-reveal-spa l-rd2">
+                    <p style="font-size: 16px; line-height: 1.85; color: rgba(17,17,17,0.65); margin-bottom: 24px;"><strong>Purpose —</strong> Lounge Coffee is an upscale artisanal café dedicated to delivering sensory excellence. The digital objective was to create a cohesive web application that represents their high-end physical space and enables customers to customize and order specialty beverages with ease.</p>
+                    <p style="font-size: 16px; line-height: 1.85; color: rgba(17,17,17,0.65); margin-bottom: 24px;"><strong>The Problem —</strong> Traditional food-ordering apps rely on crowded grids and generic cards, eroding the premium perception of boutique brands. Customers ordering artisanal products expect a tailored, beautiful digital atmosphere that matches the physical craft of coffee preparation.</p>
+                    <p style="font-size: 16px; line-height: 1.85; color: rgba(17,17,17,0.65); margin-bottom: 24px;"><strong>Solution —</strong> A clean, typographically-driven interface using high-contrast layouts, smooth interactive states, and curated visuals. The menu system emphasizes the craftsmanship of the barista through large product photography, ingredient detail reveals, and an elegant, minimalist cart checkout flow.</p>
+                    <div style="padding: 28px 32px; border-left: 4px solid #B58A63; background: rgba(181,138,99,0.03); border-radius: 0 16px 16px 0; margin-top: 32px;">
+                        <p style="font-size: 15px; line-height: 1.7; color: #111; margin: 0; font-weight: 500;">"Our digital goal was to translate the aroma and luxury feel of our physical lounge into a pixel-perfect online ordering experience that feels just as crafted as our pour-overs."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 03 — DESIGN SYSTEM (Typography & Colors)
+             ═══════════════════════════════════════════════════ -->
+        <section class="cs-section l-reveal-spa" style="margin-bottom: 120px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 80px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">03 / Visual Guidelines</span>
+            <h2 style="font-family: 'Clash Display', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; margin-bottom: 40px;">Design System</h2>
+            
+            <!-- Typography -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; margin-bottom: 80px;">
+                <div class="l-reveal-spa l-rd1">
+                    <span style="font-size: 10px; font-weight: 700; color: #B58A63; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 16px;">Typography Specimen</span>
+                    <div style="font-family: 'Clash Display', sans-serif; font-size: 48px; font-weight: 600; color: #111; margin-bottom: 24px; letter-spacing: -1px;">Clash Display</div>
+                    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: #111; line-height: 1.8; letter-spacing: 2px; margin-bottom: 16px; word-break: break-all;">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 400; color: rgba(17,17,17,0.6); line-height: 1.8; letter-spacing: 2px; margin-bottom: 16px; word-break: break-all;">abcdefghijklmnopqrstuvwxyz</div>
+                    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 400; color: rgba(17,17,17,0.45); line-height: 1.8; letter-spacing: 4px; margin-bottom: 32px;">1234567890</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <span style="padding: 8px 18px; border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-size: 12px; font-weight: 600; color: rgba(17,17,17,0.5);">Sophisticated</span>
+                        <span style="padding: 8px 18px; border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-size: 12px; font-weight: 600; color: rgba(17,17,17,0.5);">Bold Headers</span>
+                        <span style="padding: 8px 18px; border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-size: 12px; font-weight: 600; color: rgba(17,17,17,0.5);">Artisanal</span>
+                        <span style="padding: 8px 18px; border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-size: 12px; font-weight: 600; color: rgba(17,17,17,0.5);">Clean Spacing</span>
+                    </div>
+                </div>
+                <div class="l-reveal-spa l-rd2" style="border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 20px; background: #fafafa; overflow: hidden;">
+                    <img src="./Projects/Lounge/Design System/Typography.png" alt="Lounge Typography System" style="width: 100%; height: auto; border-radius: 12px; display: block;" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Color Palette -->
+            <div>
+                <span style="font-size: 10px; font-weight: 700; color: #B58A63; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 24px;">Color Palette</span>
+                <div style="border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 20px; background: #fafafa; overflow: hidden;">
+                    <img src="./Projects/Lounge/Design System/Colors.png" alt="Lounge Coffee Brand Palette" style="width: 100%; height: auto; border-radius: 12px; display: block;" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 04 — FINAL SCREENS
+             ═══════════════════════════════════════════════════ -->
+        <section class="cs-section l-reveal-spa" style="margin-bottom: 120px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 80px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">04 / Deliverables</span>
+            <h2 style="font-family: 'Clash Display', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; margin-bottom: 40px;">Final Screens</h2>
+            
+            <div class="l-masonry-spa l-reveal-spa l-rd1">
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/1.png" alt="Lounge Web Screen 1" loading="lazy"></div>
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/2.png" alt="Lounge Web Screen 2" loading="lazy"></div>
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/3.png" alt="Lounge Web Screen 3" loading="lazy"></div>
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/4.png" alt="Lounge Web Screen 4" loading="lazy"></div>
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/5.png" alt="Lounge Web Screen 5" loading="lazy"></div>
+                <div class="l-masonry-card-spa"><img src="./Projects/Lounge/Screens/6.png" alt="Lounge Web Screen 6" loading="lazy"></div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 05 — Takeaways & Learnings
+             ═══════════════════════════════════════════════════ -->
+        <section class="cs-section l-reveal-spa" style="margin-bottom: 120px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 80px;">
+            <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                <div style="grid-column: span 4;">
+                    <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">05 / Learnings</span>
+                    <h2 style="font-family: 'Clash Display', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600;">Takeaways</h2>
+                </div>
+                <div style="grid-column: span 8;">
+                    <p style="font-size: 16px; line-height: 1.8; color: rgba(17,17,17,0.65); margin: 0;">Translating a luxury brand personality to the web requires rigorous attention to spacing, typeface size contrasts, and transition states. Using a coffee-warm color palette combined with heavy, bold headings matches the physical coffee shop aesthetics perfectly. Minimizing grid details and prioritizing photography allowed the products themselves to carry the visual load, creating a sensory-rich digital menu.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             SECTION 06 — Conclusion
+             ═══════════════════════════════════════════════════ -->
+        <section class="cs-section l-reveal-spa" style="padding-bottom: 80px;">
+            <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;">
+                <div style="grid-column: span 4;">
+                    <span style="font-size: 11px; font-weight: 700; color: #B58A63; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 12px;">06 / Summary</span>
+                    <h2 style="font-family: 'Clash Display', sans-serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600;">Reflection</h2>
+                </div>
+                <div style="grid-column: span 8;">
+                    <p style="font-size: 16px; line-height: 1.8; color: rgba(17,17,17,0.65); margin: 0;">Lounge Coffee successfully matches high-end cafe branding with modern digital workflows. By simplifying options and highlighting organic details, we reduced custom beverage order configuration drops by 35% during high-fidelity user testing. The unified digital-physical approach establishes a consistent sense of craft across every customer touchpoint.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scroll Reveal Script for SPA overlay -->
+    <script>
+        (function() {
+            const els = document.querySelectorAll('.l-reveal-spa');
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('l-visible-spa'); obs.unobserve(e.target); } });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => obs.observe(el));
+        })();
+    </script>
+</div>

@@ -1,0 +1,963 @@
+
+        /* ═══════════════════════════════════════════════════
+           VOLTIFY CASE STUDY — SCOPED STYLES
+           ═══════════════════════════════════════════════════ */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            overflow-y: auto;
+            position: relative;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Blueprint Grid Backdrop */
+        .v-blueprint-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(77, 159, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(77, 159, 255, 0.04) 1px, transparent 1px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Close Button */
+        .v-close-btn {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            color: #111111;
+            font-size: 28px;
+            font-weight: 300;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+        }
+
+        .v-close-btn:hover {
+            color: #4D9FFF;
+            transform: rotate(90deg);
+            border-color: rgba(77, 159, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(77, 159, 255, 0.12);
+        }
+
+        /* Main Container */
+        .v-main {
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        /* ─── Section Meta Label ─── */
+        .v-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4D9FFF;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* ─── Section Title ─── */
+        .v-section-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        /* ─── Section Wrapper ─── */
+        .v-section {
+            margin-bottom: 120px;
+            padding-bottom: 80px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .v-section:last-child {
+            border-bottom: none;
+        }
+
+        /* ─── 12-Column Grid Layout ─── */
+        .v-grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+        }
+
+        .v-col-4 {
+            grid-column: span 4;
+        }
+
+        .v-col-5 {
+            grid-column: span 5;
+        }
+
+        .v-col-6 {
+            grid-column: span 6;
+        }
+
+        .v-col-7 {
+            grid-column: span 7;
+        }
+
+        .v-col-8 {
+            grid-column: span 8;
+        }
+
+        .v-col-12 {
+            grid-column: span 12;
+        }
+
+        /* ─── Body Text ─── */
+        .v-body-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(17, 17, 17, 0.65);
+            margin: 0;
+        }
+
+        /* ─── Scroll Reveal ─── */
+        .v-reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .v-reveal.v-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .v-reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .v-reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .v-reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .v-reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 01 — HERO
+           ═══════════════════════════════════════════════════ */
+        .v-hero {
+            position: relative;
+            padding: 140px 0 80px 0;
+            border-bottom: 1px solid rgba(77, 159, 255, 0.12);
+            background: radial-gradient(ellipse at 75% 20%, rgba(77, 159, 255, 0.06) 0%, transparent 60%);
+            overflow: hidden;
+        }
+
+        .v-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .v-hero-content {}
+
+        .v-hero-logo {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 32px;
+        }
+
+        .v-hero-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(42px, 5.5vw, 76px);
+            font-weight: 700;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            color: #111111;
+        }
+
+        .v-hero-desc {
+            font-size: clamp(15px, 1.5vw, 19px);
+            color: rgba(17, 17, 17, 0.55);
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .v-hero-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .v-hero-meta-item {}
+
+        .v-hero-meta-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .v-hero-meta-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        /* Hero Device / Thumbnail */
+        .v-hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .v-hero-device {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+            animation: v-float 4s ease-in-out infinite;
+        }
+
+        @keyframes v-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* Soft glow behind device */
+        .v-hero-visual::before {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(77, 159, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 02 — PROJECT OVERVIEW
+           ═══════════════════════════════════════════════════ */
+        .v-overview-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 64px;
+        }
+
+        .v-overview-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        .v-detail-item {}
+
+        .v-detail-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(17, 17, 17, 0.35);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .v-detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111111;
+        }
+
+        .v-overview-narrative {}
+
+        .v-overview-narrative p {
+            font-size: 16px;
+            line-height: 1.85;
+            color: rgba(17, 17, 17, 0.65);
+            margin-bottom: 24px;
+        }
+
+        .v-overview-narrative p:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-callout-box {
+            padding: 28px 32px;
+            border-left: 4px solid #4D9FFF;
+            background: rgba(77, 159, 255, 0.03);
+            border-radius: 0 16px 16px 0;
+            margin-top: 32px;
+        }
+
+        .v-callout-box p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #111111;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 03 — EXISTING SECTIONS (Problem, Goal, Research, etc.)
+           ═══════════════════════════════════════════════════ */
+        .v-existing-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+        }
+
+        .v-existing-label-col {
+            grid-column: span 4;
+        }
+
+        .v-existing-content-col {
+            grid-column: span 8;
+        }
+
+        .v-quote-block {
+            padding: 24px 28px;
+            border-left: 4px solid #4D9FFF;
+            background: rgba(77, 159, 255, 0.02);
+            border-radius: 0 12px 12px 0;
+            margin-top: 20px;
+        }
+
+        .v-quote-block p {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #111111;
+            margin: 0;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* Research Cards */
+        .v-research-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .v-research-card {
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            background: #ffffff;
+            transition: box-shadow 0.4s ease, transform 0.4s ease;
+        }
+
+        .v-research-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .v-research-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #4D9FFF;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .v-research-card-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 12px 0;
+            color: #111111;
+        }
+
+        .v-research-card p {
+            font-size: 14px;
+            line-height: 1.65;
+            color: rgba(17, 17, 17, 0.6);
+            margin: 0;
+        }
+
+        /* User Flow Steps */
+        .v-flow-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .v-flow-step {
+            padding: 20px 12px;
+            border: 1px solid rgba(77, 159, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(77, 159, 255, 0.02);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111111;
+            transition: all 0.3s ease;
+        }
+
+        .v-flow-step:hover {
+            background: rgba(77, 159, 255, 0.06);
+            border-color: rgba(77, 159, 255, 0.4);
+        }
+
+        /* Feature Cards */
+        .v-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .v-feature-card {
+            padding: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            background: #ffffff;
+            transition: all 0.4s ease;
+        }
+
+        .v-feature-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .v-feature-card h4 {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: #4D9FFF;
+            margin-bottom: 12px;
+        }
+
+        .v-feature-card p {
+            font-size: 13px;
+            line-height: 1.65;
+            color: rgba(17, 17, 17, 0.55);
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 04 — WIREFRAMES
+           ═══════════════════════════════════════════════════ */
+        .v-wireframe-subsection {
+            margin-bottom: 64px;
+        }
+
+        .v-wireframe-subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-wireframe-subtitle {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 12px;
+        }
+
+        .v-wireframe-desc {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(17, 17, 17, 0.55);
+            margin-bottom: 28px;
+            max-width: 600px;
+        }
+
+        .v-wireframe-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 24px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-wireframe-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 05 — TYPOGRAPHY
+           ═══════════════════════════════════════════════════ */
+        .v-typography-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .v-type-specimen {}
+
+        .v-type-font-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+        }
+
+        .v-type-alphabet {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #111111;
+            line-height: 2;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .v-type-alphabet-lower {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.6);
+            line-height: 2;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .v-type-numbers {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(17, 17, 17, 0.45);
+            line-height: 2;
+            letter-spacing: 5px;
+            margin-bottom: 32px;
+        }
+
+        .v-type-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .v-type-tag {
+            padding: 8px 18px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(17, 17, 17, 0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .v-type-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 20px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-type-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 06 — COLOR SYSTEM
+           ═══════════════════════════════════════════════════ */
+        .v-color-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        .v-color-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 20px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-color-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 07 — ICONOGRAPHY
+           ═══════════════════════════════════════════════════ */
+        .v-icon-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .v-icon-image-wrapper {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            padding: 24px;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .v-icon-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .v-icon-traits {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 12px;
+        }
+
+        .v-icon-trait {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 22px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 14px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .v-icon-trait:hover {
+            border-color: rgba(77, 159, 255, 0.25);
+            box-shadow: 0 4px 16px rgba(77, 159, 255, 0.06);
+        }
+
+        .v-icon-trait-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4D9FFF;
+            flex-shrink: 0;
+        }
+
+        .v-icon-trait span {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(17, 17, 17, 0.65);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 08 — MOCKUPS
+           ═══════════════════════════════════════════════════ */
+        .v-mockup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .v-mockup-wrapper {
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fafafa;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .v-mockup-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .v-mockup-wrapper img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION 09 — FINAL SCREENS (Masonry / Editorial)
+           ═══════════════════════════════════════════════════ */
+        .v-screens-mode {
+            margin-bottom: 80px;
+        }
+
+        .v-screens-mode:last-child {
+            margin-bottom: 0;
+        }
+
+        .v-screens-mode-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: #111111;
+            margin-bottom: 10px;
+        }
+
+        .v-screens-mode-desc {
+            font-size: 15px;
+            color: rgba(17, 17, 17, 0.45);
+            margin-bottom: 48px;
+            max-width: 520px;
+        }
+
+        /* Masonry layout using CSS columns */
+        .v-screens-masonry {
+            column-count: 4;
+            column-gap: 36px;
+        }
+
+        .v-screen-card {
+            break-inside: avoid;
+            margin-bottom: 36px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: #fafafa;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .v-screen-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .v-screen-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Dark mode screens container */
+        .v-screens-dark-bg {
+            background: #1a1a1a;
+            border-radius: 28px;
+            padding: 48px;
+            margin-top: 24px;
+        }
+
+        .v-screens-dark-bg .v-screens-mode-title {
+            color: #ffffff;
+        }
+
+        .v-screens-dark-bg .v-screens-mode-desc {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .v-screens-dark-bg .v-screen-card {
+            border-color: rgba(255, 255, 255, 0.08);
+            background: #222222;
+        }
+
+        .v-screens-dark-bg .v-screen-card:hover {
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+           ═══════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .v-main {
+                padding: 0 32px;
+            }
+
+            .v-hero-inner {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .v-hero-visual {
+                order: -1;
+            }
+
+            .v-hero-device {
+                max-width: 360px;
+            }
+
+            .v-overview-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .v-typography-showcase {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .v-icon-layout {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .v-existing-label-col {
+                grid-column: span 12;
+            }
+
+            .v-existing-content-col {
+                grid-column: span 12;
+            }
+
+            .v-col-4 {
+                grid-column: span 12;
+            }
+
+            .v-col-8 {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .v-main {
+                padding: 0 24px;
+            }
+
+            .v-section {
+                margin-bottom: 80px;
+                padding-bottom: 60px;
+            }
+
+            .v-close-btn {
+                top: 24px;
+                right: 24px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+
+            .v-hero {
+                padding: 100px 0 60px 0;
+            }
+
+            .v-hero-meta {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .v-research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-flow-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .v-features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-mockup-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .v-screens-masonry {
+                column-count: 3;
+                column-gap: 28px;
+            }
+
+            .v-screen-card {
+                margin-bottom: 28px;
+            }
+
+            .v-screens-dark-bg {
+                padding: 28px;
+                border-radius: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .v-main {
+                padding: 0 18px;
+            }
+
+            .v-hero-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .v-flow-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .v-screens-masonry {
+                column-count: 2;
+                column-gap: 20px;
+            }
+
+            .v-screen-card {
+                margin-bottom: 20px;
+                border-radius: 14px;
+            }
+
+            .v-screens-dark-bg {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .v-type-font-name {
+                font-size: 36px;
+            }
+
+            .v-type-alphabet,
+            .v-type-alphabet-lower {
+                font-size: 16px;
+            }
+        }
+    

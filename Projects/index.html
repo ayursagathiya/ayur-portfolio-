@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Ayur Sagathiya</title>
+    <meta name="description" content="Projects page of Ayur Sagathiya - Digital Product Designer. Selected digital products, interfaces and design systems.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../index.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+
+</head>
+
+<body style="opacity: 0; background-color: var(--bg-primary); transition: opacity 0.4s ease-in-out; min-height: 100vh; padding-top: 120px;">
+    <!-- Close Button -->
+    <button id="p-close-btn" class="close-btn-standalone" title="Return to Homepage">×</button>
+
+    <!-- Main Content -->
+    <div class="projects-page-container container">
+        <header class="projects-page-header">
+            <h1 class="projects-page-title">PROJECTS</h1>
+            <p class="projects-page-subtitle">Selected digital products, interfaces and design systems.</p>
+        </header>
+
+        <!-- Projects Grid -->
+        <div id="projects-grid" class="projects-grid"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const projects = [
+          {
+            id: 'voltify',
+            name: 'Voltify',
+            category: 'Mobile App • EV Charging',
+            route: '/projects/voltify',
+            thumbnail: '../Projects/Voltify/thumbnail/thumbnail image.png'
+          },
+          {
+            id: 'lounge',
+            name: 'Lounge Coffee',
+            category: 'Brand Identity • Web Design',
+            route: '/projects/lounge',
+            thumbnail: '../Projects/Lounge/thumbnail/Elegant Black Laptop Mockup.png'
+          }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Flag for returning to homepage
+            sessionStorage.setItem('fromCaseStudy', 'true');
+
+            // Render cards
+            const grid = document.getElementById('projects-grid');
+            if (grid) {
+                grid.innerHTML = projects.map(proj => `
+                    <a href="${proj.route}" class="project-hub-card" data-project="${proj.id}">
+                        <div class="project-hub-card-image-wrapper">
+                            <img src="${proj.thumbnail}" alt="${proj.name} Thumbnail" class="project-hub-card-img" loading="lazy">
+                        </div>
+                        <div class="project-hub-card-info">
+                            <h3 class="project-hub-card-title">${proj.name}</h3>
+                            <p class="project-hub-card-category">${proj.category}</p>
+                        </div>
+                    </a>
+                `).join('');
+            }
+
+            // Close button click goes back to home
+            const closeBtn = document.getElementById('p-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.setItem('fromCaseStudy', 'true');
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 500);
+                });
+            }
+
+            // Intercept clicks on cards to navigate with transition
+            if (grid) {
+                grid.addEventListener('click', (e) => {
+                    const card = e.target.closest('.project-hub-card');
+                    if (card) {
+                        e.preventDefault();
+                        const route = card.getAttribute('href');
+                        document.body.style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = route;
+                        }, 400);
+                    }
+                });
+            }
+
+            // Fade in body
+            requestAnimationFrame(() => {
+                document.body.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+
+</html>

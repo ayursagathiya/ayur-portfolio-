@@ -47,6 +47,47 @@ if (typeof ScrollTrigger !== 'undefined') {
 // ─── Shared global state for unified rAF loop ───
 let mouseX = 0, mouseY = 0;
 
+// Projects Data Array for SPA projects hub
+const projectsData = [
+  {
+    id: 'voltify',
+    name: 'Voltify',
+    category: 'Mobile App • EV Charging',
+    route: '/projects/voltify',
+    thumbnail: './Projects/Voltify/thumbnail/thumbnail image.png'
+  },
+  {
+    id: 'lounge',
+    name: 'Lounge Coffee',
+    category: 'Brand Identity • Web Design',
+    route: '/projects/lounge',
+    thumbnail: './Projects/Lounge/thumbnail/Elegant Black Laptop Mockup.png'
+  }
+];
+
+function renderProjectsGrid() {
+    const grid = document.getElementById('projects-grid');
+    if (!grid) return;
+    
+    // Check if inside a subfolder/detail path to adjust asset directories
+    const isSubdir = window.location.pathname.includes('/projects/') || window.location.pathname.endsWith('/voltify') || window.location.pathname.endsWith('/lounge');
+    
+    grid.innerHTML = projectsData.map(proj => {
+        const thumb = isSubdir ? `.${proj.thumbnail}` : proj.thumbnail;
+        return `
+            <a href="${proj.route}" class="project-hub-card" data-project="${proj.id}">
+                <div class="project-hub-card-image-wrapper">
+                    <img src="${thumb}" alt="${proj.name} Thumbnail" class="project-hub-card-img" loading="lazy">
+                </div>
+                <div class="project-hub-card-info">
+                    <h3 class="project-hub-card-title">${proj.name}</h3>
+                    <p class="project-hub-card-category">${proj.category}</p>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Clear GSAP ScrollTrigger memory if it exists
     if (typeof ScrollTrigger !== 'undefined') {
@@ -117,12 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // SPA Routing: Click interceptor for case studies and smooth scroll hash links
+
+    // Call render once initially in case we land directly on projects page
+    renderProjectsGrid();
+
+    // SPA Routing: Click interceptor for case studies and projects page
     document.addEventListener('click', (e) => {
-        const projectLink = e.target.closest('a[href="/voltify"], a[href="/lounge"]');
+        const projectLink = e.target.closest('a[href="/voltify"], a[href="/lounge"], a[href="/projects/voltify"], a[href="/projects/lounge"]');
         if (projectLink) {
             e.preventDefault();
             const targetPath = projectLink.getAttribute('href');
             navigateToCaseStudy(targetPath, false);
+            return;
+        }
+
+        const projectsLink = e.target.closest('a[href="/projects"]');
+        if (projectsLink) {
+            e.preventDefault();
+            navigateToProjects(false);
             return;
         }
 
@@ -137,22 +190,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const targetScrollPos = targetElement.getBoundingClientRect().top + window.scrollY;
                     const distance = Math.abs(targetScrollPos - window.scrollY);
                     
-                    // Duration: 600ms to 1000ms based on distance
-                    const minDuration = 0.6; // 600ms
-                    const maxDuration = 1.0; // 1000ms
+                    const minDuration = 0.6;
+                    const maxDuration = 1.0;
                     const maxDistance = 3000;
                     const distanceRatio = Math.min(Math.max(distance / maxDistance, 0), 1);
                     const scrollDuration = minDuration + distanceRatio * (maxDuration - minDuration);
                     
                     lenisInstance.scrollTo(targetElement, {
                         duration: scrollDuration,
-                        offset: -64, // navbar height
-                        easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // easeOutExpo
+                        offset: -64,
+                        easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
                     });
 
                     updateNavActiveLink(targetId);
-                    
-                    // Push state to update the URL without page reload/popstate trigger
                     history.pushState({ page: 'home', hash: targetId }, '', window.location.pathname + targetId);
                 }
             }
@@ -164,17 +214,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = window.location.pathname;
         const hash = window.location.hash;
         
-        if (path === '/voltify' || path.endsWith('/voltify')) {
-            navigateToCaseStudy('/voltify', true);
-        } else if (path === '/lounge' || path.endsWith('/lounge')) {
-            navigateToCaseStudy('/lounge', true);
+        if (path === '/projects' || path.endsWith('/projects') || path.endsWith('/projects/')) {
+            navigateToProjects(true);
+        } else if (path === '/voltify' || path.endsWith('/voltify') || path === '/projects/voltify' || path.endsWith('/projects/voltify')) {
+            navigateToCaseStudy(path, true);
+        } else if (path === '/lounge' || path.endsWith('/lounge') || path === '/projects/lounge' || path.endsWith('/projects/lounge')) {
+            navigateToCaseStudy(path, true);
         } else {
-            // We are navigating to homepage (root path)
             const homeView = document.getElementById('homepage-view');
             const isHomeVisible = homeView && homeView.style.display !== 'none';
             
             if (isHomeVisible) {
-                // Homepage is already visible, just scroll to hash/top smoothly
                 if (hash) {
                     const targetElement = document.querySelector(hash);
                     if (targetElement && lenisInstance) {
@@ -195,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } else {
-                // Return from case study
                 navigateToHome(true);
                 if (hash) {
                     setTimeout(() => {
@@ -215,52 +264,62 @@ document.addEventListener('DOMContentLoaded', () => {
    SPA CLIENT-SIDE ROUTER FOR PROJECTS
    ============================================================ */
 let caseStudyCache = {};
-let savedScrollY = 0;
+let homepageScrollY = 0;
+let projectsScrollY = 0;
+let historySource = 'home'; // Tracks entry context: 'home' or 'projects'
 
 function navigateToCaseStudy(path, isPopState = false) {
     const homeView = document.getElementById('homepage-view');
+    const projectsView = document.getElementById('projects-view');
     const caseStudyView = document.getElementById('case-study-view');
     const contentContainer = document.getElementById('case-study-spa-content');
     const header = document.getElementById('header-nav');
     if (!homeView || !caseStudyView || !contentContainer) return;
 
-    const projectId = path.replace(/^\//, '');
+    const projectId = path.replace(/^\/projects\//, '').replace(/^\//, '');
 
-    // Save home scroll position
-    if (!isPopState) {
-        savedScrollY = window.scrollY;
-    }
-
-    // Disable scroll trigger updates and Lenis scroll
     if (lenisInstance) {
         lenisInstance.stop();
     }
 
-    // Fade out navbar
     if (header) {
         header.style.opacity = '0';
         header.style.pointerEvents = 'none';
     }
 
-    // Apply fade/slide transition to homepage view
-    homeView.classList.remove('spa-transition-in');
-    homeView.classList.add('spa-transition-out');
+    // Determine current visible parent view and transition it out
+    if (projectsView && projectsView.style.display !== 'none') {
+        historySource = 'projects';
+        if (!isPopState) {
+            projectsScrollY = window.scrollY;
+        }
+        projectsView.classList.remove('projects-spa-transition-in');
+        projectsView.classList.add('projects-spa-transition-out');
+    } else {
+        historySource = 'home';
+        if (!isPopState) {
+            homepageScrollY = window.scrollY;
+        }
+        homeView.classList.remove('spa-transition-in');
+        homeView.classList.add('spa-transition-out');
+    }
 
     const displayCaseStudy = (html) => {
         setTimeout(() => {
-            // Hide homepage view completely
             homeView.style.display = 'none';
             homeView.classList.remove('spa-transition-out');
+            if (projectsView) {
+                projectsView.style.display = 'none';
+                projectsView.classList.remove('projects-spa-transition-out');
+            }
             
             if (header) {
                 header.style.display = 'none';
             }
 
-            // Inject the case study HTML content
             contentContainer.innerHTML = html;
             caseStudyView.style.display = 'block';
 
-            // Reset scroll position to top
             window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
             
             if (lenisInstance) {
@@ -268,27 +327,20 @@ function navigateToCaseStudy(path, isPopState = false) {
                 lenisInstance.start();
             }
 
-            // Refresh ScrollTrigger so that triggers on the loaded page calculate correctly
             if (typeof ScrollTrigger !== 'undefined') {
                 ScrollTrigger.refresh();
             }
 
-            // Animate case study entrance
             caseStudyView.classList.remove('spa-transition-out');
             caseStudyView.classList.add('spa-transition-in');
 
-            // Update URL without page reload
             if (!isPopState) {
                 history.pushState({ page: projectId }, '', path);
             }
 
-            // Bind SPA close button
             setupSPACloseButton();
-
-            // Initialize scroll reveal for SPA-injected content
-            // (innerHTML does not execute <script> tags, so we must run this manually)
             initSPAScrollReveal();
-        }, 500); // Wait for transition duration
+        }, 500);
     };
 
     if (caseStudyCache[projectId]) {
@@ -318,61 +370,138 @@ function navigateToCaseStudy(path, isPopState = false) {
     }
 }
 
-function navigateToHome(isPopState = false) {
+function navigateToProjects(isPopState = false) {
     const homeView = document.getElementById('homepage-view');
+    const projectsView = document.getElementById('projects-view');
     const caseStudyView = document.getElementById('case-study-view');
     const contentContainer = document.getElementById('case-study-spa-content');
     const header = document.getElementById('header-nav');
-    if (!homeView || !caseStudyView) return;
+    if (!homeView || !projectsView) return;
+
+    if (!isPopState) {
+        if (homeView && homeView.style.display !== 'none') {
+            homepageScrollY = window.scrollY;
+        }
+    }
 
     if (lenisInstance) {
         lenisInstance.stop();
     }
 
-    // Apply fade/slide transition to case study view
-    caseStudyView.classList.remove('spa-transition-in');
-    caseStudyView.classList.add('spa-transition-out');
+    if (header) {
+        header.style.opacity = '0';
+        header.style.pointerEvents = 'none';
+    }
+
+    // Hide active case study or home page
+    if (caseStudyView && caseStudyView.style.display !== 'none') {
+        caseStudyView.classList.remove('spa-transition-in');
+        caseStudyView.classList.add('spa-transition-out');
+    } else {
+        homeView.classList.remove('spa-transition-in');
+        homeView.classList.add('spa-transition-out');
+    }
 
     setTimeout(() => {
-        // Hide case study view, clear its inner HTML
-        caseStudyView.style.display = 'none';
-        caseStudyView.classList.remove('spa-transition-out');
-        if (contentContainer) contentContainer.innerHTML = '';
-
-        // Show homepage view
-        homeView.style.display = 'block';
-        if (header) {
-            header.style.display = 'flex';
-            void header.offsetWidth; // Force browser layout reflow
-            header.style.opacity = '1';
-            header.style.pointerEvents = 'auto';
+        homeView.style.display = 'none';
+        homeView.classList.remove('spa-transition-out');
+        if (caseStudyView) {
+            caseStudyView.style.display = 'none';
+            caseStudyView.classList.remove('spa-transition-out');
+            if (contentContainer) contentContainer.innerHTML = '';
         }
 
-        // Restore saved scroll position instantly
-        window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' });
+        if (header) {
+            header.style.display = 'none';
+        }
+
+        renderProjectsGrid();
+        projectsView.style.display = 'block';
+
+        const targetScroll = projectsScrollY || 0;
+        window.scrollTo({ top: targetScroll, left: 0, behavior: 'instant' });
+        
         if (lenisInstance) {
-            lenisInstance.scrollTo(savedScrollY, { immediate: true });
+            lenisInstance.scrollTo(targetScroll, { immediate: true });
             lenisInstance.start();
         }
 
-        // Refresh GSAP ScrollTrigger to recalculate exact triggers for homepage elements
         if (typeof ScrollTrigger !== 'undefined') {
             ScrollTrigger.refresh();
         }
 
-        // Animate homepage entrance
+        projectsView.classList.remove('projects-spa-transition-out');
+        projectsView.classList.add('projects-spa-transition-in');
+
+        if (!isPopState) {
+            history.pushState({ page: 'projects' }, '', '/projects');
+        }
+
+        setupProjectsCloseButton();
+    }, 500);
+}
+
+function navigateToHome(isPopState = false) {
+    const homeView = document.getElementById('homepage-view');
+    const projectsView = document.getElementById('projects-view');
+    const caseStudyView = document.getElementById('case-study-view');
+    const contentContainer = document.getElementById('case-study-spa-content');
+    const header = document.getElementById('header-nav');
+    if (!homeView) return;
+
+    if (lenisInstance) {
+        lenisInstance.stop();
+    }
+
+    // Animate out active overlay
+    if (caseStudyView && caseStudyView.style.display !== 'none') {
+        caseStudyView.classList.remove('spa-transition-in');
+        caseStudyView.classList.add('spa-transition-out');
+    } else if (projectsView && projectsView.style.display !== 'none') {
+        projectsView.classList.remove('projects-spa-transition-in');
+        projectsView.classList.add('projects-spa-transition-out');
+    }
+
+    setTimeout(() => {
+        if (caseStudyView) {
+            caseStudyView.style.display = 'none';
+            caseStudyView.classList.remove('spa-transition-out');
+            if (contentContainer) contentContainer.innerHTML = '';
+        }
+        if (projectsView) {
+            projectsView.style.display = 'none';
+            projectsView.classList.remove('projects-spa-transition-out');
+        }
+
+        homeView.style.display = 'block';
+        if (header) {
+            header.style.display = 'flex';
+            void header.offsetWidth;
+            header.style.opacity = '1';
+            header.style.pointerEvents = 'auto';
+        }
+
+        window.scrollTo({ top: homepageScrollY, left: 0, behavior: 'instant' });
+        if (lenisInstance) {
+            lenisInstance.scrollTo(homepageScrollY, { immediate: true });
+            lenisInstance.start();
+        }
+
+        if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+        }
+
         homeView.classList.remove('spa-transition-out');
         homeView.classList.add('spa-transition-in');
 
-        // Update URL to root
         if (!isPopState) {
             history.pushState({ page: 'home' }, '', '/');
         }
     }, 500);
 }
 
-function setupSPACloseButton() {
-    const closeBtn = document.getElementById('case-study-close-btn-spa');
+function setupProjectsCloseButton() {
+    const closeBtn = document.getElementById('projects-close-btn-spa');
     if (closeBtn) {
         const newCloseBtn = closeBtn.cloneNode(true);
         closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
@@ -383,13 +512,34 @@ function setupSPACloseButton() {
     }
 }
 
+function setupSPACloseButton() {
+    const closeBtn = document.getElementById('case-study-close-btn-spa');
+    if (closeBtn) {
+        const newCloseBtn = closeBtn.cloneNode(true);
+        closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+        newCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (historySource === 'projects' || window.location.pathname.startsWith('/projects')) {
+                navigateToProjects(false);
+            } else {
+                navigateToHome(false);
+            }
+        });
+    }
+}
+
 function initSPAScrollReveal() {
-    const els = document.querySelectorAll('.v-reveal-spa');
+    const els = document.querySelectorAll('.v-reveal-spa, .l-reveal-spa');
     if (!els.length) return;
     const obs = new IntersectionObserver((entries) => {
         entries.forEach(e => {
             if (e.isIntersecting) {
-                e.target.classList.add('v-visible-spa');
+                if (e.target.classList.contains('v-reveal-spa')) {
+                    e.target.classList.add('v-visible-spa');
+                }
+                if (e.target.classList.contains('l-reveal-spa')) {
+                    e.target.classList.add('l-visible-spa');
+                }
                 obs.unobserve(e.target);
             }
         });
