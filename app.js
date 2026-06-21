@@ -610,7 +610,7 @@ function initPreloader() {
     if (!preloader || !counterElement) return;
 
     let count = 0;
-    const duration = 1000; // 1 second duration
+    const duration = 400; // 1 second duration
     const startTime = performance.now();
 
     const updateCounter = (timestamp) => {
@@ -631,7 +631,7 @@ function initPreloader() {
                 // Slide the entire preloader panel upward using GSAP
                 gsap.to(preloader, {
                     yPercent: -100,
-                    duration: 1.2,
+                    duration: 0.6,
                     ease: "power3.inOut",
                     onStart: () => {
                         document.body.classList.remove('preloader-active');
@@ -645,7 +645,7 @@ function initPreloader() {
                 requestAnimationFrame(() => {
                     triggerPremiumHeroReveal(false);
                 });
-            }, 150); // Premium brief hold before lifting the sheet
+            }, 50); // Premium brief hold before lifting the sheet
         }
     };
 
@@ -1753,7 +1753,7 @@ function initPremiumHero() {
     if (folioText) gsap.set(folioText, { opacity: 0, x: 150 });
     if (portraitGlow) gsap.set(portraitGlow, { opacity: 0, scale: 0.5 });
     if (portraitWrapper) gsap.set(portraitWrapper, { opacity: 0, y: 80 });
-    if (rotatingRing) gsap.set(rotatingRing, { opacity: 0, scale: 0.8 });
+    if (rotatingRing) gsap.set(rotatingRing, { opacity: 1, scale: 1 });
     
     heroLines.forEach(line => gsap.set(line, { scaleX: 0 }));
     floatingLabels.forEach(label => gsap.set(label, { opacity: 0, y: 30 }));
