@@ -1,0 +1,259 @@
+/*
+  ========================================================================
+  LOCAL FONT DECLARATIONS
+  Portfolio 2.0 - Ayur Sagathiya
+  All fonts loaded from public/fonts/ — zero external requests
+  ========================================================================
+*/
+
+/* ─── Satoshi (Heading Font) ─── */
+/* Weights: 300, 400, 500, 700, 900 — OTF format */
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ─── Inter (Body Font) ─── */
+/* Variable font covering weights 100-900 */
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+/* ─── Space Grotesk ─── */
+/* Variable font covering weights 300-700 */
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('/fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ─── Clash Display ─── */
+/* Weights: 200, 300, 400, 500, 600, 700 — WOFF2 + WOFF */
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Extralight.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Extralight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Light.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Regular.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Medium.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Semibold.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Semibold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Clash Display';
+    src: url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Bold.woff2') format('woff2'),
+         url('/fonts/ClashDisplay_Complete/ClashDisplay_Complete/Fonts/WEB/fonts/ClashDisplay-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ─── Poppins ─── */
+/* Weights: 300, 400, 500, 600, 700, 800, 900 — WOFF2 + WOFF */
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Light.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Regular.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Medium.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-SemiBold.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Bold.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-ExtraBold.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Black.woff2') format('woff2'),
+         url('/fonts/Poppins_Complete/Poppins_Complete/Fonts/WEB/fonts/Poppins-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ─── Playfair Display ─── */
+/* Variable font covering weights 400-900 */
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+    font-weight: 400 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('/fonts/Playfair_Display/PlayfairDisplay-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 400 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+/* ─── Prata ─── */
+/* Weight: 400 only */
+
+@font-face {
+    font-family: 'Prata';
+    src: url('/fonts/Prata/Prata-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ─── Bodoni Moda ─── */
+/* Variable font covering weights 400-900 */
+
+@font-face {
+    font-family: 'Bodoni Moda';
+    src: url('/fonts/Bodoni_Moda/BodoniModa-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 400 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bodoni Moda';
+    src: url('/fonts/Bodoni_Moda/BodoniModa-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 400 900;
+    font-style: italic;
+    font-display: swap;
+}

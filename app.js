@@ -131,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initNavScrollSync();
         initHeaderScroll();
         initMobileMenu();
+        initPremiumFooter();
+        initBackToTopFab();
         
         // Skip preloader animation and reveal hero instantly
         triggerPremiumHeroReveal(true);
@@ -156,6 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initNavScrollSync();
         initHeaderScroll();
         initMobileMenu();
+        initPremiumFooter();
+        initBackToTopFab();
         startUnifiedLoop();
     }
 
@@ -727,26 +731,8 @@ function initCustomCursor() {
         const target = e.target.closest(interactiveSelectors);
         if (target) {
             isHovering = true;
-            document.body.classList.add('hovering-link');
-
-            // Context-aware texts
-            let text = 'EXPLORE';
-            if (target.closest('.nav-links') || target.classList.contains('logo')) {
-                text = 'OPEN';
-            } else if (target.closest('#portrait-block')) {
-                text = 'VIEW';
-            } else if (target.classList.contains('about-skill-chip') || target.classList.contains('skill-pill-marquee')) {
-                text = 'VIEW';
-            } else if (target.classList.contains('timeline-card')) {
-                text = 'VIEW';
-            } else if (target.classList.contains('btn')) {
-                text = 'EXPLORE';
-            } else if (target.classList.contains('floating-label')) {
-                text = 'EXPLORE';
-            }
-
             if (cursorTextLabel) {
-                cursorTextLabel.textContent = text;
+                cursorTextLabel.textContent = '';
             }
         }
     });
@@ -3013,5 +2999,92 @@ function initSportsBookingSlots() {
                 }
             }
         });
+    });
+}
+
+/* ============================================================
+   PREMIUM FOOTER — Reveal + Scroll Links + Resume
+   ============================================================ */
+function initPremiumFooter() {
+    const footer = document.getElementById('premium-footer');
+    if (!footer) return;
+
+    // Scroll-reveal footer
+    const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                footer.classList.add('footer-visible');
+                footerObserver.unobserve(footer);
+            }
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    footerObserver.observe(footer);
+
+    // Footer smooth-scroll links
+    footer.addEventListener('click', (e) => {
+        const scrollLink = e.target.closest('[data-footer-scroll]');
+        if (scrollLink) {
+            e.preventDefault();
+            const targetId = scrollLink.getAttribute('href');
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+                if (lenisInstance) {
+                    lenisInstance.scrollTo(targetEl, {
+                        duration: 1.0,
+                        offset: -64,
+                        easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+                    });
+                } else {
+                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+    });
+
+    // Resume download toast
+    const resumeLink = footer.querySelector('.footer-resume-download');
+    if (resumeLink) {
+        resumeLink.addEventListener('click', () => {
+            if (typeof showToast === 'function') {
+                showToast('Resume Download Started');
+            }
+        });
+    }
+}
+
+/* ============================================================
+   FLOATING BACK TO TOP BUTTON (FAB)
+   ============================================================ */
+function initBackToTopFab() {
+    const fab = document.getElementById('back-to-top-fab');
+    if (!fab) return;
+
+    // Show/hide based on scroll position (35% threshold)
+    const updateFabVisibility = () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+
+        if (scrollPercent > 35) {
+            fab.classList.add('visible');
+        } else {
+            fab.classList.remove('visible');
+        }
+    };
+
+    window.addEventListener('scroll', updateFabVisibility, { passive: true });
+    updateFabVisibility();
+
+    // Click: smooth scroll to hero
+    fab.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (lenisInstance) {
+            lenisInstance.scrollTo(0, {
+                duration: 1.2,
+                easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+            });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     });
 }
